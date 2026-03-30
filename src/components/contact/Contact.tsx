@@ -1,136 +1,96 @@
-import { useState, useRef, useEffect, type CSSProperties } from 'react';
-import { 
-  FaEnvelope,
-  FaMapMarkerAlt, 
-  FaLinkedin, 
-  FaGithub,
-  FaTelegram,
-  FaHeart,
+import { type CSSProperties } from "react";
+import {
+  FaArrowUp,
   FaCode,
-  FaArrowUp
-} from 'react-icons/fa';
-import { SiGmail, SiReact } from 'react-icons/si';
+  FaEnvelope,
+  FaGithub,
+  FaHeart,
+  FaLinkedin,
+  FaMapMarkerAlt,
+  FaTelegram,
+} from "react-icons/fa";
+import { SiGmail, SiReact } from "react-icons/si";
+
 interface CustomCSSProperties extends CSSProperties {
-  '--social-color'?: string;
+  "--social-color"?: string;
 }
 
 const Contact = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [currentYear] = useState(new Date().getFullYear());
-  const sectionRef = useRef(null);
+  const currentYear = new Date().getFullYear();
 
   const contactInfo = [
     {
       icon: <FaEnvelope />,
-      title: 'Email',
-      value: 'muslimarajabova1997@gmail.com',
-      link: '',
+      title: "Email",
+      value: "muslimarajabova1997@gmail.com",
+      link: "mailto:muslimarajabova1997@gmail.com",
     },
     {
       icon: <FaMapMarkerAlt />,
-      title: 'Location',
-      value: 'Bukhara, Uzbekistan',
-      link: '#',
-    }
+      title: "Location",
+      value: "Bukhara, Uzbekistan",
+      link: "#contact",
+    },
   ];
 
   const socialLinks = [
-    {
-      icon: <FaLinkedin />,
-      name: 'LinkedIn',
-      url: '',
-      color: '#0077B5'
-    },
-    {
-      icon: <FaGithub />,
-      name: 'GitHub',
-      url: 'https://github.com/m-radjabova',
-      color: '#333'
-    },
-    {
-      icon: <FaTelegram />,
-      name: 'Telegram',
-      url: '',
-      color: '#0088CC'
-    },
+    { icon: <FaLinkedin />, name: "LinkedIn", url: "https://www.linkedin.com", color: "#0077B5" },
+    { icon: <FaGithub />, name: "GitHub", url: "https://github.com/m-radjabova", color: "#333" },
+    { icon: <FaTelegram />, name: "Telegram", url: "https://t.me/", color: "#0088CC" },
     {
       icon: <SiGmail />,
-      name: 'Gmail',
-      url: '',
-      color: '#D14836'
-    }
+      name: "Gmail",
+      url: "mailto:muslimarajabova1997@gmail.com",
+      color: "#D14836",
+    },
   ];
 
   const quickLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Contact', href: '#contact' }
+    { name: "Home", href: "#home" },
+    { name: "About", href: "#about" },
+    { name: "Projects", href: "#projects" },
+    { name: "Contact", href: "#contact" },
   ];
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   return (
-    <footer id="contact" className="contact-footer" ref={sectionRef}>
-      {/* Background Elements */}
-      <div className="footer-bg">
-        <div className="bg-wave"></div>
-        <div className="bg-particles">
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-          <div className="particle"></div>
-        </div>
-      </div>
-
-      <div className="footer-container">
-        {/* Main Footer Content */}
-        <div className="footer-content">
-          {/* Brand Section */}
-          <div className={`footer-section brand-section ${isVisible ? 'animate-in' : ''}`}>
-            <div className="brand-logo">
-              <h3>M.Radjabova</h3>
-              <div className="logo-dot"></div>
+    <footer id="contact" className="relative px-4 pb-10 pt-24 sm:px-6 lg:px-8">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,107,154,0.08),transparent_25%),linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,183,197,0.16))] dark:bg-[radial-gradient(circle_at_top,rgba(168,85,247,0.12),transparent_25%),linear-gradient(180deg,rgba(15,23,42,0),rgba(2,6,23,0.7))]" />
+      <div className="relative mx-auto max-w-7xl rounded-[2.25rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] p-8 shadow-[var(--shadow-soft)] backdrop-blur-2xl xl:p-10">
+        <div className="grid gap-10 lg:grid-cols-[1.2fr_0.7fr_0.9fr_1fr]">
+          <div className="space-y-5">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-[var(--accent-primary)] via-[var(--accent-secondary)] to-[var(--accent-tertiary)] p-[1px]">
+                <div className="flex h-full w-full items-center justify-center rounded-2xl bg-[var(--card-solid)] text-sm font-bold text-[var(--text-primary)] backdrop-blur">
+                  MR
+                </div>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-[var(--text-primary)]">M.Radjabova</h3>
+                <p className="text-sm text-[var(--text-secondary)]">Frontend Developer</p>
+              </div>
             </div>
-            <p className="brand-description">
-              Frontend Developer & UI/UX Designer passionate about creating 
-              beautiful and functional digital experiences.
+            <p className="max-w-sm leading-7 text-[var(--text-secondary)]">
+              Frontend Developer & UI/UX Designer passionate about creating beautiful
+              and functional digital experiences.
             </p>
-            <div className="tech-stack">
+            <div className="inline-flex items-center gap-3 rounded-full border border-[var(--border-soft)] bg-white/82 px-4 py-2 text-sm text-[var(--text-secondary)] backdrop-blur-xl dark:bg-white/5">
               <span>Built with</span>
-              <div className="stack-icons">
-                <SiReact className="react-icon" />
-                <span>React</span>
+              <div className="flex items-center gap-2 font-semibold text-[var(--text-primary)]">
+                <SiReact className="text-[var(--accent-primary)]" />
+                React
               </div>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className={`footer-section links-section ${isVisible ? 'animate-in' : ''}`}>
-            <h4>Quick Links</h4>
-            <ul className="footer-links">
-              {quickLinks.map((link, index) => (
-                <li key={index}>
-                  <a href={link.href} className="footer-link">
+          <div>
+            <h4 className="text-lg font-semibold text-[var(--text-primary)]">Quick Links</h4>
+            <ul className="mt-5 space-y-3">
+              {quickLinks.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-[var(--text-secondary)] transition duration-300 hover:text-[var(--accent-primary)]"
+                  >
                     {link.name}
                   </a>
                 </li>
@@ -138,42 +98,43 @@ const Contact = () => {
             </ul>
           </div>
 
-          {/* Contact Info */}
-          <div className={`footer-section contact-section ${isVisible ? 'animate-in' : ''}`}>
-            <h4>Get In Touch</h4>
-            <div className="contact-methods">
-              {contactInfo.map((item, index) => (
+          <div>
+            <h4 className="text-lg font-semibold text-[var(--text-primary)]">Get In Touch</h4>
+            <div className="mt-5 space-y-3">
+              {contactInfo.map((item) => (
                 <a
-                  key={index}
+                  key={item.title}
                   href={item.link}
-                  className="contact-method"
+                  className="flex items-start gap-3 rounded-[1.4rem] border border-[var(--border-soft)] bg-white/82 p-4 text-[var(--text-secondary)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[var(--accent-primary)]/30 dark:bg-white/5"
                 >
-                  <div className="method-icon">
-                    {item.icon}
-                  </div>
-                  <div className="method-info">
-                    <span className="method-title">{item.title}</span>
-                    <span className="method-value">{item.value}</span>
+                  <div className="mt-1 text-[var(--accent-primary)]">{item.icon}</div>
+                  <div className="flex flex-col">
+                    <span className="text-sm uppercase tracking-[0.2em] text-[var(--text-secondary)]">
+                      {item.title}
+                    </span>
+                    <span className="mt-1 text-[var(--text-primary)]">{item.value}</span>
                   </div>
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Social & CTA */}
-          <div className={`footer-section cta-section ${isVisible ? 'animate-in' : ''}`}>
-            <h4>Let's Work Together</h4>
-            <p>Have a project in mind? Let's discuss it!</p>
+          <div>
+            <h4 className="text-lg font-semibold text-[var(--text-primary)]">Let&apos;s Work Together</h4>
+            <p className="mt-4 leading-7 text-[var(--text-secondary)]">
+              Have a project in mind? Let&apos;s discuss it.
+            </p>
 
-            <div className="social-links">
-              {socialLinks.map((social, index) => (
+            <div className="mt-5 flex flex-wrap gap-3">
+              {socialLinks.map((social) => (
                 <a
-                  key={index}
+                  key={social.name}
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="social-link"
-                  style={{ '--social-color': social.color } as CustomCSSProperties}
+                  className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--border-soft)] bg-white/82 text-lg text-[var(--text-primary)] shadow-[0_10px_24px_rgba(255,107,154,0.08)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:text-[var(--accent-primary)] dark:bg-white/5"
+                  style={{ "--social-color": social.color } as CustomCSSProperties}
+                  aria-label={social.name}
                 >
                   {social.icon}
                 </a>
@@ -182,28 +143,23 @@ const Contact = () => {
           </div>
         </div>
 
-        {/* Footer Bottom */}
-        <div className="footer-bottom">
-          <div className="footer-divider"></div>
-          
-          <div className="bottom-content">
-            <div className="copyright">
-              <p>
-                © {currentYear} Muslima Radjabova. Made with 
-                <FaHeart className="heart-icon" /> 
-                and lots of 
-                <FaCode className="code-icon" />
-              </p>
-            </div>
-            
-            <button className="scroll-top" onClick={scrollToTop}>
-              <FaArrowUp />
-            </button>
-          </div>
+        <div className="mt-10 flex flex-col gap-4 border-t border-[var(--border-soft)] pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
+            © {currentYear} Muslima Radjabova. Made with
+            <FaHeart className="text-rose-400" />
+            and <FaCode className="text-[var(--accent-secondary)]" />
+          </p>
+
+          <button
+            className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--border-soft)] bg-white/82 text-[var(--text-primary)] shadow-[0_10px_24px_rgba(255,107,154,0.08)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:text-[var(--accent-primary)] dark:bg-white/5"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          >
+            <FaArrowUp />
+          </button>
         </div>
       </div>
     </footer>
   );
-}
+};
 
 export default Contact;

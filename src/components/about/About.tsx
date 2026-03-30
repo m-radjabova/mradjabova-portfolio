@@ -1,229 +1,207 @@
-import { useRef, useState, useEffect } from 'react';
-import { 
-  FaReact, 
-  FaJs, 
-  FaNodeJs, 
-  FaFigma, 
-  FaGitAlt,
+import { useState } from "react";
+import {
   FaCode,
-  FaHeart,
+  FaFigma,
+  FaGitAlt,
   FaGraduationCap,
-  FaRocket
-} from 'react-icons/fa';
-import { 
-  SiTypescript, 
-  SiHtml5, 
+  FaHeart,
+  FaJs,
+  FaPython,
+  FaReact,
+} from "react-icons/fa";
+import {
   SiCss3,
+  SiFastapi,
+  SiHtml5,
+  SiPostgresql,
   SiTailwindcss,
-  SiNextdotjs,
-  SiVite
-} from 'react-icons/si';
-
-// AOS import qilish
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+  SiTypescript,
+  SiVite,
+} from "react-icons/si";
 
 const About = () => {
-  const aboutRef = useRef(null);
-  const [activeTab, setActiveTab] = useState('skills');
-
-  // AOS ni initialize qilish
-  useEffect(() => {
-    AOS.init({
-      duration: 500,
-      easing: 'ease-out',
-      once: true,
-      mirror: false,
-      offset: 80, 
-    });
-  }, []);
+  const [activeTab, setActiveTab] = useState("skills");
 
   const skills = [
-    { name: 'React', level: 90, icon: <FaReact />, color: '#61DAFB', gradient: 'var(--gradient-3)' },
-    { name: 'JavaScript', level: 90, icon: <FaJs />, color: '#F7DF1E', gradient: 'var(--gradient-5)' },
-    { name: 'TypeScript', level: 90, icon: <SiTypescript />, color: '#3178C6', gradient: 'var(--gradient-1)' },
-    { name: 'Next.js', level: 85, icon: <SiNextdotjs />, color: '#000000', gradient: 'var(--gradient-2)' },
-    { name: 'HTML5', level: 95, icon: <SiHtml5 />, color: '#E34F26', gradient: 'var(--gradient-2)' },
-    { name: 'CSS3', level: 100, icon: <SiCss3 />, color: '#1572B6', gradient: 'var(--gradient-3)' },
-    { name: 'Tailwind', level: 50, icon: <SiTailwindcss />, color: '#06B6D4', gradient: 'var(--gradient-4)' },
-    { name: 'Vite', level: 80, icon: <SiVite />, color: '#646CFF', gradient: 'var(--gradient-5)' },
-    { name: 'Node.js', level: 75, icon: <FaNodeJs />, color: '#339933', gradient: 'var(--gradient-4)' },
-    { name: 'UI/UX Design', level: 90, icon: <FaFigma />, color: '#FF6B6B', gradient: 'var(--gradient-2)' },
-    { name: 'Git', level: 85, icon: <FaGitAlt />, color: '#F05032', gradient: 'var(--gradient-2)' }
+    { name: "React", level: 90, icon: <FaReact />, tone: "from-cyan-400 to-sky-500" },
+    { name: "JavaScript", level: 90, icon: <FaJs />, tone: "from-amber-300 to-yellow-500" },
+    { name: "TypeScript", level: 90, icon: <SiTypescript />, tone: "from-blue-500 to-indigo-500" },
+    { name: "Python", level: 86, icon: <FaPython />, tone: "from-sky-500 to-amber-400" },
+    { name: "HTML5", level: 95, icon: <SiHtml5 />, tone: "from-orange-400 to-red-500" },
+    { name: "CSS3", level: 100, icon: <SiCss3 />, tone: "from-sky-400 to-blue-600" },
+    { name: "Tailwind", level: 85, icon: <SiTailwindcss />, tone: "from-cyan-400 to-teal-500" },
+    { name: "Vite", level: 80, icon: <SiVite />, tone: "from-violet-400 to-fuchsia-500" },
+    { name: "FastAPI", level: 82, icon: <SiFastapi />, tone: "from-emerald-400 to-teal-500" },
+    { name: "PostgreSQL", level: 80, icon: <SiPostgresql />, tone: "from-blue-500 to-cyan-400" },
+    { name: "UI/UX Design", level: 90, icon: <FaFigma />, tone: "from-pink-400 to-rose-500" },
+    { name: "Git", level: 85, icon: <FaGitAlt />, tone: "from-orange-500 to-rose-500" },
   ];
 
   const education = [
     {
-      year: '2023 - Present',
-      degree: 'Programming Technology',
-      institution: 'Asia International University (AIU)',
-      description: 'Pursuing a Bachelor\'s degree in Programming Technology, focusing on software development, algorithms, and data structures.',
+      year: "2023 - Present",
+      degree: "Programming Technology",
+      institution: "Asia International University (AIU)",
+      description:
+        "Bachelor's degree focused on software development, algorithms, system thinking and practical engineering fundamentals.",
       icon: <FaGraduationCap />,
-      gradient: 'var(--gradient-1)'
-    }
+    },
   ];
 
   return (
-    <section id="about" className="about-section" ref={aboutRef}>
-      <div className="about-container">
-        {/* Animated Background Elements */}
-        <div className="about-background">
-          <div className="floating-shape shape-1"></div>
-          <div className="floating-shape shape-2"></div>
-          <div className="floating-shape shape-3"></div>
-          <div className="floating-shape shape-4"></div>
-        </div>
+    <section id="about" className="relative px-4 py-24 sm:px-6 lg:px-8">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,107,154,0.08),transparent_25%),radial-gradient(circle_at_80%_30%,rgba(168,85,247,0.06),transparent_25%)] dark:bg-[radial-gradient(circle_at_20%_20%,rgba(255,107,154,0.14),transparent_25%),radial-gradient(circle_at_80%_30%,rgba(168,85,247,0.12),transparent_25%)]" />
 
-        {/* Header with AOS animatsiyasi */}
-        <div 
-          className="about-header"
-          data-aos="fade-down"
-          data-aos-delay="100"
-        >
-          <div className="header-decoration">
-            <div className="decoration-line"></div>
-            <FaRocket className="decoration-icon" />
-            <div className="decoration-line"></div>
-          </div>
-          <h2 className="about-title">
-            About <span className="gradient-text">Me</span>
+      <div className="relative mx-auto max-w-7xl">
+        <div className="mx-auto max-w-3xl text-center animate-[fade-up_0.8s_ease-out_both]">
+          <h2 className="mt-6 text-4xl font-black tracking-[-0.03em] text-[var(--text-primary)] sm:text-5xl">
+            Building polished interfaces with
+            <span className="bg-gradient-to-r from-[var(--accent-gradient-from)] via-[var(--accent-gradient-via)] to-[var(--accent-gradient-to)] bg-clip-text text-transparent">
+              {" "}
+              clean front-end systems
+            </span>
           </h2>
-          <p className="about-subtitle">
-            Crafting digital experiences with passion, precision and pixel-perfect design
+          <p className="mt-4 text-lg leading-8 text-[var(--text-secondary)]">
+            I enjoy turning visual ideas into responsive, reliable and modern
+            products. My workflow combines interface design sensitivity with
+            practical engineering decisions.
           </p>
         </div>
 
-        <div className="about-content">
-          {/* Left Side - Personal Card with AOS */}
-          <div 
-            className="about-personal"
-            data-aos="fade-right"
-            data-aos-delay="200"
-          >
-            <div className="personal-card">
-              <div className="card-glow"></div>
-              <div className="avatar-section">
-                <div className="avatar-wrapper">
-                  <div className="about-avatar">
-                    <div className="avatar-inner">
-                      <FaHeart className="avatar-icon" />
-                    </div>
-                    <div className="avatar-ring ring-1"></div>
-                    <div className="avatar-ring ring-2"></div>
-                    <div className="avatar-ring ring-3"></div>
-                  </div>
-                </div>
-                <div className="status-indicator">
-                  <div className="status-dot"></div>
-                  <span>Available for projects</span>
-                </div>
+        <div className="mt-16 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="rounded-[2.25rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] p-8 shadow-[var(--shadow-soft)] backdrop-blur-2xl transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
+            <div className="mb-6 flex items-center gap-4">
+              <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] text-2xl text-white shadow-[0_16px_34px_rgba(255,107,154,0.28)]">
+                <FaHeart />
               </div>
-              
-              <div className="personal-info">
-                <h3>Muslima Radjabova</h3>
-                <p className="role">Frontend Developer & UI/UX Designer</p>
-                <p className="bio">
-                  I specialize in creating beautiful, functional, and user-centered digital experiences. 
-                  With 2+ years of experience in frontend development and design, I bridge the gap between 
-                  aesthetic design and technical implementation.
+              <div>
+                <p className="text-sm uppercase tracking-[0.28em] text-[var(--text-secondary)]">
+                  Personal profile
                 </p>
+                <h3 className="mt-1 text-2xl font-bold text-[var(--text-primary)]">
+                  Muslima Radjabova
+                </h3>
+              </div>
+            </div>
+
+            <div className="space-y-5">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--accent-primary)]">
+                Frontend Developer & UI/UX Designer
+              </p>
+              <p className="text-base leading-8 text-[var(--text-secondary)]">
+                I specialize in building beautiful, functional and user-centered
+                web experiences. I work comfortably across layout systems,
+                component architecture and visual refinement.
+              </p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {[
+                  "Responsive landing pages",
+                  "Component-based React apps",
+                  "Design-to-code translation",
+                  "Strong visual hierarchy",
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-[1.35rem] border border-[var(--border-soft)] bg-white/78 px-4 py-3 text-sm text-[var(--text-secondary)] backdrop-blur-xl dark:bg-white/5"
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+              <div className="inline-flex items-center gap-3 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm font-medium text-emerald-500 dark:text-emerald-300">
+                <span className="h-2.5 w-2.5 rounded-full bg-emerald-300" />
+                Available for projects
               </div>
             </div>
           </div>
 
-          {/* Right Side - Tabs Content with AOS */}
-          <div 
-            className="about-details"
-            data-aos="fade-left"
-            data-aos-delay="300"
-          >
-            <div className="tabs-container">
-              <div className="tabs-header">
-                <button 
-                  className={`tab-btn ${activeTab === 'skills' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('skills')}
-                  data-aos="zoom-in"
-                  data-aos-delay="400"
-                >
-                  <FaCode className="tab-icon" />
-                  Skills
-                </button>
-                <button 
-                  className={`tab-btn ${activeTab === 'education' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('education')}
-                  data-aos="zoom-in"
-                  data-aos-delay="500"
-                >
-                  <FaGraduationCap className="tab-icon" />
-                  Education
-                </button>
-              </div>
-
-              <div className="tabs-content">
-                {activeTab === 'skills' && (
-                  <div className="skills-grid">
-                    {skills.map((skill, index) => (
-                      <div 
-                        key={skill.name}
-                        className="skill-card"
-                        data-aos="fade-up"
-                        data-aos-delay={index * 50}
-                      >
-                        <div className="skill-header">
-                          <div 
-                            className="skill-icon-wrapper"
-                            style={{ background: skill.gradient }}
-                          >
-                            <div className="skill-icon">
-                              {skill.icon}
-                            </div>
-                          </div>
-                          <div className="skill-info">
-                            <span className="skill-name">{skill.name}</span>
-                            <span className="skill-percent">{skill.level}%</span>
-                          </div>
-                        </div>
-                        <div className="skill-bar">
-                          <div 
-                            className="skill-progress"
-                            style={{ 
-                              width: `${skill.level}%`,
-                              background: skill.gradient
-                            }}
-                          ></div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {activeTab === 'education' && (
-                  <div className="timeline">
-                    {education.map((edu, index) => (
-                      <div 
-                        key={index}
-                        className="timeline-item"
-                        data-aos="fade-up"
-                        data-aos-delay={index * 200}
-                      >
-                        <div 
-                          className="timeline-icon"
-                          style={{ background: edu.gradient }}
-                        >
-                          {edu.icon}
-                        </div>
-                        <div className="timeline-content">
-                          <span className="timeline-year">{edu.year}</span>
-                          <h4 className="timeline-role">{edu.degree}</h4>
-                          <span className="timeline-company">{edu.institution}</span>
-                          <p className="timeline-description">{edu.description}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+          <div className="rounded-[2.25rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] p-6 shadow-[var(--shadow-soft)] backdrop-blur-2xl transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
+            <div className="mb-6 flex flex-wrap gap-3">
+              <button
+                className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition duration-300 ${
+                  activeTab === "skills"
+                    ? "bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] text-white shadow-[0_12px_28px_rgba(255,107,154,0.24)]"
+                    : "border border-[var(--border-soft)] bg-white/78 text-[var(--text-secondary)] hover:bg-white/90 hover:text-[var(--text-primary)] dark:bg-white/5 dark:hover:bg-white/8"
+                }`}
+                onClick={() => setActiveTab("skills")}
+              >
+                <FaCode />
+                Skills
+              </button>
+              <button
+                className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition duration-300 ${
+                  activeTab === "education"
+                    ? "bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] text-white shadow-[0_12px_28px_rgba(255,107,154,0.24)]"
+                    : "border border-[var(--border-soft)] bg-white/78 text-[var(--text-secondary)] hover:bg-white/90 hover:text-[var(--text-primary)] dark:bg-white/5 dark:hover:bg-white/8"
+                }`}
+                onClick={() => setActiveTab("education")}
+              >
+                <FaGraduationCap />
+                Education
+              </button>
             </div>
+
+            {activeTab === "skills" && (
+              <div className="grid gap-4 md:grid-cols-2">
+                {skills.map((skill) => (
+                  <div
+                    key={skill.name}
+                    className="rounded-[1.8rem] border border-[var(--border-soft)] bg-white/78 p-5 shadow-[0_10px_24px_rgba(255,107,154,0.08)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 dark:bg-white/5"
+                  >
+                    <div className="mb-4 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${skill.tone} text-lg text-white`}
+                        >
+                          {skill.icon}
+                        </div>
+                        <span className="font-semibold text-[var(--text-primary)]">{skill.name}</span>
+                      </div>
+                      <span className="text-sm font-semibold text-[var(--text-secondary)]">
+                        {skill.level}%
+                      </span>
+                    </div>
+                    <div className="h-2 rounded-full bg-[var(--border-soft)]">
+                      <div
+                        className={`h-2 rounded-full bg-gradient-to-r ${skill.tone}`}
+                        style={{ width: `${skill.level}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {activeTab === "education" && (
+              <div className="space-y-4">
+                {education.map((edu) => (
+                  <div
+                    key={edu.degree}
+                    className="rounded-[1.8rem] border border-[var(--border-soft)] bg-white/78 p-6 shadow-[0_10px_24px_rgba(255,107,154,0.08)] backdrop-blur-xl dark:bg-white/5"
+                  >
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] text-xl text-white">
+                        {edu.icon}
+                      </div>
+                      <div>
+                        <p className="text-sm uppercase tracking-[0.24em] text-[var(--accent-primary)]">
+                          {edu.year}
+                        </p>
+                        <h4 className="mt-2 text-xl font-bold text-[var(--text-primary)]">
+                          {edu.degree}
+                        </h4>
+                        <p className="mt-1 text-sm font-semibold text-[var(--text-secondary)]">
+                          {edu.institution}
+                        </p>
+                        <p className="mt-3 leading-7 text-[var(--text-secondary)]">
+                          {edu.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -1,97 +1,102 @@
-import { useState } from "react"
-import { Nav } from "react-bootstrap"
-import { Link, useNavigate, useLocation } from "react-router-dom"
-import { House, People, FileText, Gear, BoxArrowRight, List } from "react-bootstrap-icons"
-import { FaBox, FaHeart } from "react-icons/fa"
-import { SiWine } from "react-icons/si"
-import useContextPro from "../../hooks/useContextPro"
+import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  FaBars,
+  FaBox,
+  FaClipboardList,
+  FaCog,
+  FaHeart,
+  FaHome,
+  FaImages,
+  FaSignOutAlt,
+  FaUsers,
+} from "react-icons/fa";
+import { SiWine } from "react-icons/si";
+import useContextPro from "../../hooks/useContextPro";
 
 function AdminSidebar() {
-    const [isOpen, setIsOpen] = useState(true)
-    const navigate = useNavigate()
-    const location = useLocation() 
-    const {
-        state: { user }, dispatch
-    } = useContextPro()
+  const [isOpen, setIsOpen] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const {
+    state: { user },
+    dispatch,
+  } = useContextPro();
 
-    const menuItems = [
-        { name: "Dashboard", icon: <House />, path: "/admin/dashboard", role: "ADMIN" },
-        { name: "Products", icon: <FileText />, path: "/admin/products", role: "ADMIN" },
-        { name: "Categories", icon: <Gear />, path: "/admin/categories", role: "ADMIN" },
-        { name: "Carousel/Slider", icon: <FaHeart />, path: "/admin/carousel", role: "ADMIN" },
-        { name: "Users", icon: <People />, path: "/admin/users", role: "ADMIN" },
-        { name: "Orders", icon: <FaBox />, path: "/admin/orders", role: "CHEF" },
+  const menuItems = [
+    { name: "Dashboard", icon: <FaHome />, path: "/admin", role: "ADMIN" },
+    { name: "Products", icon: <FaClipboardList />, path: "/admin/products", role: "ADMIN" },
+    { name: "Categories", icon: <FaCog />, path: "/admin/categories", role: "ADMIN" },
+    { name: "Carousel/Slider", icon: <FaHeart />, path: "/admin/carousel", role: "ADMIN" },
+    { name: "Users", icon: <FaUsers />, path: "/admin/users", role: "ADMIN" },
+    { name: "Orders", icon: <FaBox />, path: "/admin/orders", role: "CHEF" },
     { name: "Waiter", icon: <SiWine />, path: "/admin/waiter", role: "WAITER" },
-    ]
+    { name: "Gallery", icon: <FaImages />, path: "/admin/gallery", role: "ADMIN" },
+  ];
 
-    const canAccess = (itemRole: string) => {
-        if (!user?.roles) return false
-        if (user.roles.includes("SUPER_ADMIN")) return true
-        return user.roles.includes(itemRole)
-    }
+  const canAccess = (itemRole: string) => {
+    if (!user?.roles) return false;
+    if (user.roles.includes("SUPER_ADMIN")) return true;
+    return user.roles.includes(itemRole);
+  };
 
+  const isActiveLink = (path: string) => {
+    if (path === "/admin" && location.pathname === "/admin") return true;
+    if (path !== "/admin" && location.pathname.startsWith(path)) return true;
+    return false;
+  };
 
-    const isActiveLink = (path: string) => {
-        if (path === "/admin" && location.pathname === "/admin") {
-            return true
-        }
-        if (path !== "/admin" && location.pathname.startsWith(path)) {
-            return true
-        }
-        return false
-    }
-
-    return (
-        <div
-            className={`admin-sidebar vh-100 d-flex flex-column ${isOpen ? 'expanded' : ''}`}
-            style={{ width: isOpen ? "230px" : "70px" }}
+  return (
+    <div
+      className={`sticky top-0 flex min-h-screen shrink-0 flex-col border-r border-white/10 bg-slate-900/95 px-3 py-4 backdrop-blur transition-all duration-300 ${
+        isOpen ? "w-64" : "w-20"
+      }`}
+    >
+      <div className="mb-4 flex items-center justify-between px-2">
+        {isOpen && (
+          <button onClick={() => navigate("/admin")} className="text-left">
+            <p className="text-xs uppercase tracking-[0.28em] text-slate-500">Admin</p>
+            <h4 className="mt-1 text-lg font-bold text-white">Panel</h4>
+          </button>
+        )}
+        <button
+          className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white"
+          onClick={() => setIsOpen(!isOpen)}
         >
-            <div className="sidebar-header d-flex justify-content-between align-items-center p-3">
-                {isOpen && (
-                    <h4 onClick={() => navigate("/admin")} className="m-0">
-                        Admin Panel
-                    </h4>
-                )}
-                <button
-                    className="toggle-btn btn-sm"
-                    onClick={() => setIsOpen(!isOpen)}
-                >
-                    <List />
-                </button>
-            </div>
+          <FaBars />
+        </button>
+      </div>
 
-            <Nav className="flex-column mt-3 sidebar-nav">
-                {menuItems
-                    .filter((item) => canAccess(item.role))
-                    .map((item, i) => (
-                        <Nav.Item key={i}>
-                            <Nav.Link
-                                as={Link}
-                                to={item.path}
-                                className={`nav-link-item d-flex align-items-center gap-2 px-4 py-3 ${
-                                    isActiveLink(item.path) ? 'active' : ''
-                                }`}
-                                data-tooltip={!isOpen ? item.name : undefined}
-                            >
-                                <span className="nav-icon">{item.icon}</span>
-                                {isOpen && <span className="nav-text">{item.name}</span>}
-                            </Nav.Link>
-                        </Nav.Item>
-                    ))}
-            </Nav>
+      <nav className="mt-4 flex flex-1 flex-col gap-2">
+        {menuItems
+          .filter((item) => canAccess(item.role))
+          .map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition ${
+                isActiveLink(item.path)
+                  ? "bg-white text-slate-950"
+                  : "text-slate-300 hover:bg-white/10 hover:text-white"
+              }`}
+            >
+              <span className="text-lg">{item.icon}</span>
+              {isOpen && <span>{item.name}</span>}
+            </Link>
+          ))}
+      </nav>
 
-            {/* Footer */}
-            <div className="sidebar-footer mt-auto">
-                <button 
-                    onClick={() => dispatch({ type: "LOGOUT" })} 
-                    className="logout-btn w-100 d-flex align-items-center justify-content-center gap-2 px-3 py-2"
-                >
-                    <BoxArrowRight />
-                    {isOpen && <span>Logout</span>}
-                </button>
-            </div>
-        </div>
-    )
+      <div className="mt-auto pt-4">
+        <button
+          onClick={() => dispatch({ type: "LOGOUT" })}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-rose-500/20 bg-rose-500/10 px-3 py-3 text-sm font-semibold text-rose-200 transition hover:bg-rose-500/20"
+        >
+          <FaSignOutAlt />
+          {isOpen && <span>Logout</span>}
+        </button>
+      </div>
+    </div>
+  );
 }
 
-export default AdminSidebar
+export default AdminSidebar;

@@ -48,9 +48,6 @@ function useProjects() {
       setLoading(false);
     }
   }, []);
-
-  console.log("projects", projects);
-
   return { projects, loading, error };
 }
 

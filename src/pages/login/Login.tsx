@@ -1,13 +1,13 @@
-import { FaEnvelope, FaLock, FaArrowRight, FaUtensils, FaEyeSlash, FaEye } from 'react-icons/fa';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { type FieldValues, useForm } from 'react-hook-form';
+import { useState } from "react";
+import { FaArrowRight, FaEnvelope, FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
+import { NavLink, useNavigate } from "react-router-dom";
+import { type FieldValues, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from '../../firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { toast } from 'react-toastify';
-import type { User } from '../../types/types';
-import { FirebaseError } from 'firebase/app';
-import { useState } from 'react';
+import { auth, db } from "../../firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { toast } from "react-toastify";
+import type { User } from "../../types/types";
+import { FirebaseError } from "firebase/app";
 
 const LoginForm = () => {
   const { register, handleSubmit, formState: { isSubmitting } } = useForm();
@@ -22,8 +22,6 @@ const LoginForm = () => {
       const userDocSnap = await getDoc(userDocRef);
       if (userDocSnap.exists()) {
         const currentUser = { id: user.uid, ...userDocSnap.data() } as User;
-        // console.log("currentUser", currentUser);
-        
         if (currentUser?.roles) {
           localStorage.setItem("role", currentUser.roles.join(","));
           navigate("/", { replace: true });
@@ -35,7 +33,6 @@ const LoginForm = () => {
         toast.warn("User role topilmadi.");
       }
     } catch (error: unknown) {
-
       if (error instanceof FirebaseError) {
         const code = error.code;
 
@@ -58,197 +55,83 @@ const LoginForm = () => {
         }
       } else {
         toast.error("Noma'lum xatolik yuz berdi!");
-        console.error("❌ Unknown error:", error);
+        console.error("Unknown error:", error);
       }
     }
   };
 
   return (
-    <div className="login d-flex justify-content-center align-items-center min-vh-100" style={{ 
-      backgroundColor: '#fef7f9',
-      backgroundImage: 'linear-gradient(135deg, rgba(226, 26, 67, 0.03) 0%, rgba(255, 255, 255, 0.9) 100%)',
-      position: 'relative',
-      overflow: 'hidden'
-    }}>
-      {/* Background decorative elements */}
-      <div style={{
-        position: 'absolute',
-        top: '-10%',
-        left: '-10%',
-        width: '30%',
-        height: '50%',
-        backgroundColor: 'rgba(226, 26, 67, 0.05)',
-        borderRadius: '50%',
-        filter: 'blur(40px)'
-      }}></div>
-      <div style={{
-        position: 'absolute',
-        bottom: '-10%',
-        right: '-5%',
-        width: '40%',
-        height: '40%',
-        backgroundColor: 'rgba(226, 26, 67, 0.05)',
-        borderRadius: '50%',
-        filter: 'blur(40px)'
-      }}></div>
-      
-      <div className="login-form bg-white p-4 p-md-5 rounded-4 shadow" style={{ 
-        width: '95%', 
-        maxWidth: '450px',
-        border: 'none',
-        position: 'relative',
-        overflow: 'hidden',
-        zIndex: 1,
-        boxShadow: '0 10px 30px rgba(226, 26, 67, 0.1) !important'
-      }}>
-        {/* Decorative elements */}
-        <div style={{
-          position: 'absolute',
-          top: '-30px',
-          right: '-30px',
-          width: '120px',
-          height: '120px',
-          backgroundColor: 'rgba(226, 26, 67, 0.08)',
-          borderRadius: '50%',
-          zIndex: 0
-        }}></div>
-        
-        <div className="text-center mb-4" style={{ position: 'relative', zIndex: 1 }}>
-          <div className="mb-3" style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '70px',
-            height: '70px',
-            backgroundColor: 'rgba(226, 26, 67, 0.1)',
-            borderRadius: '50%',
-            marginBottom: '1rem'
-          }}>
-            <FaUtensils style={{ 
-              fontSize: '2rem', 
-              color: '#E21A43'
-            }} />
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(244,63,94,0.2),transparent_25%),radial-gradient(circle_at_bottom_right,rgba(56,189,248,0.18),transparent_25%),linear-gradient(135deg,#fff7ed,#ffe4e6_45%,#f8fafc)]" />
+
+      <div className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-rose-200/60 bg-white/80 p-8 shadow-2xl shadow-rose-200/40 backdrop-blur xl:p-10">
+        <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-rose-200/50 blur-2xl" />
+
+        <div className="relative text-center">
+          <div className="mx-auto mb-4 flex h-[72px] w-[72px] items-center justify-center rounded-full bg-rose-100 text-rose-600">
+            <FaLock className="text-2xl" />
           </div>
-          <h1 className="fw-bold mb-2" style={{ 
-            color: '#E21A43',
-            fontSize: '2rem',
-            background: 'linear-gradient(135deg, #E21A43 0%, #FF6B9D 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text'
-          }}>Perfect Breakfast</h1>
-          <p className="text-muted" style={{ fontSize: '1rem' }}>Sign in to your account</p>
+          <h1 className="text-3xl font-black text-slate-900">Welcome back</h1>
+          <p className="mt-2 text-slate-600">Sign in to your account</p>
         </div>
 
-        <form onSubmit={handleSubmit(Login)} style={{ position: 'relative', zIndex: 1 }}>
-          <div className="mb-4">
-            <label htmlFor="email" className="form-label fw-semibold" style={{ color: '#333' }}>Email Address</label>
-            <div className="input-group input-group-lg">
-              <span className="input-group-text bg-white" style={{ 
-                borderRight: 'none',
-                borderColor: 'rgba(226, 26, 67, 0.3)',
-                borderTopLeftRadius: '12px',
-                borderBottomLeftRadius: '12px'
-              }}>
-                <FaEnvelope style={{ color: '#E21A43' }} />
-              </span>
+        <form onSubmit={handleSubmit(Login)} className="relative mt-8 space-y-5">
+          <div>
+            <label htmlFor="email" className="mb-2 block text-sm font-semibold text-slate-700">
+              Email Address
+            </label>
+            <div className="flex items-center rounded-2xl border border-rose-200 bg-white px-4">
+              <FaEnvelope className="text-rose-500" />
               <input
                 type="email"
-                className="form-control"
                 id="email"
                 placeholder="your@email.com"
-                {...register('email', { required: true })}
-                style={{ 
-                  borderLeft: 'none',
-                  borderColor: 'rgba(226, 26, 67, 0.3)',
-                  boxShadow: 'none',
-                  borderTopRightRadius: '12px',
-                  borderBottomRightRadius: '12px',
-                  padding: '0.75rem 1rem',
-                  fontSize: '1rem'
-                }}
+                {...register("email", { required: true })}
+                className="w-full bg-transparent px-4 py-4 outline-none placeholder:text-slate-400"
               />
             </div>
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="password" className="form-label fw-semibold">Password</label>
-            <div className="input-group input-group-lg">
-              <span className="input-group-text bg-white"><FaLock style={{ color: '#E21A43' }} /></span>
+          <div>
+            <label htmlFor="password" className="mb-2 block text-sm font-semibold text-slate-700">
+              Password
+            </label>
+            <div className="flex items-center rounded-2xl border border-rose-200 bg-white px-4">
+              <FaLock className="text-rose-500" />
               <input
                 type={showPassword ? "text" : "password"}
-                className="form-control"
                 id="password"
-                placeholder="••••••••"
-                {...register('password', { required: true })}
+                placeholder="Password"
+                {...register("password", { required: true })}
+                className="w-full bg-transparent px-4 py-4 outline-none placeholder:text-slate-400"
               />
-              <span 
-                className="input-group-text bg-white" 
-                style={{ cursor: "pointer" }}
+              <button
+                type="button"
+                className="text-rose-500"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? <FaEyeSlash style={{ color: '#E21A43' }} /> : <FaEye style={{ color: '#E21A43' }} />}
-              </span>
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
             </div>
           </div>
 
           <button
             disabled={isSubmitting}
             type="submit"
-            className="btn w-100 py-3 fw-bold d-flex align-items-center justify-content-center gap-2"
-            style={{ 
-              background: 'linear-gradient(135deg, #E21A43 0%, #FF6B9D 100%)',
-              color: 'white',
-              borderRadius: '12px',
-              border: 'none',
-              boxShadow: '0 4px 15px rgba(226, 26, 67, 0.3)',
-              transition: 'all 0.4s ease',
-              fontSize: '1.1rem',
-              position: 'relative',
-              overflow: 'hidden',
-              zIndex: 1
-            }}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-500 px-6 py-4 text-base font-bold text-white shadow-lg shadow-rose-300/40 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            {isSubmitting ? (
-              <>
-                <span>Signing in...</span>
-                <div className="spinner"></div> 
-              </>
-            ) : (
+            {isSubmitting ? "Signing in..." : (
               <>
                 <span>Sign In</span>
                 <FaArrowRight />
               </>
             )}
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: '-100%',
-                width: '100%',
-                height: '100%',
-                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
-                transition: 'left 0.7s',
-                zIndex: 0
-              }}
-              className="btn-shine"
-            ></div>
           </button>
 
-
-          <div className="text-center mt-4 pt-3" style={{ borderTop: '1px solid rgba(226, 26, 67, 0.1)' }}>
-            <p className="text-muted small mb-0">
-              Don't have an account?{' '}
-              <NavLink 
-                to="/sign-up" 
-                style={{ 
-                  color: '#E21A43', 
-                  fontWeight: '600',
-                  textDecoration: 'none',
-                  transition: 'all 0.3s ease'
-                }}
-                className="hover-underline"
-              >
+          <div className="border-t border-rose-100 pt-4 text-center text-sm text-slate-600">
+            <p>
+              Don't have an account?{" "}
+              <NavLink to="/sign-up" className="font-semibold text-rose-600 transition hover:text-rose-500">
                 Create one
               </NavLink>
             </p>

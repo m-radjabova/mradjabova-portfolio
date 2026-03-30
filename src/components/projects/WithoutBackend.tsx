@@ -1,300 +1,107 @@
-import { useState, useEffect, useRef, type ReactElement } from 'react';
-import './WithoutBackend.css';
-import { 
-  FaGithub, 
-  FaExternalLinkAlt, 
-  FaEye,
-  FaUtensils,
-  FaIceCream,
-  FaStar
-} from 'react-icons/fa';
-import { 
-  SiReact, 
-  SiTypescript, 
+import { type ReactElement } from "react";
+import { Link } from "react-router-dom";
+import { FaArrowRight, FaGithub } from "react-icons/fa";
+import { localProjects, type LocalProject } from "../../data/projects";
+import {
   SiBootstrap,
-  SiFigma,
   SiCss3,
-  SiJavascript
-} from 'react-icons/si';
-import ProjectModal from './ProjectModal';
+  SiFigma,
+  SiJavascript,
+  SiReact,
+  SiTypescript,
+} from "react-icons/si";
 
-// flower shop project photos
-import photo1 from "../../assets/Снимок экрана 2025-11-01 201302.png";
-import photo2 from "../../assets/Снимок экрана 2025-11-01 201336.png";
-import photo3 from "../../assets/Снимок экрана 2025-11-01 201350.png";
-import photo4 from "../../assets/Снимок экрана 2025-11-01 201416.png";
-import photo5 from "../../assets/Снимок экрана 2025-11-01 201436.png";
-import photo6 from "../../assets/Снимок экрана 2025-11-01 201452.png";
-import photo7 from "../../assets/Снимок экрана 2025-11-01 201506.png";
-import photo8 from "../../assets/Снимок экрана 2025-11-01 201527.png";
-import photo9 from "../../assets/Снимок экрана 2025-11-01 201540.png";
-import photo10 from "../../assets/Снимок экрана 2025-11-01 201557.png";
-import photo11 from "../../assets/Снимок экрана 2025-11-01 201618.png";
-import photo12 from "../../assets/Снимок экрана 2025-11-01 201741.png";
-import photo13 from "../../assets/Снимок экрана 2025-11-01 201804.png";
-import photo14 from "../../assets/Снимок экрана 2025-11-01 201819.png";
-
-// your meal project photos
-import meal1 from "../../assets/Снимок экрана 2025-11-01 204005.png";
-import meal2 from "../../assets/Снимок экрана 2025-11-01 204018.png";
-import meal3 from "../../assets/Снимок экрана 2025-11-01 204037.png";
-import meal4 from "../../assets/Снимок экрана 2025-11-01 204050.png";
-import meal5 from "../../assets/Снимок экрана 2025-11-01 204108.png";
-import meal6 from "../../assets/Снимок экрана 2025-11-01 204208.png";
-import meal7 from "../../assets/Снимок экрана 2025-11-01 204223.png";
-
-// ice cream shop project photos
-import ice1 from "../../assets/Снимок экрана 2025-11-01 205140.png";
-import ice2 from "../../assets/Снимок экрана 2025-11-01 205156.png";
-import ice3 from "../../assets/Снимок экрана 2025-11-01 205209.png";
-import ice4 from "../../assets/Снимок экрана 2025-11-01 205222.png";
-import ice5 from "../../assets/Снимок экрана 2025-11-01 205241.png";
-import ice6 from "../../assets/Снимок экрана 2025-11-01 205301.png";
-import ice7 from "../../assets/Снимок экрана 2025-11-01 205325.png";
-import ice8 from "../../assets/Снимок экрана 2025-11-01 205348.png";
-import ice9 from "../../assets/Снимок экрана 2025-11-01 205415.png";
-import ice10 from "../../assets/Снимок экрана 2025-11-01 205432.png";
-import ice11 from "../../assets/Снимок экрана 2025-11-01 205529.png";
-import { LuFlower } from 'react-icons/lu';
-export interface Project {
-    id: number;
-    title: string;
-    description: string;
-    images: string[];
-    technologies: string[];
-    liveLink: string;
-    githubLink: string;
-    icon: React.ReactElement;
-    accentColor: string;
-    category: string;
-    features: string[];
-}
+export type Project = LocalProject;
 export type TechIcons = {
   [key: string]: ReactElement;
 };
 
 function WithoutBackend() {
-    const [activeProject, setActiveProject] = useState<Project | null>(null);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [isVisible, setIsVisible] = useState(false);
-    const sectionRef = useRef(null);
+  const techIcons: TechIcons = {
+    react: <SiReact />,
+    typescript: <SiTypescript />,
+    bootstrap: <SiBootstrap />,
+    figma: <SiFigma />,
+    css: <SiCss3 />,
+    javascript: <SiJavascript />,
+  };
 
-    const projectsData = [
-        {
-            id: 1,
-            title: "Floral Elegance",
-            description: "A sophisticated flower shop platform with elegant animations and seamless user experience. Features product catalog, shopping cart, and responsive design.",
-            images: [photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9, photo10, photo11, photo12, photo13, photo14],
-            technologies: ["React", "TypeScript", "CSS", "Bootstrap", "Figma"],
-            liveLink: "",
-            githubLink: "https://github.com/m-radjabova/vite-project.git",
-            icon: <LuFlower />,
-            accentColor: "#FF6F91",
-        },
-        {
-            id: 2,
-            title: "Culinary Master",
-            description: "Modern meal planning application with recipe management and interactive features. Perfect for food enthusiasts and home cooks.",
-            images: [meal1, meal2, meal3, meal4, meal5, meal6, meal7],
-            technologies: ["React", "TypeScript", "CSS", "Bootstrap", "Figma"],
-            liveLink: "",
-            githubLink: "https://github.com/m-radjabova/vite-project.git",
-            icon: <FaUtensils />,
-            accentColor: "#4ECDC4",
-            },
-        {
-            id: 3,
-            title: "Frozen Delights",
-            description: "Vibrant ice cream shop website with engaging animations and product showcases. Captures the joy and excitement of frozen treats.",
-            images: [ice1, ice2, ice3, ice4, ice5, ice6, ice7, ice8, ice9, ice10, ice11],
-            technologies: ["React", "TypeScript", "CSS", "Bootstrap", "Figma"],
-            liveLink: "",
-            githubLink: "https://github.com/m-radjabova/vite-project.git",
-            icon: <FaIceCream />,
-            accentColor: "#45B7D1",
-        }
-    ];
+  return (
+    <div>
+      <div className="mb-8">
+        <p className="text-sm uppercase tracking-[0.28em] text-[var(--accent-primary)]">
+          Without backend
+        </p>
+        <h3 className="mt-2 text-2xl font-bold text-[var(--text-primary)] sm:text-3xl">
+          Static and showcase projects
+        </h3>
+      </div>
 
-    const techIcons: TechIcons = {
-        react: <SiReact />,
-        typescript: <SiTypescript />,
-        bootstrap: <SiBootstrap />,
-        figma: <SiFigma />,
-        css: <SiCss3 />,
-        javascript: <SiJavascript />
-    };
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsVisible(true);
-                }
-            },
-            { threshold: 0.1 }
-        );
-
-        if (sectionRef.current) {
-            observer.observe(sectionRef.current);
-        }
-
-        return () => observer.disconnect();
-    }, []);
-
-    const openProjectModal = (project: Project) => {
-        setActiveProject(project);
-        setCurrentImageIndex(0);
-        document.body.style.overflow = 'avto';
-    };
-
-    const closeProjectModal = () => {
-        setActiveProject(null);
-        setCurrentImageIndex(0);
-        document.body.style.overflow = '';
-    };
-
-    const nextImage = () => {
-        if (activeProject) {
-            setCurrentImageIndex((prevIndex) => 
-                prevIndex === activeProject.images.length - 1 ? 0 : prevIndex + 1
-            );
-        }
-    };
-
-    const prevImage = () => {
-        if (activeProject) {
-            setCurrentImageIndex((prevIndex) => 
-                prevIndex === 0 ? activeProject.images.length - 1 : prevIndex - 1
-            );
-        }
-    };
-
-    return (
-        <section className="without-backend-section" id="projects" ref={sectionRef}>
-            {/* Animated Background */}
-            <div className="projects-bg">
-                <div className="bg-orb orb-1"></div>
-                <div className="bg-orb orb-2"></div>
-                <div className="bg-orb orb-3"></div>
-                <div className="floating-shapes">
-                    <div className="shape shape-1"></div>
-                    <div className="shape shape-2"></div>
-                    <div className="shape shape-3"></div>
+      <div className="grid gap-8 xl:grid-cols-3">
+        {localProjects.map((project) => (
+          <article
+            key={project.id}
+            className="group overflow-hidden rounded-[2rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] shadow-[var(--shadow-soft)] backdrop-blur-2xl transition duration-300 hover:-translate-y-2 hover:shadow-[var(--shadow-glow)]"
+          >
+            <Link to={`/projects/${project.slug}`} className="block">
+              <div className="relative overflow-hidden">
+                <img
+                  src={project.images[0]}
+                  alt={project.title}
+                  className="h-72 w-full object-cover object-top transition duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent dark:from-slate-950/80" />
+                <div className="absolute left-5 top-5 inline-flex items-center gap-2 rounded-full border border-white/45 bg-white/55 px-3 py-2 text-sm font-medium text-white backdrop-blur-xl dark:border-white/30 dark:bg-white/25">
+                  <span style={{ color: project.accentColor }}>{project.icon}</span>
+                  {project.category}
                 </div>
-            </div>
-
-            <div className="without-backend-container">
-                {/* Projects Grid */}
-                <div className="projects-grid">
-                    {projectsData.map((project) => (
-                        <div 
-                            key={project.id} 
-                            className={`project-card ${isVisible ? 'animate-in' : ''}`}
-                            onClick={() => openProjectModal(project as Project)}
-                        >
-                            {/* Card Glow Effects */}
-                            <div className="card-glow-1"></div>
-                            <div className="card-glow-2"></div>
-                            
-                            {/* Project Image with Enhanced Overlay */}
-                            <div className="card-image-container">
-                                <img 
-                                    src={project.images[0]} 
-                                    alt={project.title} 
-                                    className="card-image"
-                                />
-                                
-                                {/* Gradient Overlay */}
-                                <div className="image-gradient"></div>
-                                
-                                {/* Hover Overlay */}
-                                <div className="card-overlay">
-                                    <div className="overlay-content">
-                                        <button className="view-project-btn magnetic">
-                                            <FaEye />
-                                            <span>Explore Project</span>
-                                        </button>
-                                        <div className="image-stats">
-                                            <div className="stat">
-                                                <FaStar />
-                                                <span>{project.images.length} Screenshots</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Technology Stack */}
-                                <div className="tech-stack-project">
-                                    {project.technologies.map((tech, techIndex) => (
-                                        <div 
-                                            key={techIndex} 
-                                            className="tech-item-project"
-                                            style={{ animationDelay: `${techIndex * 0.1}s` }}
-                                        >
-                                            <div className="tech-icon-project">
-                                                {techIcons[tech.toLowerCase()] || <SiReact />}
-                                            </div>
-                                            <span className="tech-name-project">{tech}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            
-                            {/* Card Content */}
-                            <div className="card-content">
-                                <div className="card-header">
-                                    <div className="title-section">
-                                        <h3 className="project-title">{project.title}</h3>
-                                    </div>
-                                </div>
-                                
-                                <p className="project-description">
-                                    {project.description}
-                                </p>                                
-                                {/* Card Actions */}
-                                <div className="card-actions">
-                                    <a 
-                                        href={project.githubLink} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        className="action-btn github-btn magnetic"
-                                        onClick={(e) => e.stopPropagation()}
-                                    >
-                                        <FaGithub />
-                                        <span>Source Code</span>
-                                    </a>
-                                    {project.liveLink && (
-                                        <a 
-                                            href={project.liveLink} 
-                                            target="_blank" 
-                                            rel="noopener noreferrer"
-                                            className="action-btn live-btn magnetic"
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
-                                            <FaExternalLinkAlt />
-                                            <span>Live Demo</span>
-                                        </a>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Interactive Border */}
-                            <div className="interactive-border"></div>
-                        </div>
-                    ))}
+                <div className="absolute bottom-5 left-5 flex flex-wrap gap-2 pr-5">
+                  {project.technologies.map((tech) => (
+                    <span
+                      key={tech}
+                      className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/35 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-xl dark:border-white/20 dark:bg-white/15"
+                    >
+                      {techIcons[tech.toLowerCase()] || <SiReact />}
+                      {tech}
+                    </span>
+                  ))}
                 </div>
-            </div>
+              </div>
+            </Link>
 
-            <ProjectModal
-                activeProject={activeProject}
-                open={!!activeProject}
-                onClose={closeProjectModal}
-                currentImageIndex={currentImageIndex}
-                nextImage={nextImage}
-                prevImage={prevImage}
-            />
-        </section>
-    );
+            <div className="space-y-6 p-6">
+              <div className="space-y-3">
+                <h4 className="text-3xl font-black text-[var(--text-primary)]">{project.title}</h4>
+                <p className="leading-7 text-[var(--text-secondary)]">{project.description}</p>
+              </div>
+
+              <div className="flex items-center justify-between gap-3 text-sm text-[var(--text-secondary)]">
+                <span>{project.stats}</span>
+                <Link
+                  to={`/projects/${project.slug}`}
+                  className="inline-flex items-center gap-2 font-semibold text-[var(--accent-primary)] transition hover:text-[var(--accent-secondary)]"
+                >
+                  Open page
+                  <FaArrowRight />
+                </Link>
+              </div>
+
+              <a
+                href={project.githubLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[var(--border-soft)] bg-white/82 px-4 py-3 text-sm font-semibold text-[var(--text-primary)] shadow-[0_10px_24px_rgba(255,107,154,0.08)] transition duration-300 hover:-translate-y-0.5 hover:border-[var(--accent-primary)]/35 hover:text-[var(--accent-primary)] dark:bg-white/5"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <FaGithub />
+                Source Code
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default WithoutBackend;

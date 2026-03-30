@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { FaArrowRight, FaGithub, FaGitAlt, FaPython } from "react-icons/fa";
+import { SiMysql, SiReact, SiTailwindcss } from "react-icons/si";
 import myPhoto from "../../assets/photo_2025-11-03_08-23-39.jpg";
 import TypewriterTitle from "./TypewriterTitle";
 
@@ -7,94 +9,61 @@ interface CustomStyle extends React.CSSProperties {
   "--mouse-y": string;
 }
 
+const orbitIcons = [
+  {
+    label: "React",
+    className:
+      "left-[2%] top-[8%] h-24 w-24 rounded-[1.9rem] text-[var(--accent-primary)] animate-[float-petal_9s_ease-in-out_infinite]",
+    icon: <SiReact className="h-12 w-12" />,
+  },
+  {
+    label: "Tailwind",
+    className:
+      "right-[2%] top-[10%] h-24 w-24 rounded-full text-sky-400 animate-[float-petal_11s_ease-in-out_infinite]",
+    icon: <SiTailwindcss className="h-12 w-12" />,
+  },
+  {
+    label: "Git",
+    className:
+      "left-[1%] top-1/2 h-22 w-22 -translate-y-1/2 rounded-[1.7rem] text-orange-500 animate-[float-petal_10s_ease-in-out_infinite]",
+    icon: <FaGitAlt className="h-10 w-10" />,
+  },
+  {
+    label: "Python",
+    className:
+      "right-[1%] top-1/2 h-22 w-22 -translate-y-1/2 rounded-full text-yellow-500 animate-[float-petal_12s_ease-in-out_infinite]",
+    icon: <FaPython className="h-10 w-10" />,
+  },
+  {
+    label: "SQL",
+    className:
+      "bottom-[2%] left-1/2 h-22 w-22 -translate-x-1/2 rounded-[1.7rem] text-violet-500 animate-[float-petal_13s_ease-in-out_infinite]",
+    icon: <SiMysql className="h-10 w-10" />,
+  },
+];
+
 const Hero = () => {
-  const titleRef = useRef(null);
-  const subtitleRef = useRef(null);
-  const descriptionRef = useRef(null);
-  const buttonsRef = useRef(null);
-  const avatarRef = useRef(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (event: MouseEvent) => {
       setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100,
+        x: (event.clientX / window.innerWidth) * 100,
+        y: (event.clientY / window.innerHeight) * 100,
       });
     };
 
     window.addEventListener("mousemove", handleMouseMove);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate-in");
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    // Observe all elements
-    if (titleRef.current) observer.observe(titleRef.current);
-    if (subtitleRef.current) observer.observe(subtitleRef.current);
-    if (descriptionRef.current) observer.observe(descriptionRef.current);
-    if (buttonsRef.current) observer.observe(buttonsRef.current);
-    if (avatarRef.current) observer.observe(avatarRef.current);
-
-    // Floating particles effect
-    const createParticles = () => {
-      const container = document.querySelector(".particles-container");
-      if (!container) return;
-
-      // Clear existing particles
-      container.innerHTML = "";
-
-      for (let i = 0; i < 25; i++) {
-        const particle = document.createElement("div");
-        particle.className = "floating-particle";
-
-        const size = Math.random() * 8 + 2;
-        const left = Math.random() * 100;
-        const delay = Math.random() * 8;
-        const duration = Math.random() * 15 + 15;
-
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${left}%`;
-        particle.style.animationDelay = `${delay}s`;
-        particle.style.animationDuration = `${duration}s`;
-
-        // Random gradient colors
-        const gradients = [
-          "var(--gradient-1)",
-          "var(--gradient-2)",
-          "var(--gradient-3)",
-          "var(--gradient-4)",
-          "var(--gradient-5)",
-        ];
-        const randomGradient =
-          gradients[Math.floor(Math.random() * gradients.length)];
-        particle.style.background = randomGradient;
-
-        container.appendChild(particle);
-      }
-    };
-
-    createParticles();
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      observer.disconnect();
-    };
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   return (
-    <section className="hero-section" id="home">
-      {/* Advanced Animated Background */}
+    <section
+      className="relative overflow-hidden px-4 pb-24 pt-24 sm:px-6 lg:px-8 lg:pb-[7.5rem] lg:pt-28"
+      id="home"
+    >
       <div
-        className="animated-bg"
+        className="pointer-events-none absolute inset-0"
         style={
           {
             "--mouse-x": `${mousePosition.x}%`,
@@ -102,172 +71,90 @@ const Hero = () => {
           } as CustomStyle
         }
       >
-        <div className="gradient-mesh"></div>
-        <div className="floating-orbs">
-          <div className="orb orb-1"></div>
-          <div className="orb orb-2"></div>
-          <div className="orb orb-3"></div>
-          <div className="orb orb-4"></div>
-        </div>
-        <div className="particles-container"></div>
-        <div className="noise-overlay"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgba(255,107,154,0.12),transparent_18%),linear-gradient(135deg,rgba(255,250,251,0.46)_0%,rgba(255,245,247,0.34)_42%,rgba(255,250,252,0.22)_100%)] dark:bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgba(255,107,154,0.14),transparent_16%),linear-gradient(135deg,rgba(2,6,23,0.54)_0%,rgba(15,23,42,0.48)_42%,rgba(26,26,46,0.4)_100%)]" />
+        <div className="absolute -left-24 top-16 h-72 w-72 rounded-full bg-[var(--accent-secondary)]/20 blur-3xl animate-[glow-drift_14s_ease-in-out_infinite]" />
+        <div className="absolute right-0 top-6 h-80 w-80 rounded-full bg-[var(--accent-primary)]/20 blur-3xl animate-[glow-drift_16s_ease-in-out_infinite]" />
+        <div className="absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-[var(--accent-tertiary)]/20 blur-3xl animate-[glow-drift_12s_ease-in-out_infinite]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.35)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.35)_1px,transparent_1px)] bg-[size:96px_96px] opacity-[0.12] dark:opacity-[0.05]" />
+        <div className="absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_1px_1px,rgba(255,107,154,0.18)_1px,transparent_0)] [background-size:28px_28px] dark:opacity-[0.1]" />
+        <div className="absolute inset-0 bg-transparent dark:bg-[linear-gradient(180deg,rgba(2,6,23,0.16),rgba(2,6,23,0.08),rgba(2,6,23,0.18))]" />
       </div>
 
-      {/* Animated Grid Overlay */}
-      <div className="grid-overlay"></div>
+      <div className="relative mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
+        <div className="space-y-8 animate-[fade-up_0.8s_ease-out_both]">
+      
+          <TypewriterTitle />
 
-      <div className="hero-container">
-        <div className="hero-content">
-          {/* Left Content */}
-          <div className="hero-left">
-            <div className="text-content">
-              <TypewriterTitle />
+          <p className="max-w-2xl text-lg leading-8 text-[var(--text-secondary)] sm:text-xl">
+            I build responsive, modern and visually strong web interfaces with React,
+            TypeScript and Tailwind CSS. My focus is turning design ideas into clean,
+            polished and production-ready user experiences.
+          </p>
 
-              <p
-                ref={descriptionRef}
-                className="hero-description animate-on-scroll"
+          <div className="grid max-w-xl grid-cols-2 gap-4 sm:grid-cols-3">
+            {[
+              ["20+", "Projects"],
+              ["2+", "Years"],
+            ].map(([value, label]) => (
+              <div
+                key={label}
+                className="rounded-[1.8rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] p-5 shadow-[var(--shadow-soft)] backdrop-blur-2xl transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]"
               >
-                I specialize in creating{" "}
-                <span className="highlight">immersive digital experiences</span>{" "}
-                that blend cutting-edge technology with elegant design.
-                Transforming complex ideas into intuitive, user-friendly
-                interfaces.
-              </p>
-
-              {/* Stats */}
-              <div className="hero-stats">
-                <div className="stat-item">
-                  <div className="stat-number">20+</div>
-                  <div className="stat-label">Projects</div>
-                </div>
-                <div className="stat-item">
-                  <div className="stat-number">2+</div>
-                  <div className="stat-label">Years</div>
-                </div>
+                <p className="text-3xl font-black text-[var(--text-primary)]">{value}</p>
+                <p className="mt-1 text-sm uppercase tracking-[0.24em] text-[var(--text-secondary)]">
+                  {label}
+                </p>
               </div>
-
-              <div ref={buttonsRef} className="hero-buttons animate-on-scroll">
-                <a href="#projects" className="btn btn-primary magnetic">
-                  <span className="btn-text">
-                    <span className="btn-icon">🚀</span>
-                    Explore Projects
-                  </span>
-                  <div className="btn-shine"></div>
-                </a>
-              </div>
-            </div>
+            ))}
           </div>
 
-          {/* Right Content - Avatar */}
-           <div className="hero-right">
-            <div className="avatar-container">
-              <div ref={avatarRef} className="avatar-wrapper animate-on-scroll">
-                <div className="avatar-glow"></div>
+          <div className="flex flex-wrap items-center gap-4">
+            <a
+              href="#projects"
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] px-6 py-3 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(255,107,154,0.28)] transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-[0_20px_40px_rgba(255,107,154,0.34)]"
+            >
+              Explore Projects
+              <FaArrowRight />
+            </a>
+            <a
+              href="https://github.com/m-radjabova"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-[var(--border-soft)] bg-[color:var(--card-bg)] px-6 py-3 text-sm font-semibold text-[var(--text-primary)] shadow-[var(--shadow-soft)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[var(--accent-primary)]/35 hover:text-[var(--accent-primary)]"
+            >
+              <FaGithub />
+              GitHub
+            </a>
+          </div>
+        </div>
+
+        <div className="relative mx-auto w-full max-w-xl animate-[fade-up_1s_ease-out_both]">
+          <div className="absolute -inset-8 rounded-[2.8rem] bg-gradient-to-br from-[var(--accent-primary)]/18 via-[var(--accent-secondary)]/12 to-[var(--accent-tertiary)]/18 blur-3xl" />
+
+          <div className="relative mx-auto flex min-h-[44rem] items-center justify-center">
+            <div className="absolute inset-0 rounded-[3rem] bg-[radial-gradient(circle,rgba(255,255,255,0.2),transparent_60%)] dark:bg-[radial-gradient(circle,rgba(255,255,255,0.06),transparent_60%)]" />
+
+            <div className="relative z-10 mx-auto aspect-square w-full max-w-[24rem] sm:max-w-[30rem]">
+              <div className="absolute -inset-8 rounded-full bg-gradient-to-br from-[var(--accent-primary)]/30 via-[var(--accent-secondary)]/18 to-[var(--accent-tertiary)]/24 blur-3xl" />
+              <div className="relative h-full w-full overflow-hidden rounded-full bg-[var(--card-solid)] p-2 shadow-[0_30px_65px_rgba(255,107,154,0.24)]">
                 <img
                   src={myPhoto}
                   alt="Muslima"
-                  className="hero-avatar floating"
+                  className="h-full w-full rounded-full object-cover object-center"
                 />
-                <div className="avatar-border"></div>
-                <div className="tech-icons">
-                  <div className="tech-icon react">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 841.9 595.3"
-                      width="100"
-                      height="100"
-                    >
-                      <g stroke="#61DAFB" fill="none" stroke-width="20">
-                        <circle cx="420.9" cy="296.5" r="45.7" />
-                        <ellipse
-                          cx="420.9"
-                          cy="296.5"
-                          rx="250"
-                          ry="100"
-                          transform="rotate(60 420.9 296.5)"
-                        />
-                        <ellipse
-                          cx="420.9"
-                          cy="296.5"
-                          rx="250"
-                          ry="100"
-                          transform="rotate(-60 420.9 296.5)"
-                        />
-                        <ellipse cx="420.9" cy="296.5" rx="250" ry="100" />
-                      </g>
-                    </svg>
+              </div>
 
+              <div className="pointer-events-none absolute inset-0 z-20">
+                {orbitIcons.map((item) => (
+                  <div key={item.label} className={`absolute ${item.className}`}>
+                    <div className="flex h-full w-full items-center justify-center drop-shadow-[0_10px_22px_rgba(255,107,154,0.26)] dark:drop-shadow-[0_10px_22px_rgba(168,85,247,0.24)]">
+                      {item.icon}
+                    </div>
                   </div>
-
-                  <div className="tech-icon js">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 630 630"
-                    >
-                      <rect width="630" height="630" fill="#F7DF1E" />
-                      <path d="M423 492c13 8 30 15 48 15 23 0 36-11 36-27 0-18-14-24-38-34l-13-6c-37-15-62-34-62-74 0-37 28-65 71-65 31 0 54 11 70 39l-38 24c-8-15-17-21-31-21-14 0-23 9-23 21 0 15 9 21 31 30l13 6c44 19 69 37 69 79 0 45-36 70-83 70-37 0-61-10-79-37l38-23zm-165 3c7 12 13 23 28 23 14 0 23-5 23-28V289h43v201c0 45-26 66-64 66-34 0-54-17-64-38l34-21z" />
-                    </svg>
-                  </div>
-
-                  <div className="tech-icon css">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 124 141.53199999999998"
-                    >
-                      <path
-                        fill="#1572B6"
-                        d="M10.383 127.422L0 0h124l-10.383 127.398L61.965 141.53"
-                      />
-                      <path
-                        fill="#33A9DC"
-                        d="M62 131.861l41.91-11.623L113.617 9.14H62"
-                      />
-                      <path
-                        fill="#fff"
-                        d="M62 57.802H41.754l-1.44-16.147H62V25.73H23.543l.378 4.246 3.887 43.553H62V57.802zM62 97.926l-.07.02-17.06-4.61-1.09-12.206H27.44l2.14 23.972 32.347 8.985.07-.02v-16.14z"
-                      />
-                      <path
-                        fill="#EBEBEB"
-                        d="M61.965 57.802v15.925h18.812l-1.772 19.61-17.04 4.61v16.14l32.327-8.985.23-2.603 3.703-41.442.383-4.255H61.965zM61.965 25.73v15.925h38.604l.315-3.556.717-8.123.376-4.246H61.965z"
-                      />
-                    </svg>
-                  </div>
-
-                  <div className="tech-icon html">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 124 141.53199999999998"
-                    >
-                      <path
-                        fill="#E34F26"
-                        d="M10.383 127.422L0 0h124l-10.383 127.398L61.965 141.53"
-                      />
-                      <path
-                        fill="#EF652A"
-                        d="M62 131.861l41.91-11.623L113.617 9.14H62"
-                      />
-                      <path
-                        fill="#EBEBEB"
-                        d="M62 57.802H41.754l-1.44-16.147H62V25.73H23.543l.378 4.246 3.887 43.553H62V57.802zM62 97.926l-.07.02-17.06-4.61-1.09-12.206H27.44l2.14 23.972 32.347 8.985.07-.02v-16.14z"
-                      />
-                      <path
-                        fill="#fff"
-                        d="M61.965 57.802v15.925h18.812l-1.772 19.61-17.04 4.61v16.14l32.327-8.985.23-2.603 3.703-41.442.383-4.255H61.965zM61.965 25.73v15.925h38.604l.315-3.556.717-8.123.376-4.246H61.965z"
-                      />
-                    </svg>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="scroll-indicator">
-          <div className="scroll-track">
-            <div className="scroll-thumb"></div>
-          </div>
-          <span className="scroll-text">Scroll to Discover</span>
         </div>
       </div>
     </section>
