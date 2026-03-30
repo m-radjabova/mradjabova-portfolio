@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaBars, FaMoon, FaSun, FaTimes } from "react-icons/fa";
+import Logo from "../../../public/logo.png";
 
 type HeaderProps = {
   theme: "light" | "dark";
@@ -83,9 +84,9 @@ const Header = ({ theme, onToggleTheme }: HeaderProps) => {
           onClick={() => handleNavClick("home")}
           className="group flex items-center gap-3 rounded-full px-1 text-left transition-transform duration-300 hover:scale-[1.01]"
         >
-          <div className="h-11 w-11 rounded-[1.35rem] bg-gradient-to-br from-[var(--accent-primary)] via-[var(--accent-secondary)] to-[var(--accent-tertiary)] p-[1px] shadow-[0_12px_30px_rgba(255,107,154,0.25)]">
+          <div className="h-11 w-11 rounded-[1.35rem] ">
             <div className="flex h-full w-full items-center justify-center rounded-[1.25rem] bg-[var(--card-solid)] text-sm font-bold text-[var(--text-primary)] backdrop-blur">
-              MR
+              <img src={Logo} alt="Logo" className="h-10 w-8" />
             </div>
           </div>
           <div>

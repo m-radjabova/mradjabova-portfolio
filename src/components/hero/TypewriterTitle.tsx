@@ -9,8 +9,7 @@ const TypewriterTitle = () => {
   const texts = useMemo(
     () => [
       "Muslima Radjabova",
-      "a Frontend Developer",
-      "a Backend Developer",
+      "a Full-Stack Developer",
       "a UI/UX Designer",
       "a Creative Coder",
     ],
@@ -25,18 +24,18 @@ const TypewriterTitle = () => {
     const timer = setTimeout(() => {
       if (!isDeleting) {
         setDisplayText(currentText.substring(0, currentIndex + 1));
-        setCurrentIndex(currentIndex + 1);
+        setCurrentIndex((prev) => prev + 1);
 
         if (currentIndex === currentText.length) {
           setTimeout(() => setIsDeleting(true), pauseTime);
         }
       } else {
         setDisplayText(currentText.substring(0, currentIndex - 1));
-        setCurrentIndex(currentIndex - 1);
+        setCurrentIndex((prev) => prev - 1);
 
         if (currentIndex === 0) {
           setIsDeleting(false);
-          setLoopNum(loopNum + 1);
+          setLoopNum((prev) => prev + 1);
         }
       }
     }, typingSpeed);
@@ -45,13 +44,21 @@ const TypewriterTitle = () => {
   }, [currentIndex, isDeleting, loopNum, texts]);
 
   return (
-    <h1 className="max-w-4xl text-4xl font-black leading-[1.05] tracking-[-0.03em] text-[var(--text-primary)] sm:text-5xl lg:text-7xl">
-      Hi, I&apos;m{" "}
+   <h1 className="max-w-4xl text-4xl font-black leading-[1.2] tracking-[-0.03em] text-[var(--text-primary)] sm:text-5xl lg:text-7xl">
+  <span className="block">Hi, I&apos;m</span>
+
+  <span className="relative mt-2 block h-[1.3em]">
+    <span className="absolute left-0 top-0 whitespace-nowrap">
       <span className="bg-gradient-to-r from-[var(--accent-gradient-from)] via-[var(--accent-gradient-via)] to-[var(--accent-gradient-to)] bg-clip-text text-transparent">
         {displayText}
-        <span className="ml-1 inline-block animate-pulse text-[var(--accent-primary)]">|</span>
       </span>
-    </h1>
+
+      <span className="ml-1 inline-block animate-pulse text-[var(--accent-primary)] leading-none">
+        |
+      </span>
+    </span>
+  </span>
+</h1>
   );
 };
 

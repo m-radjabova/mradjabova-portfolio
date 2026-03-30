@@ -162,6 +162,11 @@ function ProjectDetails() {
                   </div>
                 ))}
               </div>
+              {project.note && (
+                <div className="mt-5 rounded-2xl border border-[var(--border-soft)] bg-white/72 px-4 py-3 text-[var(--text-secondary)] dark:bg-white/5">
+                  <strong>Note:</strong> {project.note}
+                </div>
+              )}
             </div>
           </div>
         </div>

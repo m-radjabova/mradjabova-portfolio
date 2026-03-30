@@ -52,6 +52,7 @@ export type LocalProject = {
   stats: string;
   category: string;
   features: string[];
+  note: string;
 };
 
 export const localProjects: LocalProject[] = [
@@ -71,6 +72,7 @@ export const localProjects: LocalProject[] = [
     stats: "14 screenshots",
     category: "Frontend UI",
     features: ["Responsive landing sections", "Brand-driven hero layout", "Product showcase blocks", "UI based on Figma"],
+    note: "This project was built with a mock backend powered by JSON Server for local data management. Due to its dependency on a local development environment, it cannot be deployed as a live hosted application."
   },
   {
     id: 2,
@@ -88,6 +90,7 @@ export const localProjects: LocalProject[] = [
     stats: "7 screenshots",
     category: "Food UI",
     features: ["Recipe-first layout", "Category navigation", "Warm branded palette", "Responsive marketing sections"],
+    note: "This project was built with a mock backend powered by JSON Server for local data management. Due to its dependency on a local development environment, it cannot be deployed as a live hosted application."
   },
   {
     id: 3,
@@ -105,6 +108,7 @@ export const localProjects: LocalProject[] = [
     stats: "11 screenshots",
     category: "Brand UI",
     features: ["Soft pastel art direction", "Product storytelling", "Animated presentation blocks", "Responsive showcase design"],
+    note: "This project was built with a mock backend powered by JSON Server for local data management. Due to its dependency on a local development environment, it cannot be deployed as a live hosted application."
   },
 ];
 

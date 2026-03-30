@@ -57,7 +57,7 @@ function WithBackend() {
           With backend
         </p>
         <h3 className="mt-2 text-2xl font-bold text-[var(--text-primary)] sm:text-3xl">
-          Dynamic projects from Firestore
+          Full-stack projects with live data
         </h3>
       </div>
 

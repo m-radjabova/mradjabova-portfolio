@@ -16,7 +16,7 @@ interface CustomCSSProperties extends CSSProperties {
 }
 
 const Contact = () => {
-  const currentYear = new Date().getFullYear();
+  // const currentYear = new Date().getFullYear();
 
   const contactInfo = [
     {
@@ -145,7 +145,7 @@ const Contact = () => {
 
         <div className="mt-10 flex flex-col gap-4 border-t border-[var(--border-soft)] pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
-            © {currentYear} Muslima Radjabova. Made with
+            © 2025 Muslima Radjabova. Made with
             <FaHeart className="text-rose-400" />
             and <FaCode className="text-[var(--accent-secondary)]" />
           </p>

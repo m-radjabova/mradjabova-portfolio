@@ -3,42 +3,42 @@
 
 :root {
   color-scheme: light;
-  --bg-base: #fff5f7;
-  --bg-soft: #ffeff3;
-  --bg-elevated: #fdf7f8;
-  --card-bg: rgba(255, 255, 255, 0.92);
-  --card-solid: #ffffff;
-  --accent-primary: #ff6b9a;
-  --accent-secondary: #ffb7c5;
-  --accent-tertiary: #f3c4ff;
-  --text-primary: #18181b;
-  --text-secondary: #5f6778;
-  --border-soft: rgba(255, 255, 255, 0.85);
-  --shadow-soft: 0 24px 60px rgba(190, 24, 93, 0.12);
+  --bg-base: #fff6f8;
+  --bg-soft: #fff0f4;
+  --bg-elevated: #fffafb;
+  --card-bg: rgba(255, 255, 255, 0.72);
+  --card-solid: rgba(255, 255, 255, 0.9);
+  --accent-primary: #ff5f93;
+  --accent-secondary: #f7a9be;
+  --accent-tertiary: #e8c8ff;
+  --text-primary: #17131b;
+  --text-secondary: #5c5564;
+  --border-soft: rgba(255, 255, 255, 0.58);
+  --shadow-soft: 0 24px 60px rgba(190, 24, 93, 0.14);
   --shadow-glow: 0 0 0 rgba(255, 107, 154, 0);
   --accent-gradient-from: #ff4f87;
-  --accent-gradient-via: #ff7aa2;
-  --accent-gradient-to: #c86cf4;
+  --accent-gradient-via: #ff7da5;
+  --accent-gradient-to: #c98af3;
 }
 
 html.dark {
   color-scheme: dark;
-  --bg-base: #0f172a;
-  --bg-soft: #111827;
-  --bg-elevated: #1a1a2e;
-  --card-bg: rgba(255, 255, 255, 0.05);
-  --card-solid: rgba(255, 255, 255, 0.07);
-  --accent-primary: #ff6b9a;
-  --accent-secondary: #a855f7;
-  --accent-tertiary: #f9a8d4;
-  --text-primary: #ffffff;
-  --text-secondary: #c9c9d1;
-  --border-soft: rgba(255, 255, 255, 0.08);
+  --bg-base: #0f1724;
+  --bg-soft: #131a2a;
+  --bg-elevated: #1a2135;
+  --card-bg: rgba(17, 24, 39, 0.48);
+  --card-solid: rgba(19, 26, 42, 0.82);
+  --accent-primary: #ff73a4;
+  --accent-secondary: #b17cff;
+  --accent-tertiary: #f7a9d7;
+  --text-primary: #fbfbfd;
+  --text-secondary: #d4d7e2;
+  --border-soft: rgba(255, 255, 255, 0.1);
   --shadow-soft: 0 24px 70px rgba(15, 23, 42, 0.45);
   --shadow-glow: 0 0 50px rgba(168, 85, 247, 0.22);
-  --accent-gradient-from: #ff6b9a;
-  --accent-gradient-via: #f472b6;
-  --accent-gradient-to: #a855f7;
+  --accent-gradient-from: #ff73a4;
+  --accent-gradient-via: #f78bbd;
+  --accent-gradient-to: #b17cff;
 }
 
 html {
