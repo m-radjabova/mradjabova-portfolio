@@ -39,7 +39,7 @@ const orbitIcons = [
     className:
       "bottom-0 left-1/2 h-22 w-22 -translate-x-1/2 rounded-[1.7rem] text-violet-500 animate-[float-petal_13s_ease-in-out_infinite]",
     icon: <SiMysql className="h-10 w-10" />,
-  }
+  },
 ];
 
 const Hero = () => {
@@ -83,21 +83,25 @@ const Hero = () => {
           <TypewriterTitle />
 
           <p className="max-w-2xl text-lg leading-8 text-[var(--text-secondary)] sm:text-xl">
-            I build responsive, modern and visually strong web interfaces with React,
-            TypeScript and Tailwind CSS. My focus is turning design ideas into clean,
-            polished and production-ready user experiences.
+            I build modern, responsive, and visually polished web applications
+            using React, TypeScript, and Tailwind CSS, combined with powerful
+            back-end solutions. My goal is to transform ideas into fast,
+            scalable, and user-friendly digital products that are ready for
+            real-world use.
           </p>
 
           <div className="grid max-w-xl grid-cols-2 gap-4 sm:grid-cols-3">
             {[
               ["20+", "Projects"],
-              ["2+", "Years"]
+              ["2+", "Years"],
             ].map(([value, label]) => (
               <div
                 key={label}
                 className="rounded-[1.8rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] p-5 shadow-[var(--shadow-soft)] backdrop-blur-2xl transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]"
               >
-                <p className="text-3xl font-black text-[var(--text-primary)]">{value}</p>
+                <p className="text-3xl font-black text-[var(--text-primary)]">
+                  {value}
+                </p>
                 <p className="mt-1 text-sm uppercase tracking-[0.24em] text-[var(--text-secondary)]">
                   {label}
                 </p>
