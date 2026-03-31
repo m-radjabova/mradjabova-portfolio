@@ -1,11 +1,12 @@
 export interface User {
-  id: string;
+  id?: string;
   name: string;
   email: string;
-  password: string;
-  confirmPassword: string;
-  roles: string[],
+  password?: string;
+  confirmPassword?: string;
+  roles: string[];
   uid: string;
+  createdAt?: unknown;
 }
 
 

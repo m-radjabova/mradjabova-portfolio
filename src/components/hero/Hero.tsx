@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { FaArrowRight, FaGithub, FaPython } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import { SiMysql, SiReact, SiTailwindcss } from "react-icons/si";
+import { Link } from "react-router-dom";
 import myPhoto from "../../assets/photo_2025-11-03_08-23-39.jpg";
 import TypewriterTitle from "./TypewriterTitle";
 
@@ -43,6 +45,7 @@ const orbitIcons = [
 ];
 
 const Hero = () => {
+  const { t } = useTranslation();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -59,7 +62,7 @@ const Hero = () => {
 
   return (
     <section
-      className="relative overflow-hidden px-4 pb-24 pt-10 sm:px-6"
+      className="relative overflow-hidden px-4 pb-16 pt-24 sm:px-6 sm:pb-24 sm:pt-10"
       id="home"
     >
       <div
@@ -78,61 +81,64 @@ const Hero = () => {
         <div className="absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-[var(--accent-tertiary)]/10 blur-3xl animate-[glow-drift_12s_ease-in-out_infinite]" />
       </div>
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
-        <div className="relative space-y-8 sm:p-8 lg:p-10">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
+        <div className="relative space-y-6 sm:space-y-8 sm:p-8 lg:p-10">
           <TypewriterTitle />
 
-          <p className="max-w-2xl text-lg leading-8 text-[var(--text-secondary)] sm:text-xl">
-            I build modern, responsive, and visually polished web applications
-            using React, TypeScript, and Tailwind CSS, combined with powerful
-            back-end solutions. My goal is to transform ideas into fast,
-            scalable, and user-friendly digital products that are ready for
-            real-world use.
+          <p className="max-w-2xl text-base leading-7 text-[var(--text-secondary)] sm:text-xl sm:leading-8">
+            {t("hero.intro")}
           </p>
 
-          <div className="grid max-w-xl grid-cols-2 gap-4 sm:grid-cols-3">
+          <div className="grid max-w-xl grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3">
             {[
-              ["20+", "Projects"],
-              ["2+", "Years"],
+              ["20+", t("hero.stats.projects")],
+              ["2+", t("hero.stats.years")],
             ].map(([value, label]) => (
               <div
                 key={label}
-                className="rounded-[1.8rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] p-5 shadow-[var(--shadow-soft)] backdrop-blur-2xl transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]"
+                className="rounded-[1.4rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] p-4 shadow-[var(--shadow-soft)] backdrop-blur-2xl transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-glow)] sm:rounded-[1.8rem] sm:p-5"
               >
-                <p className="text-3xl font-black text-[var(--text-primary)]">
+                <p className="text-2xl font-black text-[var(--text-primary)] sm:text-3xl">
                   {value}
                 </p>
-                <p className="mt-1 text-sm uppercase tracking-[0.24em] text-[var(--text-secondary)]">
+                <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-[var(--text-secondary)] sm:text-sm sm:tracking-[0.24em]">
                   {label}
                 </p>
               </div>
             ))}
           </div>
 
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
             <a
               href="#projects"
-              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] px-6 py-3 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(255,107,154,0.28)] transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-[0_20px_40px_rgba(255,107,154,0.34)]"
+              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(255,107,154,0.28)] transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-[0_20px_40px_rgba(255,107,154,0.34)] sm:px-6"
             >
-              Explore Projects
+              {t("hero.cta.explore")}
               <FaArrowRight />
             </a>
             <a
               href="https://github.com/m-radjabova"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-[var(--border-soft)] bg-[color:var(--card-bg)] px-6 py-3 text-sm font-semibold text-[var(--text-primary)] shadow-[var(--shadow-soft)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[var(--accent-primary)]/35 hover:text-[var(--accent-primary)]"
+              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-[var(--border-soft)] bg-[color:var(--card-bg)] px-5 py-3 text-sm font-semibold text-[var(--text-primary)] shadow-[var(--shadow-soft)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[var(--accent-primary)]/35 hover:text-[var(--accent-primary)] sm:px-6"
             >
               <FaGithub />
-              GitHub
+              {t("hero.cta.github")}
             </a>
+            <Link
+              to="/resume"
+              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-[var(--border-soft)] bg-white/82 px-5 py-3 text-sm font-semibold text-[var(--text-primary)] shadow-[var(--shadow-soft)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[var(--accent-primary)]/35 hover:text-[var(--accent-primary)] dark:bg-white/5 sm:px-6"
+            >
+              {t("hero.cta.resume")}
+              <FaArrowRight />
+            </Link>
           </div>
         </div>
 
         <div className="relative mx-auto w-full max-w-xl animate-[fade-up_1s_ease-out_both]">
-          <div className="absolute -inset-8 rounded-[2.8rem] bg-gradient-to-br from-[var(--accent-primary)]/18 via-[var(--accent-secondary)]/10 to-[var(--accent-tertiary)]/16 blur-3xl" />
+          <div className="absolute -inset-4 rounded-[2.8rem] bg-gradient-to-br from-[var(--accent-primary)]/18 via-[var(--accent-secondary)]/10 to-[var(--accent-tertiary)]/16 blur-3xl sm:-inset-8" />
 
-          <div className="relative mx-auto flex min-h-[44rem] items-center justify-center">
+          <div className="relative mx-auto flex min-h-[24rem] items-center justify-center sm:min-h-[32rem] lg:min-h-[44rem]">
             <div className="absolute inset-0 rounded-[3rem] bg-[radial-gradient(circle,rgba(255,255,255,0.3),transparent_60%)] dark:bg-[radial-gradient(circle,rgba(255,255,255,0.08),transparent_60%)]" />
 
             <div className="absolute inset-0">
@@ -145,7 +151,7 @@ const Hero = () => {
               ))}
             </div>
 
-            <div className="relative z-10 mx-auto aspect-square w-full max-w-[24rem] sm:max-w-[30rem]">
+            <div className="relative z-10 mx-auto aspect-square w-full max-w-[16rem] sm:max-w-[22rem] lg:max-w-[30rem]">
               <div className="absolute -inset-8 rounded-full " />
               <div className="relative h-full w-full overflow-hidden rounded-full ">
                 <img

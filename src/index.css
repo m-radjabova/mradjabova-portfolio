@@ -52,6 +52,7 @@ body {
   color: var(--text-primary);
   font-family: "Segoe UI Variable", "Noto Sans JP", "Segoe UI", sans-serif;
   transition: background-color 300ms ease, color 300ms ease;
+  overflow-x: hidden;
 }
 
 a {
@@ -75,6 +76,7 @@ button {
 #root {
   isolation: isolate;
   position: relative;
+  overflow-x: clip;
 }
 
 @keyframes float {
@@ -175,4 +177,21 @@ button {
     transform: translateX(35%);
     opacity: 0.7;
   }
+}
+
+.skills-carousel .slick-list {
+  overflow: visible;
+}
+
+.skills-carousel .slick-track {
+  display: flex;
+  align-items: stretch;
+}
+
+.skills-carousel .slick-slide {
+  height: inherit;
+}
+
+.skills-carousel .slick-slide > div {
+  height: 100%;
 }

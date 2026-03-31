@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaHome, FaSearch } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import useResolvedTheme from "../hooks/useResolvedTheme";
 
 function NotFound() {
   useResolvedTheme();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
 
@@ -21,7 +23,7 @@ function NotFound() {
       <div className="absolute inset-0 opacity-[0.12] [background-image:radial-gradient(circle_at_1px_1px,rgba(255,107,154,0.2)_1px,transparent_0)] [background-size:30px_30px] dark:opacity-[0.08]" />
 
       <div
-        className={`relative w-full max-w-4xl rounded-[2.2rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] p-8 shadow-[var(--shadow-soft)] backdrop-blur-2xl transition duration-500 sm:p-12 ${
+        className={`relative w-full max-w-4xl rounded-[1.8rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] p-5 shadow-[var(--shadow-soft)] backdrop-blur-2xl transition duration-500 sm:rounded-[2.2rem] sm:p-12 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
         }`}
       >
@@ -39,7 +41,7 @@ function NotFound() {
                   4
                 </p>
                 <p className="mt-3 text-xs font-semibold uppercase tracking-[0.34em] text-[var(--text-secondary)]">
-                  Lost in navigation
+                  {t("notFound.orbitLabel")}
                 </p>
               </div>
             </div>
@@ -47,13 +49,13 @@ function NotFound() {
 
           <div className="text-center lg:text-left">
             <div className="inline-flex items-center rounded-full border border-[var(--border-soft)] bg-white/60 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-[var(--accent-primary)] backdrop-blur-xl dark:bg-white/5">
-              Page Not Found
+              {t("notFound.badge")}
             </div>
             <h1 className="mt-5 text-3xl font-black leading-tight sm:text-5xl">
-              This page doesn't exist
+              {t("notFound.title")}
             </h1>
             <p className="mt-4 max-w-xl text-base leading-8 text-[var(--text-secondary)] sm:text-lg">
-              The link you followed may have been broken or the page may have been removed.
+              {t("notFound.description")}
             </p>
 
             <div className="mt-8 flex flex-wrap justify-center gap-4 lg:justify-start">
@@ -62,21 +64,21 @@ function NotFound() {
                 onClick={() => navigate(-1)}
               >
                 <FaArrowLeft />
-                Go Back
+                {t("notFound.back")}
               </button>
               <button
                 className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] px-6 py-3 font-semibold text-white shadow-[0_16px_36px_rgba(255,107,154,0.28)] transition duration-300 hover:-translate-y-0.5"
                 onClick={() => navigate("/")}
               >
                 <FaHome />
-                Home
+                {t("notFound.home")}
               </button>
               <button
                 className="inline-flex items-center gap-2 rounded-full border border-[var(--border-soft)] bg-[color:var(--card-bg)] px-6 py-3 font-semibold text-[var(--text-primary)] shadow-[var(--shadow-soft)] transition duration-300 hover:-translate-y-0.5 hover:border-[var(--accent-primary)]/35 hover:text-[var(--accent-primary)]"
                 onClick={() => navigate("/", { state: { scrollTo: "projects" } })}
               >
                 <FaSearch />
-                Projects
+                {t("notFound.projects")}
               </button>
             </div>
           </div>

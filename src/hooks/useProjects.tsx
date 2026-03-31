@@ -19,7 +19,7 @@ export interface Project {
 function useProjects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<"fetchFailed" | "connectFailed" | null>(null);
 
   useEffect(() => {
     try {
@@ -36,7 +36,7 @@ function useProjects() {
         },
         (err) => {
           console.error("Error fetching projects:", err);
-          setError("Failed to fetch projects");
+          setError("fetchFailed");
           setLoading(false);
         }
       );
@@ -44,7 +44,7 @@ function useProjects() {
       return () => unsubscribe();
     } catch (err) {
       console.error("Error initializing snapshot:", err);
-      setError("Could not connect to Firestore");
+      setError("connectFailed");
       setLoading(false);
     }
   }, []);
