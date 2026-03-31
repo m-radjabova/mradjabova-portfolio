@@ -46,7 +46,6 @@ const TypewriterTitle = () => {
 
     return () => clearTimeout(timer);
   }, [currentIndex, isDeleting, loopNum, texts]);
-  
 
   return (
     <h1 className="max-w-4xl mt-4 text-3xl font-black leading-[1.05] tracking-[-0.03em] text-[var(--text-primary)] sm:text-5xl lg:text-7xl sm:leading-[1.1] sm:mt-6">
