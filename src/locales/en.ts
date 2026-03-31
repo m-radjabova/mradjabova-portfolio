@@ -1,0 +1,260 @@
+﻿export const en = {
+  translation: {
+    common: {
+      portfolio: "Portfolio",
+      language: "Language",
+      languages: {
+        en: "EN",
+        ru: "RU",
+        uz: "UZ",
+      },
+      theme: {
+        switchToDark: "Switch to dark mode",
+        switchToLight: "Switch to light mode",
+      },
+    },
+    nav: {
+      home: "Home",
+      about: "About",
+      projects: "Projects",
+      contact: "Contact",
+    },
+    hero: {
+      greeting: "Hi, I'm",
+      intro:
+        "I build modern, responsive, and visually polished web applications using React, TypeScript, and Tailwind CSS, combined with powerful back-end solutions. My goal is to turn ideas into fast, scalable, and user-friendly digital products ready for real-world use.",
+      stats: {
+        projects: "Projects",
+        years: "Years",
+      },
+      cta: {
+        explore: "Explore Projects",
+        github: "GitHub",
+        resume: "Resume",
+      },
+      typewriter: [
+        "Muslima Radjabova",
+        "a Full-Stack Developer",
+        "a UI/UX Designer",
+        "a Creative Coder",
+      ],
+    },
+    about: {
+      title: {
+        lead: "Building polished interfaces with",
+        accent: "clean front-end systems",
+      },
+      subtitle:
+        "I enjoy turning visual ideas into responsive, reliable, and modern products. My workflow combines design sensitivity with practical engineering decisions.",
+      profileLabel: "Personal profile",
+      role: "Frontend Developer & UI/UX Designer",
+      description:
+        "I specialize in creating elegant, functional, and user-centered web experiences. I work confidently across layout systems, component architecture, and visual refinement.",
+      highlights: [
+        "Responsive landing pages",
+        "Component-based React apps",
+        "Design-to-code translation",
+        "Strong visual hierarchy",
+      ],
+      availability: "Available for projects",
+      tabs: {
+        skills: "Skills",
+        education: "Education",
+      },
+      education: {
+        year: "2023 - Present",
+        degree: "Programming Technology",
+        institution: "Asia International University (AIU)",
+        description:
+          "Bachelor's studies focused on software development, algorithms, systems thinking, and practical engineering fundamentals.",
+      },
+    },
+    skillsCarousel: {
+      eyebrow: "Core Stack",
+      title: "Skills that keep my workflow moving",
+      description:
+        "A rotating snapshot of the tools and technologies I use most often in production work.",
+      level: "Level",
+      mastery: "Mastery",
+      readiness: "Project readiness",
+    },
+    projects: {
+      title: {
+        lead: "Featured work with",
+        accent: "strong visuals and usable structure",
+      },
+      subtitle:
+        "Frontend showcase projects and dynamic app projects are grouped below. Local showcase cards open dedicated detail pages with all screenshots.",
+      withoutBackend: {
+        badge: "Without backend",
+        title: "Static and showcase projects",
+      },
+      withBackend: {
+        badge: "With backend",
+        title: "Full-stack projects with live data",
+      },
+      actions: {
+        openPage: "Open page",
+        sourceCode: "Source Code",
+        liveDemo: "Live Demo",
+      },
+      states: {
+        loading: "Loading projects...",
+        empty: "No backend projects found yet.",
+        errors: {
+          fetchFailed: "Failed to fetch projects.",
+          connectFailed: "Could not connect to Firestore.",
+        },
+      },
+      localItems: {
+        "floral-elegance": {
+          title: "Floral Elegance",
+          shortDescription: "An elegant flower shop landing page with premium visual direction.",
+          description:
+            "A refined flower shop concept built around strong product presentation, rich visuals, and a polished responsive layout.",
+          stats: "14 screenshots",
+          category: "Frontend UI",
+          features: [
+            "Responsive landing sections",
+            "Brand-driven hero layout",
+            "Product showcase blocks",
+            "UI based on Figma",
+          ],
+          note:
+            "This project used a mock backend powered by JSON Server for local data management. Because it depends on a local development setup, it was not deployed as a live hosted application.",
+        },
+        "culinary-master": {
+          title: "Culinary Master",
+          shortDescription: "A meal and recipe interface designed for clear hierarchy and conversion.",
+          description:
+            "A warm and bold food interface focused on recipe discovery, section hierarchy, and clear call-to-action placement.",
+          stats: "7 screenshots",
+          category: "Food UI",
+          features: [
+            "Recipe-first layout",
+            "Category navigation",
+            "Warm branded palette",
+            "Responsive marketing sections",
+          ],
+          note:
+            "This project used a mock backend powered by JSON Server for local data management. Because it depends on a local development setup, it was not deployed as a live hosted application.",
+        },
+        "frozen-delights": {
+          title: "Frozen Delights",
+          shortDescription: "A playful dessert brand interface with soft gradients and product imagery.",
+          description:
+            "A bright and playful website concept for an ice cream brand, using soft color transitions, strong product framing, and high-impact visuals.",
+          stats: "11 screenshots",
+          category: "Brand UI",
+          features: [
+            "Soft pastel art direction",
+            "Product storytelling",
+            "Animated presentation blocks",
+            "Responsive showcase design",
+          ],
+          note:
+            "This project used a mock backend powered by JSON Server for local data management. Because it depends on a local development setup, it was not deployed as a live hosted application.",
+        },
+      },
+      details: {
+        backToHome: "Back to home",
+        screenshot: "Screenshot",
+        thumbnail: "Thumbnail",
+        keyFeatures: "Key features",
+        note: "Note",
+      },
+    },
+    contact: {
+      role: "Frontend Developer",
+      description:
+        "Frontend Developer & UI/UX Designer focused on creating thoughtful and functional digital experiences.",
+      builtWith: "Built with",
+      quickLinks: "Quick Links",
+      getInTouch: "Get In Touch",
+      workTogether: "Let's Work Together",
+      workTogetherText: "Have a project in mind? Let's discuss it.",
+      email: "Email",
+      location: "Location",
+      locationValue: "Bukhara, Uzbekistan",
+      footer: "© 2025 Muslima Radjabova. Made with",
+      footerAnd: "and",
+      scrollTop: "Scroll to top",
+    },
+    resume: {
+      eyebrow: "Resume",
+      title: "Professional Resume",
+      description:
+        "Choose the version you need, preview it on the page, and download it in Word, PDF, or image format.",
+      backToHome: "Back to home",
+      downloadWord: "Download Word",
+      downloadPdf: "Download PDF",
+      downloadImage: "Download image",
+      downloadPreparing: "Preparing...",
+      languages: {
+        en: "English Resume",
+        ru: "Russian Resume",
+        uz: "Uzbek Resume",
+      },
+    },
+    notFound: {
+      orbitLabel: "Lost in navigation",
+      badge: "Page Not Found",
+      title: "This page doesn't exist",
+      description:
+        "The link you followed may be broken, or the page may have been removed.",
+      back: "Go Back",
+      home: "Home",
+      projects: "Projects",
+    },
+    auth: {
+      login: {
+        title: "Welcome back",
+        subtitle: "Sign in with your admin account to open the portfolio dashboard.",
+        email: "Email Address",
+        password: "Password",
+        passwordPlaceholder: "Password",
+        emailPlaceholder: "your@email.com",
+        submit: "Sign In",
+        loading: "Signing in...",
+        noAccount: "Don't have an account?",
+        createOne: "Create one",
+        toasts: {
+          roleNotFound: "User role was not found.",
+          userNotFound: "Account not found. Please sign up first.",
+          wrongCredentials: "Incorrect email or password. Please try again.",
+          invalidEmail: "The email address format is invalid.",
+          tooManyRequests: "Too many attempts. Please try again later.",
+          failed: "Sign-in failed. Please try again.",
+          unknown: "An unknown error occurred.",
+        },
+      },
+      register: {
+        title: "Create account",
+        subtitle: "Register to access the portfolio project panel",
+        fullName: "Full Name",
+        email: "Email Address",
+        password: "Password",
+        confirmPassword: "Confirm Password",
+        submit: "Create account",
+        loading: "Creating...",
+        hasAccount: "Already have an account?",
+        signIn: "Sign in",
+        validation: {
+          nameRequired: "Name is required",
+          emailRequired: "Email is required",
+          passwordRequired: "Password is required",
+          confirmRequired: "Confirm password is required",
+          passwordsMismatch: "Passwords do not match.",
+        },
+        toasts: {
+          success: "Registration successful!",
+          emailInUse: "This email is already registered.",
+          invalidEmail: "Invalid email address.",
+          weakPassword: "Password must be at least 6 characters.",
+          failed: "Registration failed. Please try again.",
+          unknown: "An unknown error occurred. Please try again.",
+        },
+      },
+    },
+  },
+} as const;
