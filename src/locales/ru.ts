@@ -166,11 +166,13 @@ export const ru = {
     },
     contact: {
       role: "Frontend Developer",
+      title: "Давайте создадим прекрасное вместе",
       description:
         "Frontend Developer & UI/UX Designer, создающий продуманные и функциональные цифровые решения.",
       builtWith: "Сделано на",
       quickLinks: "Быстрые ссылки",
       getInTouch: "Связаться",
+      socialTitle: "Социальные сети",
       workTogether: "Давайте работать вместе",
       workTogetherText: "Есть идея проекта? Давайте обсудим.",
       email: "Email",

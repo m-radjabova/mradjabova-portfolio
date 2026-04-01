@@ -18,7 +18,7 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="relative px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+    <section id="about" className="relative px-4 pb-16 pt-28 sm:px-6 sm:pb-24 sm:pt-32 lg:px-8">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,107,154,0.08),transparent_25%),radial-gradient(circle_at_80%_30%,rgba(168,85,247,0.06),transparent_25%)] dark:bg-[radial-gradient(circle_at_20%_20%,rgba(255,107,154,0.14),transparent_25%),radial-gradient(circle_at_80%_30%,rgba(168,85,247,0.12),transparent_25%)]" />
 
       <div className="relative mx-auto max-w-7xl">

@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { FaArrowRight, FaGithub, FaPython } from "react-icons/fa";
+import {FaGithub, FaPython } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { SiMysql, SiReact, SiTailwindcss } from "react-icons/si";
-import { Link } from "react-router-dom";
 import myPhoto from "../../assets/photo_2025-11-03_08-23-39.jpg";
 import TypewriterTitle from "./TypewriterTitle";
 
@@ -106,32 +105,6 @@ const Hero = () => {
                 </p>
               </div>
             ))}
-          </div>
-
-          <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-            <a
-              href="#projects"
-              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(255,107,154,0.28)] transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-[0_20px_40px_rgba(255,107,154,0.34)] sm:px-6"
-            >
-              {t("hero.cta.explore")}
-              <FaArrowRight />
-            </a>
-            <a
-              href="https://github.com/m-radjabova"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-[var(--border-soft)] bg-[color:var(--card-bg)] px-5 py-3 text-sm font-semibold text-[var(--text-primary)] shadow-[var(--shadow-soft)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[var(--accent-primary)]/35 hover:text-[var(--accent-primary)] sm:px-6"
-            >
-              <FaGithub />
-              {t("hero.cta.github")}
-            </a>
-            <Link
-              to="/resume"
-              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-[var(--border-soft)] bg-white/82 px-5 py-3 text-sm font-semibold text-[var(--text-primary)] shadow-[var(--shadow-soft)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-[var(--accent-primary)]/35 hover:text-[var(--accent-primary)] dark:bg-white/5 sm:px-6"
-            >
-              {t("hero.cta.resume")}
-              <FaArrowRight />
-            </Link>
           </div>
         </div>
 

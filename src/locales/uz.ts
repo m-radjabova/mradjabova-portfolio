@@ -15,8 +15,10 @@
     },
     nav: {
       home: "Bosh sahifa",
+      skills: "Ko'nikmalar",
       about: "Men haqimda",
       projects: "Loyihalar",
+      resume: "Resume",
       contact: "Aloqa",
     },
     hero: {
@@ -38,6 +40,12 @@
         "UI/UX dizayner",
         "ijodkor coder",
       ],
+    },
+    homePanel: {
+      title: "Bo'limni tanlang va kontent shu joyning o'zida almashsin",
+      description:
+        "Bu joy endi zamonaviy content panel kabi ishlaydi. Header o'z joyida turadi, har bir icon esa shu bitta maydon ichida o'z bo'limini ochadi.",
+      openSection: "Bo'limni ochish",
     },
     about: {
       title: {
@@ -165,9 +173,16 @@
       },
     },
     contact: {
+      title: "Keling, birga chiroyli va kuchli mahsulot yarataylik",
       role: "Frontend Developer",
       description:
         "Frontend Developer & UI/UX Designer sifatida mazmunli va funksional raqamli tajribalar yaratishga e'tibor beraman.",
+      primaryCta: "Suhbatni boshlash",
+      secondaryCta: "GitHub ni ko'rish",
+      navigationTitle: "Portfolio bo'ylab tez o'tish",
+      socialTitle: "Meni shu platformalarda topasiz",
+      emailNote: "Loyiha, hamkorlik va to'g'ridan-to'g'ri yozishmalar uchun qulay.",
+      locationNote: "Buxoroda joylashganman va remote ishlarga ochiqman.",
       builtWith: "Yaratilgan texnologiya",
       quickLinks: "Tezkor havolalar",
       getInTouch: "Bog'lanish",
@@ -185,6 +200,9 @@
       title: "Professional Resume",
       description:
         "Kerakli tilni tanlang, sahifaning o'zida ko'ring va Word, PDF yoki rasm ko'rinishida yuklab oling.",
+      previewLabel: "Ko'rish paneli",
+      cardDescription:
+        "Resume endi one-page oqim ichida turadi va shu bilan birga bir necha formatda tez yuklab olish imkonini beradi.",
       backToHome: "Bosh sahifaga qaytish",
       downloadWord: "Word yuklab olish",
       downloadPdf: "PDF yuklab olish",

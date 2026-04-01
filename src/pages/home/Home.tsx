@@ -1,39 +1,42 @@
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import About from "../../components/about/About";
 import Contact from "../../components/contact/Contact";
 import Hero from "../../components/hero/Hero";
 import Projects from "../../components/projects/Projects";
+import ResumeSection from "../../components/resume/ResumeSection";
 import SkillsCarousel from "../../components/skills/SkillsCarousel";
 
+type SectionId = "home" | "skills" | "about" | "projects" | "resume" | "contact";
+
+const validSections: SectionId[] = ["home", "skills", "about", "projects", "resume", "contact"];
+
 function Home() {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const sectionParam = searchParams.get("section");
+  const activeSection: SectionId =
+    sectionParam && validSections.includes(sectionParam as SectionId)
+      ? (sectionParam as SectionId)
+      : "home";
 
-  useEffect(() => {
-    const state = location.state as { scrollTo?: string } | null;
-    if (!state?.scrollTo) return;
+  const renderActiveSection = () => {
+    switch (activeSection) {
+      case "skills":
+        return <SkillsCarousel />;
+      case "about":
+        return <About />;
+      case "projects":
+        return <Projects />;
+      case "resume":
+        return <ResumeSection />;
+      case "contact":
+        return <Contact />;
+      case "home":
+      default:
+        return <Hero />;
+    }
+  };
 
-    const timer = window.setTimeout(() => {
-      document.getElementById(state.scrollTo || "")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-      navigate(location.pathname, { replace: true, state: null });
-    }, 100);
-
-    return () => window.clearTimeout(timer);
-  }, [location.pathname, location.state, navigate]);
-
-  return (
-    <>
-      <Hero />
-      <SkillsCarousel />
-      <About />
-      <Projects />
-      <Contact />
-    </>
-  );
+  return <div key={activeSection} className=" animate-[fade-up_0.45s_ease-out_both]">{renderActiveSection()}</div>;
 }
 
 export default Home;

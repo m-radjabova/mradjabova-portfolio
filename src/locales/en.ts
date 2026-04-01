@@ -15,8 +15,10 @@
     },
     nav: {
       home: "Home",
+      skills: "Skills",
       about: "About",
       projects: "Projects",
+      resume: "Resume",
       contact: "Contact",
     },
     hero: {
@@ -38,6 +40,12 @@
         "a UI/UX Designer",
         "a Creative Coder",
       ],
+    },
+    homePanel: {
+      title: "Choose a section and switch the content here",
+      description:
+        "This area now works like a modern content panel. The header stays in place, and each icon opens its own section inside this same space.",
+      openSection: "Open section",
     },
     about: {
       title: {
@@ -165,9 +173,16 @@
       },
     },
     contact: {
+      title: "Let’s build something elegant together",
       role: "Frontend Developer",
       description:
         "Frontend Developer & UI/UX Designer focused on creating thoughtful and functional digital experiences.",
+      primaryCta: "Start a conversation",
+      secondaryCta: "View GitHub",
+      navigationTitle: "Jump through the portfolio",
+      socialTitle: "Find me on these platforms",
+      emailNote: "Best for project requests, collabs, and direct communication.",
+      locationNote: "Based in Bukhara and open to remote opportunities.",
       builtWith: "Built with",
       quickLinks: "Quick Links",
       getInTouch: "Get In Touch",
@@ -185,6 +200,9 @@
       title: "Professional Resume",
       description:
         "Choose the version you need, preview it on the page, and download it in Word, PDF, or image format.",
+      previewLabel: "Preview panel",
+      cardDescription:
+        "This section keeps the resume inside the one-page flow while still giving fast downloads in multiple formats.",
       backToHome: "Back to home",
       downloadWord: "Download Word",
       downloadPdf: "Download PDF",

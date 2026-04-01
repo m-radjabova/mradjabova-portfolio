@@ -43,7 +43,10 @@ function SkillsCarousel() {
   const { t } = useTranslation();
 
   return (
-    <section className="relative overflow-hidden px-4 py-12 sm:px-6 sm:py-14 lg:px-8">
+    <section
+      id="skills"
+      className="relative overflow-hidden px-4 pb-12 pt-28 sm:px-6 sm:pb-14 sm:pt-32 lg:px-8"
+    >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_30%,rgba(255,107,154,0.08),transparent_24%),radial-gradient(circle_at_88%_35%,rgba(168,85,247,0.08),transparent_24%)] dark:bg-[radial-gradient(circle_at_12%_30%,rgba(255,107,154,0.12),transparent_24%),radial-gradient(circle_at_88%_35%,rgba(168,85,247,0.14),transparent_24%)]" />
       <div className="absolute -left-12 top-10 h-56 w-56 rounded-full bg-[var(--accent-primary)]/10 blur-3xl" />
       <div className="absolute right-0 top-1/4 h-72 w-72 rounded-full bg-[var(--accent-secondary)]/10 blur-3xl" />
