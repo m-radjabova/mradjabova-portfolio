@@ -190,8 +190,8 @@ const Header = ({ theme, onToggleTheme }: HeaderProps) => {
           className="group cursor-pointer flex items-center gap-3 rounded-full px-1 text-left transition-transform duration-300 hover:scale-[1.01]"
         >
           <div className="h-11 w-11 rounded-[1.35rem]">
-            <div className="flex h-full w-full items-center justify-center rounded-[1.25rem] bg-[var(--card-solid)] text-sm font-bold text-[var(--text-primary)] backdrop-blur">
-              <img src={Logo} alt="Logo" className="h-10 w-8" />
+            <div className="flex h-full w-full items-center justify-center">
+              <img src={Logo} alt="Logo" className="h-10 w-10" />
             </div>
           </div>
           <div className="hidden min-w-0 min-[380px]:block">

@@ -54,9 +54,6 @@ function SkillsCarousel() {
 
       <div className="relative mx-auto max-w-7xl">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--accent-primary)] sm:text-sm sm:tracking-[0.28em]">
-            {t("skillsCarousel.eyebrow")}
-          </p>
           <h2 className="mt-4 text-3xl font-black tracking-[-0.03em] text-[var(--text-primary)] sm:text-5xl">
             {t("skillsCarousel.title")}
           </h2>
