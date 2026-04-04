@@ -91,6 +91,41 @@ body::-webkit-scrollbar {
   overflow-x: clip;
 }
 
+.Toastify__toast-container {
+  width: min(26rem, calc(100vw - 1.5rem));
+  padding: 0;
+}
+
+.Toastify__toast {
+  margin-bottom: 0.9rem;
+}
+
+.Toastify__toast-body {
+  align-items: flex-start;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.Toastify__toast-body > div:last-child {
+  flex: 1;
+}
+
+.Toastify__toast-icon {
+  width: 1.4rem;
+  margin-inline-end: 0;
+}
+
+@media (max-width: 640px) {
+  .Toastify__toast-container {
+    width: calc(100vw - 1rem);
+    inset-inline: 0.5rem;
+  }
+}
+
 @keyframes float {
   0%, 100% {
     transform: translate3d(0, 0, 0);

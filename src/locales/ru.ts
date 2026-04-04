@@ -211,6 +211,23 @@ export const ru = {
           subject: "Тема проекта или сотрудничества",
           message: "Напишите детали здесь...",
         },
+        verification: {
+          badge: "Google подтверждение",
+          title: "Подтвердите email через Google",
+          description: "Чтобы отправить сообщение, войдите через Google и подтвердите свой реальный email.",
+          statusLabel: "Подтвержденный email",
+          verifiedHint: "Ответные письма будут приходить на этот адрес.",
+          actionButton: "Подтвердить через Google",
+          loadingButton: "Проверка Google...",
+          changeButton: "Выбрать другой Google account",
+          toasts: {
+            missingEmail: "Google email не найден. Попробуйте снова.",
+            success: "Google email подтвержден: {{email}}",
+            verifyError: "Не удалось подтвердиться через Google. Попробуйте снова.",
+            disconnectError: "Не удалось отключить Google account.",
+            required: "Сначала подтвердите Google email.",
+          },
+        },
         submit: "Отправить сообщение",
         sending: "Отправка...",
         toasts: {
@@ -305,3 +322,4 @@ export const ru = {
     },
   },
 } as const;
+

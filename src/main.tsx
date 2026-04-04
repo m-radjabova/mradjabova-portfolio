@@ -21,7 +21,7 @@ createRoot(document.getElementById("root")!).render(
           closeButton={false}
           theme="light"
           toastClassName={() =>
-            "rounded-[1.35rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] px-2 text-sm text-[var(--text-primary)] shadow-[0_18px_40px_rgba(255,107,154,0.16)] backdrop-blur-2xl"
+            "min-h-[72px] rounded-[1.35rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] px-4 py-3 text-base text-[var(--text-primary)] shadow-[0_18px_40px_rgba(255,107,154,0.16)] backdrop-blur-2xl"
           }
         />
       </CreateContextPro>

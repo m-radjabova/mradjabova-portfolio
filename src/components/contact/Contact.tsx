@@ -1,28 +1,37 @@
 import {
   type ChangeEvent,
   type FormEvent,
+  useEffect,
   useState,
 } from "react";
 import emailjs from "@emailjs/browser";
 import {
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
+import {
   FaArrowRight,
   FaEnvelope,
   FaGithub,
+  FaGoogle,
   FaLinkedin,
   FaTelegramPlane,
 } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { SiGmail, SiReact } from "react-icons/si";
 import { toast } from "react-toastify";
+import { auth } from "../../firebase";
 
 const CONTACT_EMAIL = "muslimarajabova1997@gmail.com";
 const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
 const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
 const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+const GOOGLE_PROVIDER_ID = "google.com";
 
 type ContactFormState = {
   name: string;
-  email: string;
   subject: string;
   message: string;
 };
@@ -31,11 +40,13 @@ const Contact = () => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState<ContactFormState>({
     name: "",
-    email: "",
     subject: "",
     message: "",
   });
   const [isSending, setIsSending] = useState(false);
+  const [verifiedEmail, setVerifiedEmail] = useState("");
+  const [isGoogleVerified, setIsGoogleVerified] = useState(false);
+  const [isVerifyingGoogle, setIsVerifyingGoogle] = useState(false);
 
   const socialLinks = [
     {
@@ -74,11 +85,64 @@ const Contact = () => {
     }));
   };
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      const email = user?.email?.trim() ?? "";
+      const isGoogleUser = user?.providerData.some(
+        (provider) => provider.providerId === GOOGLE_PROVIDER_ID,
+      ) ?? false;
+
+      setVerifiedEmail(isGoogleUser ? email : "");
+      setIsGoogleVerified(Boolean(email) && isGoogleUser);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const handleGoogleVerify = async () => {
+    setIsVerifyingGoogle(true);
+
+    try {
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: "select_account" });
+      const result = await signInWithPopup(auth, provider);
+      const email = result.user.email?.trim() ?? "";
+
+      if (!email) {
+        toast.error(t("contact.form.verification.toasts.missingEmail"));
+        return;
+      }
+
+      setVerifiedEmail(email);
+      setIsGoogleVerified(true);
+      toast.success(t("contact.form.verification.toasts.success", { email }));
+    } catch {
+      toast.error(t("contact.form.verification.toasts.verifyError"));
+    } finally {
+      setIsVerifyingGoogle(false);
+    }
+  };
+
+  const handleGoogleDisconnect = async () => {
+    try {
+      await signOut(auth);
+      setVerifiedEmail("");
+      setIsGoogleVerified(false);
+    } catch {
+      toast.error(t("contact.form.verification.toasts.disconnectError"));
+    }
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+    if (!formData.name || !formData.subject || !formData.message) {
       toast.error(t("contact.form.toasts.required"));
+      return;
+    }
+
+    if (!verifiedEmail || !isGoogleVerified) {
+      toast.error(t("contact.form.verification.toasts.required"));
       return;
     }
 
@@ -95,7 +159,8 @@ const Contact = () => {
         EMAILJS_TEMPLATE_ID,
         {
           from_name: formData.name,
-          from_email: formData.email,
+          from_email: verifiedEmail,
+          reply_to: verifiedEmail,
           subject: formData.subject,
           message: formData.message,
           to_email: CONTACT_EMAIL,
@@ -107,7 +172,6 @@ const Contact = () => {
 
       setFormData({
         name: "",
-        email: "",
         subject: "",
         message: "",
       });
@@ -191,7 +255,7 @@ const Contact = () => {
                   {t("contact.form.description")}
                 </p>
 
-                <form className="mt-5 grid gap-3 sm:grid-cols-2" onSubmit={handleSubmit}>
+                <form className="mt-5 grid gap-3" onSubmit={handleSubmit}>
                   <label className="grid gap-2">
                     <span className="text-sm font-semibold text-[var(--text-primary)]">
                       {t("contact.form.fields.name")}
@@ -206,21 +270,76 @@ const Contact = () => {
                     />
                   </label>
 
-                  <label className="grid gap-2">
+                  <div className="grid gap-2">
                     <span className="text-sm font-semibold text-[var(--text-primary)]">
                       {t("contact.form.fields.email")}
                     </span>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      placeholder={t("contact.form.placeholders.email")}
-                      className="min-h-11 rounded-[1rem] border border-[var(--border-soft)] bg-white/72 px-4 py-3 text-sm text-[var(--text-primary)] outline-none transition duration-300 placeholder:text-[var(--text-secondary)]/80 focus:border-[var(--accent-primary)]/45 focus:ring-2 focus:ring-[var(--accent-primary)]/15 dark:bg-white/5"
-                    />
-                  </label>
+                    <div className="relative overflow-hidden rounded-[1.3rem] border border-[var(--border-soft)] bg-[linear-gradient(145deg,rgba(255,255,255,0.82),rgba(255,255,255,0.5))] p-4 text-sm text-[var(--text-primary)] shadow-[0_16px_34px_rgba(255,107,154,0.08)] dark:bg-[linear-gradient(145deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))]">
+                      <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[var(--accent-secondary)]/18 blur-2xl" />
+                      <div className="pointer-events-none absolute -bottom-10 left-0 h-20 w-20 rounded-full bg-[var(--accent-primary)]/15 blur-2xl" />
+                      {isGoogleVerified ? (
+                        <div className="relative flex flex-col gap-4">
+                          <div className="flex items-start gap-3">
+                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/15 text-base text-emerald-600 dark:text-emerald-400">
+                              <FaGoogle />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-600/90 dark:text-emerald-400/90">
+                                {t("contact.form.verification.statusLabel")}
+                              </p>
+                              <p className="mt-1 break-all text-sm font-semibold text-[var(--text-primary)]">
+                                {verifiedEmail}
+                              </p>
+                              <p className="mt-1 text-xs leading-5 text-[var(--text-secondary)]">
+                                {t("contact.form.verification.verifiedHint")}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex justify-end">
+                            <button
+                              type="button"
+                              onClick={handleGoogleDisconnect}
+                              className="inline-flex min-h-10 items-center justify-center rounded-[0.95rem] border border-[var(--border-soft)] bg-white/70 px-4 py-2 text-xs font-semibold text-[var(--text-primary)] transition duration-300 hover:-translate-y-0.5 hover:border-[var(--accent-primary)]/35 dark:bg-white/5"
+                            >
+                              {t("contact.form.verification.changeButton")}
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="relative flex flex-col gap-4">
+                          <div className="flex items-start gap-3">
+                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,rgba(255,107,154,0.16),rgba(168,85,247,0.2))] text-base text-[var(--accent-primary)]">
+                              <FaGoogle />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--accent-primary)]">
+                                {t("contact.form.verification.badge")}
+                              </p>
+                              <p className="mt-1 text-sm font-semibold text-[var(--text-primary)]">
+                                {t("contact.form.verification.title")}
+                              </p>
+                              <p className="mt-1 text-xs leading-5 text-[var(--text-secondary)]">
+                                {t("contact.form.verification.description")}
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={handleGoogleVerify}
+                            disabled={isVerifyingGoogle}
+                            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[1rem] bg-[linear-gradient(135deg,var(--accent-primary),var(--accent-secondary))] px-4 py-3 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(255,107,154,0.22)] transition duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
+                          >
+                            <FaGoogle />
+                            {isVerifyingGoogle
+                              ? t("contact.form.verification.loadingButton")
+                              : t("contact.form.verification.actionButton")}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
 
-                  <label className="grid gap-2 sm:col-span-2">
+                  <label className="grid gap-2">
                     <span className="text-sm font-semibold text-[var(--text-primary)]">
                       {t("contact.form.fields.subject")}
                     </span>
@@ -234,7 +353,7 @@ const Contact = () => {
                     />
                   </label>
 
-                  <label className="grid gap-2 sm:col-span-2">
+                  <label className="grid gap-2">
                     <span className="text-sm font-semibold text-[var(--text-primary)]">
                       {t("contact.form.fields.message")}
                     </span>
@@ -251,7 +370,7 @@ const Contact = () => {
                   <button
                     type="submit"
                     disabled={isSending}
-                    className="sm:col-span-2 mt-1 inline-flex min-h-11 items-center justify-center rounded-[1.1rem] bg-[linear-gradient(135deg,var(--accent-primary),var(--accent-secondary))] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(255,107,154,0.24)] transition duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
+                    className="mt-1 inline-flex min-h-11 items-center justify-center rounded-[1.1rem] bg-[linear-gradient(135deg,var(--accent-primary),var(--accent-secondary))] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(255,107,154,0.24)] transition duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
                   >
                     {isSending ? t("contact.form.sending") : t("contact.form.submit")}
                   </button>
