@@ -84,7 +84,7 @@ const Hero = () => {
         <div className="relative space-y-6 sm:space-y-8 sm:p-8 lg:p-10">
           <TypewriterTitle />
 
-          <p className="max-w-2xl text-base leading-7 text-[var(--text-secondary)] sm:text-xl sm:leading-8">
+          <p className="max-w-2xl text-base leading-7 text-[var(--text-dark)] sm:text-xl sm:leading-8">
             {t("hero.intro")}
           </p>
 

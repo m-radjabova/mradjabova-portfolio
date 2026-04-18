@@ -105,6 +105,8 @@
         openPage: "Open page",
         sourceCode: "Source Code",
         liveDemo: "Live Demo",
+        showDescription: "View details",
+        hideDescription: "Hide details",
       },
       states: {
         loading: "Loading projects...",

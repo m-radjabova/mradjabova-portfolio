@@ -111,6 +111,8 @@ export const ru = {
         openPage: "Открыть страницу",
         sourceCode: "Исходный код",
         liveDemo: "Демо",
+        showDescription: "Подробнее",
+        hideDescription: "Скрыть",
       },
       states: {
         loading: "Загрузка проектов...",

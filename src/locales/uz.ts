@@ -105,6 +105,8 @@
         openPage: "Sahifani ochish",
         sourceCode: "Manba kod",
         liveDemo: "Live demo",
+        showDescription: "Batafsil ko'rish",
+        hideDescription: "Yig'ish",
       },
       states: {
         loading: "Loyihalar yuklanmoqda...",

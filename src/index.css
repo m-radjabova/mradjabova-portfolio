@@ -1,24 +1,33 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
-:root {
+ :root {
   color-scheme: light;
-  --bg-base: #fdf7fb;
-  --bg-soft: #fff1f6;
-  --bg-elevated: #fffafd;
-  --card-bg: rgba(255, 255, 255, 0.68);
-  --card-solid: rgba(255, 255, 255, 0.9);
-  --accent-primary: #ff5c97;
-  --accent-secondary: #f2a8ff;
-  --accent-tertiary: #8fd8ff;
-  --text-primary: #171320;
-  --text-secondary: #60576f;
-  --border-soft: rgba(255, 255, 255, 0.62);
-  --shadow-soft: 0 30px 70px rgba(221, 110, 168, 0.16);
-  --shadow-glow: 0 0 0 rgba(255, 107, 154, 0);
-  --accent-gradient-from: #ff5d95;
-  --accent-gradient-via: #ff8eb8;
-  --accent-gradient-to: #9ccfff;
+
+  --bg-base: #f6efe7;
+  --bg-soft: #fdf7f2;
+  --bg-elevated: rgba(255, 250, 246, 0.88);
+
+  --card-bg: rgba(255, 255, 255, 0.78);
+  --card-solid: rgba(255, 255, 255, 0.92);
+
+  --accent-primary: #e94f8a;
+  --accent-secondary: #b66dff;
+  --accent-tertiary: #4aa8ff;
+
+  --text-primary: #1a1325;
+  --text-secondary: #4f465d;
+  --text-muted: #6e657d;
+
+  --border-soft: rgba(255, 255, 255, 0.72);
+  --border-strong: rgba(91, 67, 110, 0.14);
+
+  --shadow-soft: 0 18px 45px rgba(90, 52, 88, 0.16);
+  --shadow-glow: 0 10px 30px rgba(233, 79, 138, 0.18);
+
+  --accent-gradient-from: #ff5f95;
+  --accent-gradient-via: #d88cff;
+  --accent-gradient-to: #7ec8ff;
 }
 
 html.dark {
@@ -272,4 +281,205 @@ body::-webkit-scrollbar {
 
 .skills-carousel .slick-slide > div {
   height: 100%;
+}
+
+@keyframes project-shine {
+  0% {
+    transform: translateX(-135%) skewX(-18deg);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.2;
+  }
+  48% {
+    opacity: 0.52;
+  }
+  100% {
+    transform: translateX(165%) skewX(-18deg);
+    opacity: 0;
+  }
+}
+
+.project-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2rem;
+  border: 1px solid color-mix(in srgb, var(--border-soft) 76%, transparent);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.03)),
+    color-mix(in srgb, var(--card-bg) 92%, transparent);
+  box-shadow: 0 28px 70px rgba(5, 10, 24, 0.22);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  transition:
+    transform 320ms ease,
+    box-shadow 320ms ease,
+    border-color 320ms ease;
+}
+
+.project-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
+  box-shadow: 0 0 24px color-mix(in srgb, var(--accent-secondary) 45%, transparent);
+  z-index: 1;
+}
+
+.project-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+}
+
+.project-card:hover {
+  transform: translateY(-10px);
+  border-color: color-mix(in srgb, var(--accent-secondary) 22%, var(--border-soft));
+  box-shadow:
+    0 34px 90px rgba(7, 13, 30, 0.28),
+    0 0 46px color-mix(in srgb, var(--accent-secondary) 18%, transparent);
+}
+
+.project-card-glow {
+  position: absolute;
+  inset: -25% auto auto -10%;
+  width: 42%;
+  height: 32%;
+  border-radius: 999px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent-primary) 30%, transparent) 0%, transparent 72%);
+  filter: blur(30px);
+  opacity: 0.52;
+  pointer-events: none;
+  transition: transform 400ms ease, opacity 400ms ease;
+}
+
+.project-card:hover .project-card-glow {
+  transform: translate3d(14px, 10px, 0) scale(1.08);
+  opacity: 0.75;
+}
+
+.project-card-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.project-card-shine::before {
+  content: "";
+  position: absolute;
+  top: -15%;
+  left: -25%;
+  width: 30%;
+  height: 140%;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.08), transparent);
+  transform: translateX(-135%) skewX(-18deg);
+  opacity: 0;
+}
+
+.project-card:hover .project-card-shine::before {
+  animation: project-shine 1.15s ease;
+}
+
+.project-card-media {
+  margin: 0.95rem 0.95rem 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.project-card-badge-icon {
+  transition:
+    transform 350ms ease,
+    box-shadow 350ms ease,
+    filter 350ms ease;
+}
+
+.project-card:hover .project-card-badge-icon {
+  transform: rotate(12deg) scale(1.08);
+  filter: drop-shadow(0 0 14px color-mix(in srgb, var(--accent-tertiary) 36%, transparent));
+  box-shadow: 0 0 30px color-mix(in srgb, var(--accent-primary) 24%, transparent);
+}
+
+.project-card-cta {
+  position: relative;
+  display: inline-flex;
+  min-height: 3.5rem;
+  flex: 1 1 0%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  overflow: hidden;
+  border-radius: 999px;
+  padding: 0.95rem 1.15rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  transition:
+    transform 260ms ease,
+    border-color 260ms ease,
+    box-shadow 260ms ease,
+    color 260ms ease,
+    background-color 260ms ease;
+}
+
+.project-card-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 18%, rgba(255, 255, 255, 0.28) 50%, transparent 82%);
+  transform: translateX(-125%);
+  transition: transform 520ms ease;
+}
+
+.project-card-cta:hover::before {
+  transform: translateX(125%);
+}
+
+.project-card-cta:hover {
+  transform: translateY(-2px);
+}
+
+.project-card-cta-primary {
+  color: white;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  box-shadow: 0 18px 34px color-mix(in srgb, var(--accent-primary) 28%, transparent);
+}
+
+.project-card-cta-primary:hover {
+  box-shadow:
+    0 22px 40px color-mix(in srgb, var(--accent-primary) 34%, transparent),
+    0 0 34px color-mix(in srgb, var(--accent-secondary) 18%, transparent);
+}
+
+.project-card-cta-secondary {
+  color: var(--text-primary);
+  border: 1px solid color-mix(in srgb, var(--border-soft) 92%, transparent);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.project-card-cta-secondary:hover {
+  color: var(--accent-primary);
+  border-color: color-mix(in srgb, var(--accent-primary) 30%, var(--border-soft));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 16px 30px rgba(10, 18, 34, 0.16);
+}
+
+html.dark .project-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    rgba(8, 18, 32, 0.74);
+}
+
+html.dark .project-card-media {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+html.dark .project-card-cta-secondary {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
 }
