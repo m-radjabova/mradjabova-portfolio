@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {FaGithub, FaPython } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { SiMysql, SiReact, SiTailwindcss } from "react-icons/si";
-import myPhoto from "../../assets/photo_2025-11-03_08-23-39.jpg";
+import myPhoto from "../../assets/pixar_img.png";
 import TypewriterTitle from "./TypewriterTitle";
 
 interface CustomStyle extends React.CSSProperties {
