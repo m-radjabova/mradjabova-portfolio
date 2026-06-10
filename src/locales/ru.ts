@@ -90,6 +90,7 @@ export const ru = {
       level: "Уровень",
       mastery: "Владение",
       readiness: "Готовность к проектам",
+      badge: "Экспертиза"
     },
 
     projects: {
@@ -102,10 +103,12 @@ export const ru = {
       withoutBackend: {
         badge: "Без backend",
         title: "Статические и showcase-проекты",
+        description: "Тщательно проработанные frontend-интерфейсы — чистый дизайн без серверной логики.",
       },
       withBackend: {
         badge: "С backend",
         title: "Full-stack проекты с живыми данными",
+        description: "Полноценные приложения с реальными базами данных, аутентификацией и серверной логикой.",
       },
       actions: {
         openPage: "Открыть страницу",

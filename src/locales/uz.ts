@@ -96,10 +96,12 @@
       withoutBackend: {
         badge: "Backendsiz",
         title: "Statik va showcase loyihalar",
+        description: "Ehtiyotkorlik bilan yaratilgan frontend interfeyslar — sof dizayn, backend talab qilinmaydi.",
       },
       withBackend: {
         badge: "Backend bilan",
         title: "Jonli ma'lumotlar bilan full-stack loyihalar",
+        description: "Haqiqiy ma'lumotlar bazalari, autentifikatsiya va server logikasi bilan to'liq funksional ilovalar.",
       },
       actions: {
         openPage: "Sahifani ochish",

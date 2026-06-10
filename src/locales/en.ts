@@ -85,6 +85,7 @@
       level: "Level",
       mastery: "Mastery",
       readiness: "Project readiness",
+      badge: "Expertise"
     },
     projects: {
       title: {
@@ -96,10 +97,12 @@
       withoutBackend: {
         badge: "Without backend",
         title: "Static and showcase projects",
+        description: "Carefully crafted frontend interfaces — pure design, no backend dependencies.",
       },
       withBackend: {
         badge: "With backend",
         title: "Full-stack projects with live data",
+        description: "Full-stack applications powered by real databases, authentication, and server logic.",
       },
       actions: {
         openPage: "Open page",

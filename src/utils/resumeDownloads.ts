@@ -1,4 +1,12 @@
 import { jsPDF } from "jspdf";
+import {
+  AlignmentType,
+  Document,
+  ImageRun,
+  Packer,
+  Paragraph,
+  TextRun,
+} from "docx";
 
 async function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -10,16 +18,10 @@ async function loadImage(src: string): Promise<HTMLImageElement> {
   });
 }
 
-async function imageToDataUrl(src: string): Promise<string> {
+async function imageToArrayBuffer(src: string): Promise<ArrayBuffer> {
   const response = await fetch(src);
   const blob = await response.blob();
-
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(String(reader.result));
-    reader.onerror = () => reject(new Error("Failed to read resume image."));
-    reader.readAsDataURL(blob);
-  });
+  return blob.arrayBuffer();
 }
 
 export async function downloadResumeAsPdf(imageSrc: string, fileBaseName: string) {
@@ -48,33 +50,71 @@ export async function downloadResumeAsPdf(imageSrc: string, fileBaseName: string
 }
 
 export async function downloadResumeAsWord(imageSrc: string, fileBaseName: string, title: string) {
-  const imageDataUrl = await imageToDataUrl(imageSrc);
-  const html = `
-    <html xmlns:o="urn:schemas-microsoft-com:office:office"
-          xmlns:w="urn:schemas-microsoft-com:office:word"
-          xmlns="http://www.w3.org/TR/REC-html40">
-      <head>
-        <meta charset="utf-8">
-        <title>${title}</title>
-        <style>
-          body { margin: 0; padding: 24px; background: #ffffff; text-align: center; }
-          img { max-width: 100%; height: auto; }
-        </style>
-      </head>
-      <body>
-        <img src="${imageDataUrl}" alt="${title}">
-      </body>
-    </html>
-  `;
+  const image = await loadImage(imageSrc);
+  const imageBuffer = await imageToArrayBuffer(imageSrc);
 
-  const blob = new Blob(["\ufeff", html], {
-    type: "application/msword",
+  const pageWidth = 816;
+  const pageHeight = 1056;
+  const margin = 36;
+  const maxWidth = pageWidth - margin * 2;
+  const maxHeight = pageHeight - margin * 2 - 56;
+  const scale = Math.min(maxWidth / image.width, maxHeight / image.height);
+  const renderWidth = Math.round(image.width * scale);
+  const renderHeight = Math.round(image.height * scale);
+
+  const doc = new Document({
+    sections: [
+      {
+        properties: {
+          page: {
+            size: {
+              width: "8.5in",
+              height: "11in",
+            },
+            margin: {
+              top: "0.5in",
+              right: "0.5in",
+              bottom: "0.5in",
+              left: "0.5in",
+            },
+          },
+        },
+        children: [
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: { after: 240 },
+            children: [
+              new TextRun({
+                text: title,
+                bold: true,
+                size: 28,
+              }),
+            ],
+          }),
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            children: [
+              new ImageRun({
+                type: "png",
+                data: new Uint8Array(imageBuffer),
+                transformation: {
+                  width: renderWidth,
+                  height: renderHeight,
+                },
+              }),
+            ],
+          }),
+        ],
+      },
+    ],
   });
+
+  const blob = await Packer.toBlob(doc);
 
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = `${fileBaseName}.doc`;
+  anchor.download = `${fileBaseName}.docx`;
   document.body.appendChild(anchor);
   anchor.click();
   anchor.remove();

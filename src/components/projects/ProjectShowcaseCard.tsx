@@ -1,6 +1,6 @@
-import { useEffect, useState, type ReactElement, type ReactNode } from "react";
+import { useEffect, useState, useRef, type ReactElement, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { FaArrowRight, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaArrowRight, FaChevronDown, FaTimes, FaStar } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
 
@@ -28,34 +28,65 @@ type ProjectShowcaseCardProps = {
   previewHref?: string;
 };
 
+/* ── Action Button ── */
 function ProjectActionButton({ action }: { action: ProjectAction }) {
-  const baseClassName =
-    action.variant === "primary"
-      ? "project-card-cta project-card-cta-primary"
-      : "project-card-cta project-card-cta-secondary";
+  const isPrimary = action.variant === "primary";
 
-  const content = (
+  const baseClasses = `group/action relative inline-flex min-h-[3.2rem] flex-1 items-center justify-center gap-2.5 overflow-hidden rounded-[0.85rem] px-5 text-sm font-bold tracking-[-0.01em] transition-all duration-400 ease-out lg:flex-none lg:px-6 ${
+    isPrimary
+      ? "text-white"
+      : "text-[var(--text-primary)]/90 border border-[var(--border-soft)]/40 bg-white/5 backdrop-blur-sm"
+  }`;
+
+  const hoverClasses = isPrimary
+    ? "hover:scale-[1.03] hover:shadow-2xl hover:shadow-[var(--accent-primary)]/30 active:scale-[0.97]"
+    : "hover:scale-[1.03] hover:border-[var(--accent-primary)]/25 hover:bg-white/10 hover:text-[var(--accent-primary)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] active:scale-[0.97]";
+
+  const buttonContent = (
     <>
-      <span className="text-sm transition duration-300 group-hover:translate-x-0.5">{action.icon}</span>
-      <span>{action.label}</span>
+      {/* Primary bg gradient */}
+      {isPrimary && (
+        <span className="absolute inset-0 rounded-[inherit] bg-gradient-to-br from-[var(--accent-primary)] via-[var(--accent-primary)] to-[var(--accent-secondary)]" />
+      )}
+      {/* Hover glow overlay */}
+      <span className={`absolute inset-0 rounded-[inherit] transition-all duration-400 ${
+        isPrimary
+          ? "bg-gradient-to-br from-white/0 via-white/0 to-white/[0.08] opacity-0 group-hover/action:opacity-100"
+          : "bg-gradient-to-br from-white/[0.04] to-transparent opacity-0 group-hover/action:opacity-100"
+      }`} />
+      {/* Shimmer sweep */}
+      <span className={`absolute inset-0 -translate-x-full skew-x-[-15deg] bg-gradient-to-r from-transparent ${
+        isPrimary ? "via-white/20" : "via-white/8"
+      } to-transparent transition-transform duration-[800ms] group-hover/action:translate-x-full`} />
+      {/* Glow ring */}
+      <span className={`absolute -inset-[1.5px] rounded-[inherit] blur-md transition-all duration-500 ${
+        isPrimary
+          ? "bg-gradient-to-r from-[var(--accent-primary)]/30 to-[var(--accent-secondary)]/30 opacity-0 group-hover/action:opacity-100"
+          : "bg-gradient-to-r from-[var(--accent-primary)]/10 to-[var(--accent-secondary)]/10 opacity-0 group-hover/action:opacity-80"
+      }`} aria-hidden="true" />
+      <span className="relative z-10 transition-all duration-300 group-hover/action:translate-x-0.5 group-hover/action:scale-110">{action.icon}</span>
+      <span className="relative z-10">{action.label}</span>
     </>
   );
 
+  const combinedClasses = `${baseClasses} ${hoverClasses}`;
+
   if (action.to) {
     return (
-      <Link to={action.to} className={`${baseClassName} group`}>
-        {content}
+      <Link to={action.to} className={combinedClasses}>
+        {buttonContent}
       </Link>
     );
   }
 
   return (
-    <a href={action.href} target="_blank" rel="noopener noreferrer" className={`${baseClassName} group`}>
-      {content}
+    <a href={action.href} target="_blank" rel="noopener noreferrer" className={combinedClasses}>
+      {buttonContent}
     </a>
   );
 }
 
+/* ── Main Card ── */
 function ProjectShowcaseCard({
   title,
   shortDescription,
@@ -73,56 +104,102 @@ function ProjectShowcaseCard({
 }: ProjectShowcaseCardProps) {
   const { t } = useTranslation();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const cardRef = useRef<HTMLElement>(null);
 
+  /* ── Lock scroll & close on Escape ── */
   useEffect(() => {
-    if (!isDetailsOpen) {
-      return undefined;
-    }
-
+    if (!isDetailsOpen) return undefined;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsDetailsOpen(false);
-      }
+      if (event.key === "Escape") setIsDetailsOpen(false);
     };
-
     window.addEventListener("keydown", handleEscape);
-
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleEscape);
     };
   }, [isDetailsOpen]);
 
-  const previewContent = (
-    <div className="project-card-media relative overflow-hidden rounded-[1.55rem]">
+  /* ── 3D Parallax tilt on hover ── */
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    card.style.setProperty("--mx", `${(x - 0.5) * 4}deg`);
+    card.style.setProperty("--my", `${(y - 0.5) * -3}deg`);
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    const card = cardRef.current;
+    if (card) {
+      card.style.setProperty("--mx", "0deg");
+      card.style.setProperty("--my", "0deg");
+    }
+    setIsHovered(false);
+  };
+
+  /* ── Image area ── */
+  const imageContent = (
+    <div className="relative h-full w-full overflow-hidden rounded-xl">
+      {/* Skeleton shimmer */}
+      {!imageLoaded && (
+        <div className="absolute inset-0 z-10 animate-pulse bg-gradient-to-br from-white/[0.08] via-white/[0.02] to-white/[0.08]" />
+      )}
+
       <img
         src={image}
         alt={imageAlt}
-        className="h-56 w-full object-cover object-top transition duration-700 group-hover:scale-[1.06] sm:h-64"
+        loading="lazy"
+        onLoad={() => setImageLoaded(true)}
+        className={`h-56 w-full object-cover object-top transition-all duration-700 sm:h-64 lg:h-full lg:min-h-[22rem] ${
+          imageLoaded ? "opacity-100" : "opacity-0"
+        } ${isHovered ? "scale-105" : "scale-100"}`}
       />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,10,20,0.08),rgba(6,10,20,0.3)_44%,rgba(6,10,20,0.82)_100%)]" />
 
-      <div className="absolute inset-x-0 top-0 h-14 bg-[linear-gradient(180deg,rgba(255,255,255,0.42),transparent)] opacity-80" />
+      {/* Gradient overlays */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[rgba(5,10,24,0.88)] via-[rgba(5,10,24,0.15)] to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[rgba(5,10,24,0.3)] to-transparent opacity-30" />
 
-      <div className="absolute left-4 top-4 flex max-w-[calc(100%-2rem)] items-center gap-3 rounded-full border border-white/20 bg-black/20 px-4 py-2 text-xs font-semibold text-white/92 backdrop-blur-xl sm:left-5 sm:top-5">
+      {/* Top edge light */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+
+      {/* Hover glow */}
+      <div
+        className={`absolute inset-0 rounded-xl transition-opacity duration-500 ${
+          isHovered ? "opacity-100" : "opacity-0"
+        }`}
+        style={{
+          boxShadow: "inset 0 0 50px rgba(168,85,247,0.08), inset 0 0 100px rgba(255,107,154,0.04)",
+        }}
+      />
+
+      {/* Badge */}
+      <div className="absolute left-3 top-3 z-20 flex max-w-[calc(100%-1.5rem)] items-center gap-2.5 rounded-xl border border-white/15 bg-black/25 px-3.5 py-2 text-[11px] font-semibold text-white/90 backdrop-blur-xl transition-all duration-300 hover:bg-black/35 hover:border-white/25 sm:left-4 sm:top-4">
         <span
-          className="project-card-badge-icon inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/14 text-base shadow-[0_0_24px_rgba(255,255,255,0.14)]"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-white/12 text-sm shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all duration-300"
           style={badgeAccent ? { color: badgeAccent } : undefined}
         >
           {badgeIcon}
         </span>
-        <span className="truncate uppercase tracking-[0.18em] text-white/78">{badge}</span>
+        <span className="truncate uppercase tracking-[0.16em] text-white/75">{badge}</span>
       </div>
 
-      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-end justify-between gap-3 sm:bottom-5 sm:left-5 sm:right-5">
-        <div className="flex max-w-full flex-wrap gap-2">
-          {technologies.slice(0, 4).map((tech) => (
+      {/* Bottom tech tags + stats */}
+      <div className="absolute bottom-3 left-3 right-3 z-20 flex flex-col items-start gap-2 sm:bottom-4 sm:left-4 sm:right-4">
+        <div className="flex max-w-full flex-wrap gap-1.5">
+          {technologies.slice(0, 3).map((tech) => (
             <span
               key={tech}
-              className="inline-flex items-center gap-2 rounded-full border border-white/16 bg-white/10 px-3 py-1.5 text-[11px] font-medium text-white/92 backdrop-blur-xl"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/12 bg-white/10 px-2.5 py-1 text-[10px] font-medium text-white/90 backdrop-blur-xl transition-all duration-200 hover:bg-white/18 hover:border-white/20"
             >
               {techIcons[tech.toLowerCase()] || badgeIcon}
               <span>{tech}</span>
@@ -131,7 +208,8 @@ function ProjectShowcaseCard({
         </div>
 
         {stats && (
-          <span className="rounded-full border border-white/14 bg-black/20 px-3 py-1.5 text-[11px] font-medium tracking-[0.14em] text-white/72 backdrop-blur-xl">
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-black/20 px-2.5 py-1 text-[10px] font-medium tracking-[0.12em] text-white/80 backdrop-blur-xl">
+            <FaStar className="text-[9px] text-yellow-300/80" />
             {stats}
           </span>
         )}
@@ -140,111 +218,205 @@ function ProjectShowcaseCard({
   );
 
   return (
-    <article className="project-card group flex h-full flex-col">
+    <article
+      ref={cardRef}
+      className="project-card group"
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      style={
+        {
+          "--mx": "0deg",
+          "--my": "0deg",
+          perspective: "1100px",
+          transform: "rotateY(var(--mx)) rotateX(var(--my))",
+          transformStyle: "preserve-3d",
+        } as React.CSSProperties
+      }
+    >
       <div className="project-card-glow" aria-hidden="true" />
       <div className="project-card-shine" aria-hidden="true" />
 
-      {previewHref ? (
-        <a href={previewHref} target="_blank" rel="noopener noreferrer" className="block">
-          {previewContent}
-        </a>
-      ) : (
-        previewContent
-      )}
+      <div className="flex flex-col lg:flex-row lg:items-stretch">
+        {/* ── Image Column ── */}
+        <div className="relative lg:w-[40%] lg:min-w-[18rem] xl:w-[38%]">
+          <div className="p-3 pb-0 lg:p-3 lg:pb-0 lg:h-full">
+            {previewHref ? (
+              <a href={previewHref} target="_blank" rel="noopener noreferrer" className="block h-full">
+                {imageContent}
+              </a>
+            ) : (
+              imageContent
+            )}
+          </div>
+        </div>
 
-      <div className="flex flex-1 flex-col gap-6 px-5 pb-5 pt-6 sm:px-6 sm:pb-6">
-        <div className="flex min-h-[13rem] flex-1 flex-col gap-4">
-          <div className="space-y-3">
-            <h4 className="text-[1.75rem] font-black leading-[1.05] tracking-[-0.04em] text-[var(--text-primary)] sm:text-[2rem]">
+        {/* ── Content Column ── */}
+        <div className="flex flex-1 flex-col gap-4 px-5 pb-5 pt-4 sm:px-6 sm:pb-6 lg:px-6 lg:py-5">
+          <div className="flex flex-1 flex-col gap-4">
+            {/* Badge + Stats row */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/8 bg-white/[0.03] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-secondary)]/80">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--accent-primary)]/60" />
+                {badge}
+              </span>
+              {stats && (
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--accent-secondary)]/12 bg-[var(--accent-secondary)]/6 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--accent-secondary)]">
+                  <FaStar className="text-[9px]" />
+                  {stats}
+                </span>
+              )}
+            </div>
+
+            {/* Title */}
+            <h4 className="max-w-[20ch] text-[1.6rem] font-extrabold leading-[1.05] tracking-[-0.03em] text-[var(--text-primary)] transition-all duration-300 group-hover:text-[var(--accent-primary)] sm:text-[1.9rem]">
               {title}
             </h4>
-            <p className="text-sm leading-7 text-[var(--text-secondary)] sm:text-[15px]">
+
+            {/* Short description */}
+            <p className="max-w-2xl text-sm leading-7 text-[var(--text-secondary)]/80 sm:text-[14px]">
               {shortDescription}
             </p>
+
+            {/* Tech pills */}
+            <div className="flex flex-wrap gap-2">
+              {technologies.slice(0, 5).map((tech) => (
+                <span
+                  key={tech}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/8 bg-white/[0.04] px-3 py-1.5 text-[11px] font-semibold text-[var(--text-primary)]/90 backdrop-blur-lg transition-all duration-200 hover:border-[var(--accent-primary)]/20 hover:bg-white/[0.07]"
+                >
+                  {techIcons[tech.toLowerCase()] || badgeIcon}
+                  <span>{tech}</span>
+                </span>
+              ))}
+            </div>
+
+            {/* Details expander */}
+            <div className="group/expand relative overflow-hidden rounded-[1.1rem] border border-white/6 bg-gradient-to-br from-white/[0.02] to-white/[0.01] p-4 backdrop-blur-lg transition-all duration-300 hover:border-[var(--accent-primary)]/12 hover:bg-white/[0.04] hover:shadow-[0_4px_20px_rgba(0,0,0,0.04)] sm:p-4">
+              {/* Gradient accent line */}
+              <div className="absolute top-0 left-3 right-3 h-px bg-gradient-to-r from-transparent via-[var(--accent-primary)]/20 to-transparent opacity-0 transition-opacity duration-300 group-hover/expand:opacity-100" />
+              
+              <button
+                type="button"
+                onClick={() => setIsDetailsOpen(true)}
+                className="group/btn inline-flex cursor-pointer items-center gap-2.5 text-sm font-semibold transition-all duration-300"
+              >
+                <span className="relative inline-flex items-center gap-2 text-[var(--accent-secondary)] group-hover/btn:text-[var(--accent-primary)] transition-colors duration-300">
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-[var(--accent-secondary)]/12 bg-[var(--accent-secondary)]/6 text-[10px] transition-all duration-300 group-hover/btn:bg-[var(--accent-primary)]/6 group-hover/btn:border-[var(--accent-primary)]/12">
+                    <FaChevronDown className="text-[9px] transition-all duration-300 group-hover/btn:translate-y-0.5" />
+                  </span>
+                  <span>{t("projects.actions.showDescription")}</span>
+                </span>
+                {/* Animated underline */}
+                <span className="h-px flex-1 max-w-[40px] bg-gradient-to-r from-[var(--accent-secondary)]/30 to-transparent transition-all duration-300 group-hover/btn:max-w-[60px] group-hover/btn:from-[var(--accent-primary)]/40" />
+              </button>
+              <p className="mt-2.5 text-sm leading-7 text-[var(--text-secondary)]/70 line-clamp-2 pl-[2.25rem]">
+                {description}
+              </p>
+            </div>
           </div>
 
-          <div className="rounded-[1.35rem] border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl">
-            <button
-              type="button"
-              onClick={() => setIsDetailsOpen(true)}
-              className="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold text-[var(--accent-secondary)] transition duration-300 hover:text-[var(--accent-primary)]"
-            >
-              {t("projects.actions.showDescription")}
-              <FaChevronDown />
-            </button>
-            <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]/82">
-              {shortDescription}
-            </p>
+          {/* ── Actions Footer ── */}
+          <div className="mt-auto space-y-3">
+            <div className="flex flex-col gap-2.5 sm:flex-row lg:flex-wrap">
+              {actions.map((action) => (
+                <ProjectActionButton key={action.label} action={action} />
+              ))}
+            </div>
+
+            {/* Bottom bar */}
+            <div className="flex items-center justify-between border-t border-white/6 pt-3 text-[10px] uppercase tracking-[0.16em] text-[var(--text-secondary)]/60">
+              <span className="flex items-center gap-1.5">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--accent-primary)]/50" />
+                {badge}
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-[var(--accent-tertiary)] transition-all duration-200 group-hover:gap-2.5">
+                {t("projects.actions.openPage")}
+                <FaArrowRight className="text-[10px] transition-all duration-200 group-hover:translate-x-1" />
+              </span>
+            </div>
           </div>
-        </div>
-
-        <div className="flex flex-col gap-3 sm:flex-row">
-          {actions.map((action) => (
-            <ProjectActionButton key={action.label} action={action} />
-          ))}
-        </div>
-
-        <div className="flex items-center justify-between border-t border-white/8 pt-1 text-xs uppercase tracking-[0.18em] text-[var(--text-secondary)]/80">
-          <span>{badge}</span>
-          <span className="inline-flex items-center gap-2 text-[var(--accent-tertiary)]">
-            {t("projects.actions.openPage")}
-            <FaArrowRight className="transition duration-300 group-hover:translate-x-1" />
-          </span>
         </div>
       </div>
 
+      {/* ── Detail Modal ── */}
       {isDetailsOpen &&
         createPortal(
           <div
-            className="fixed inset-0 z-[120] flex items-end justify-center bg-slate-950/56 px-4 pb-4 pt-16 backdrop-blur-md sm:items-center sm:p-6"
+            className="fixed inset-0 z-[120] flex items-end justify-center bg-slate-950/60 px-4 pb-4 pt-16 backdrop-blur-xl sm:items-center sm:p-6 animate-[fade-up_0.35s_ease-out_both]"
             onClick={() => setIsDetailsOpen(false)}
           >
             <div
-              className="relative w-full max-w-2xl overflow-hidden rounded-[2rem] border border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.1),rgba(255,255,255,0.04)),color-mix(in_srgb,var(--card-solid)_92%,transparent)] shadow-[0_30px_120px_rgba(5,10,24,0.45)] backdrop-blur-2xl"
+              className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-white/10 bg-[var(--card-solid)] shadow-[0_40px_120px_rgba(5,10,24,0.5)] backdrop-blur-2xl"
               onClick={(event) => event.stopPropagation()}
             >
-              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--accent-primary)] via-[var(--accent-secondary)] to-[var(--accent-tertiary)] shadow-[0_0_24px_rgba(255,130,185,0.45)]" />
+              {/* Top gradient bar */}
+              <div className="relative h-1 w-full overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-[var(--accent-primary)] via-[var(--accent-secondary)] to-[var(--accent-tertiary)]" />
+                <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+              </div>
 
-              <div className="flex items-start justify-between gap-4 border-b border-white/8 px-5 pb-4 pt-6 sm:px-7">
-                <div className="space-y-2">
-                  <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/6 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-secondary)]">
+              {/* Header */}
+              <div className="flex items-start justify-between gap-4 border-b border-white/8 px-5 pb-4 pt-4 sm:px-7">
+                <div className="space-y-2.5">
+                  <div className="inline-flex items-center gap-2.5 rounded-xl border border-white/8 bg-white/6 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-secondary)]">
                     <span
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/8 text-sm"
+                      className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-white/8 bg-white/8 text-xs"
                       style={badgeAccent ? { color: badgeAccent } : undefined}
                     >
                       {badgeIcon}
                     </span>
                     <span>{badge}</span>
                   </div>
-                  <h5 className="text-2xl font-black tracking-[-0.04em] text-[var(--text-primary)] sm:text-3xl">{title}</h5>
+                  <h5 className="text-xl font-extrabold tracking-[-0.03em] text-[var(--text-primary)] sm:text-2xl">
+                    {title}
+                  </h5>
                 </div>
 
                 <button
                   type="button"
                   onClick={() => setIsDetailsOpen(false)}
-                  className="inline-flex cursor-pointer h-11 min-w-11 items-center justify-center rounded-full border border-white/10 bg-white/6 px-4 text-sm font-semibold text-[var(--text-primary)] transition duration-300 hover:border-[var(--accent-primary)]/30 hover:text-[var(--accent-primary)]"
+                  className="inline-flex cursor-pointer h-10 min-w-10 items-center justify-center rounded-xl border border-white/8 bg-white/6 px-3 text-sm font-semibold text-[var(--text-primary)] transition-all duration-200 hover:border-[var(--accent-primary)]/25 hover:bg-white/10 hover:text-[var(--accent-primary)] hover:rotate-90"
                 >
-                  {t("projects.actions.hideDescription")}
-                  <FaChevronUp className="ml-2" />
+                  <FaTimes className="text-sm" />
                 </button>
               </div>
 
-              <div className="space-y-5 px-5 py-5 sm:px-7 sm:py-6">
-                <p className="text-base leading-8 text-[var(--text-secondary)]">{description}</p>
-
-                <div className="flex flex-wrap gap-2">
-                  {technologies.map((tech) => (
-                    <span
-                      key={tech}
-                      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3.5 py-2 text-xs font-semibold text-[var(--text-primary)]"
-                    >
-                      {techIcons[tech.toLowerCase()] || badgeIcon}
-                      <span>{tech}</span>
-                    </span>
-                  ))}
+              {/* Body */}
+              <div className="space-y-5 px-5 py-4 sm:px-7 sm:py-5">
+                {/* Image preview */}
+                <div className="overflow-hidden rounded-xl border border-white/6 shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+                  <img
+                    src={image}
+                    alt={imageAlt}
+                    className="w-full object-cover object-top max-h-48 transition-transform duration-500 hover:scale-[1.03]"
+                  />
                 </div>
 
-                <div className="flex flex-col gap-3 border-t border-white/8 pt-5 sm:flex-row">
+                <p className="text-sm leading-7 text-[var(--text-secondary)]/85 sm:text-[15px]">
+                  {description}
+                </p>
+
+                {/* Tech pills */}
+                <div>
+                  <p className="mb-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
+                    Technologies
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {technologies.map((tech) => (
+                      <span
+                        key={tech}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-white/8 bg-white/5 px-3 py-1.5 text-[11px] font-semibold text-[var(--text-primary)] transition-all duration-200 hover:bg-white/10 hover:border-white/14"
+                      >
+                        {techIcons[tech.toLowerCase()] || badgeIcon}
+                        <span>{tech}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex flex-col gap-2.5 border-t border-white/6 pt-4 sm:flex-row">
                   {actions.map((action) => (
                     <ProjectActionButton key={`modal-${action.label}`} action={action} />
                   ))}
