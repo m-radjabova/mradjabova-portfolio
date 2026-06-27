@@ -14,7 +14,6 @@ import {
 import { HiSparkles } from "react-icons/hi";
 import { FiExternalLink } from "react-icons/fi";
 
-// ── Types ──────────────────────────────────────────────────────
 interface DecorativeItem {
   id: number;
   size: number;
@@ -24,6 +23,20 @@ interface DecorativeItem {
   duration: string;
   opacity: number;
 }
+
+type SkillCategory = {
+  name: string;
+  skills: Array<{
+    label: string;
+    level: number;
+  }>;
+};
+
+type AboutStat = {
+  value: number;
+  label: string;
+  suffix: string;
+};
 
 // ── Floating Orbs Generator ────────────────────────────────────
 const useOrbs = (count: number): DecorativeItem[] => {
@@ -156,39 +169,16 @@ const About = () => {
     },
   ];
 
-  const skillCategories = [
-    {
-      name: "Frontend",
-      skills: [
-        { label: "React / TypeScript", level: 94 },
-        { label: "Tailwind CSS", level: 92 },
-        { label: "Next.js", level: 82 },
-      ],
-    },
-    {
-      name: "Design",
-      skills: [
-        { label: "UI/UX Design", level: 88 },
-        { label: "Figma", level: 85 },
-        { label: "Responsive Layouts", level: 90 },
-      ],
-    },
-    {
-      name: "Backend & Tools",
-      skills: [
-        { label: "Node.js / Express", level: 78 },
-        { label: "Firebase", level: 80 },
-        { label: "Git / GitHub", level: 90 },
-      ],
-    },
-  ];
+  const skillCategories = t("about.skillsCategories", {
+    returnObjects: true,
+  }) as SkillCategory[];
 
-  const stats = [
-    { value: 12, label: "Projects", suffix: "+", icon: <FaCode /> },
-    { value: 3, label: "Years Exp", suffix: "+", icon: <FaStar /> },
-    { value: 50, label: "UI Components", suffix: "+", icon: <FaPalette /> },
-    { value: 24, label: "Achievements", suffix: "", icon: <FaCrown /> },
-  ];
+  const stats = (t("about.stats", {
+    returnObjects: true,
+  }) as AboutStat[]).map((stat, index) => ({
+    ...stat,
+    icon: [<FaCode />, <FaStar />, <FaPalette />, <FaCrown />][index],
+  }));
 
   return (
     <section
@@ -411,7 +401,7 @@ const About = () => {
                       <FaRocket />
                     </div>
                     <p className="text-sm font-medium text-[var(--text-secondary)]">
-                      Continuously learning and building with modern technologies
+                      {t("about.learningNote")}
                     </p>
                   </div>
                 </div>
@@ -438,10 +428,10 @@ const About = () => {
 
                   <div className="mt-4 flex items-center justify-between rounded-2xl bg-gradient-to-r from-[var(--accent-primary)]/5 to-[var(--accent-secondary)]/5 p-4">
                     <span className="text-sm font-semibold text-[var(--text-primary)]">
-                      Tools & Platforms
+                      {t("about.toolsLabel")}
                     </span>
                     <div className="flex items-center gap-2 text-xs text-[var(--accent-primary)]">
-                      <span>VSCode · Git · Figma · Firebase · Chrome DevTools</span>
+                      <span>{t("about.toolsList")}</span>
                       <FiExternalLink className="opacity-60" />
                     </div>
                   </div>
@@ -463,19 +453,18 @@ const About = () => {
                 {t("about.profileLabel")}
               </p>
               <h3 className="mt-3 text-2xl font-extrabold text-[var(--text-primary)] sm:text-3xl">
-                Let's create something{" "}
+                {t("about.cta.titleStart")}{" "}
                 <span className="bg-gradient-to-r from-[var(--accent-gradient-from)] via-[var(--accent-gradient-via)] to-[var(--accent-gradient-to)] bg-clip-text text-transparent">
-                  extraordinary
+                  {t("about.cta.titleAccent")}
                 </span>{" "}
-                together
+                {t("about.cta.titleEnd")}
               </h3>
               <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-[var(--text-secondary)]">
-                Currently exploring modern front-end patterns, design systems, and building
-                production-ready user interfaces.
+                {t("about.cta.description")}
               </p>
               <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-[var(--accent-primary)]/20 transition-all duration-300 hover:shadow-xl hover:shadow-[var(--accent-primary)]/30 hover:scale-105">
                 <FaRocket />
-                Open to opportunities
+                {t("about.cta.button")}
                 <FaArrowRight className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
               </div>
             </div>

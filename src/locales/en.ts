@@ -12,6 +12,10 @@
         switchToDark: "Switch to dark mode",
         switchToLight: "Switch to light mode",
       },
+      actions: {
+        toggleMobileMenu: "Toggle mobile menu",
+        scrollToTop: "Scroll to top",
+      },
     },
     nav: {
       home: "Home",
@@ -76,6 +80,49 @@
         description:
           "Bachelor's studies focused on software development, algorithms, systems thinking, and practical engineering fundamentals.",
       },
+      skillsCategories: [
+        {
+          name: "Frontend",
+          skills: [
+            { label: "React / TypeScript", level: 94 },
+            { label: "Tailwind CSS", level: 92 },
+            { label: "Next.js", level: 82 },
+          ],
+        },
+        {
+          name: "Design",
+          skills: [
+            { label: "UI/UX Design", level: 88 },
+            { label: "Figma", level: 85 },
+            { label: "Responsive Layouts", level: 90 },
+          ],
+        },
+        {
+          name: "Backend & Tools",
+          skills: [
+            { label: "Node.js / Express", level: 78 },
+            { label: "Firebase", level: 80 },
+            { label: "Git / GitHub", level: 90 },
+          ],
+        },
+      ],
+      stats: [
+        { value: 12, label: "Projects", suffix: "+" },
+        { value: 3, label: "Years Exp", suffix: "+" },
+        { value: 50, label: "UI Components", suffix: "+" },
+        { value: 24, label: "Achievements", suffix: "" },
+      ],
+      learningNote: "Continuously learning and building with modern technologies",
+      toolsLabel: "Tools & Platforms",
+      toolsList: "VSCode · Git · Figma · Firebase · Chrome DevTools",
+      cta: {
+        titleStart: "Let's create something",
+        titleAccent: "extraordinary",
+        titleEnd: "together",
+        description:
+          "Currently exploring modern front-end patterns, design systems, and building production-ready user interfaces.",
+        button: "Open to opportunities",
+      },
     },
     skillsCarousel: {
       eyebrow: "Core Stack",
@@ -103,6 +150,12 @@
         badge: "With backend",
         title: "Full-stack projects with live data",
         description: "Full-stack applications powered by real databases, authentication, and server logic.",
+      },
+      panel: {
+        withLabel: "Backend Projects",
+        withoutLabel: "Frontend Projects",
+        withBadge: "Featured first",
+        withoutBadge: "Showcase",
       },
       actions: {
         openPage: "Open page",
@@ -194,6 +247,7 @@
       emailNote: "Best for project requests, collabs, and direct communication.",
       locationNote: "Based in Bukhara and open to remote opportunities.",
       builtWith: "Built with",
+      builtWithStack: "React / TypeScript / Tailwind CSS",
       quickLinks: "Quick Links",
       getInTouch: "Get In Touch",
       workTogether: "Let's Work Together",

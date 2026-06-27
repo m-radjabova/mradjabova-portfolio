@@ -477,7 +477,7 @@ const Header = ({ theme, onToggleTheme }: HeaderProps) => {
             <button
               className="relative inline-flex h-11 w-11 items-center justify-center rounded-[1.25rem] border border-white/18 bg-white/10 text-[var(--text-primary)] shadow-[0_16px_36px_rgba(255,107,154,0.08)] backdrop-blur-2xl transition-all duration-300 active:scale-90 dark:bg-slate-950/18 md:hidden"
               onClick={() => setIsMobileMenuOpen((c) => !c)}
-              aria-label="Toggle mobile menu"
+              aria-label={t("common.actions.toggleMobileMenu")}
             >
               {/* Hamburger icon with smooth cross transition */}
               <span className="relative h-4 w-4">
@@ -630,8 +630,8 @@ const Header = ({ theme, onToggleTheme }: HeaderProps) => {
             ? "pointer-events-auto translate-y-0 opacity-100"
             : "pointer-events-none translate-y-4 opacity-0"
         }`}
-        aria-label="Scroll to top"
-        title="Scroll to top"
+        aria-label={t("common.actions.scrollToTop")}
+        title={t("common.actions.scrollToTop")}
       >
         <FaArrowUp className="h-4 w-4" />
       </button>

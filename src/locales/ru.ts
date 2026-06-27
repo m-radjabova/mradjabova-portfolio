@@ -12,6 +12,10 @@ export const ru = {
         switchToDark: "Переключить на тёмную тему",
         switchToLight: "Переключить на светлую тему",
       },
+      actions: {
+        toggleMobileMenu: "Открыть или закрыть мобильное меню",
+        scrollToTop: "Прокрутить наверх",
+      },
     },
 
     nav: {
@@ -80,6 +84,49 @@ export const ru = {
         description:
           "Обучаюсь разработке программного обеспечения с упором на алгоритмы, системное мышление и практические инженерные навыки.",
       },
+      skillsCategories: [
+        {
+          name: "Frontend",
+          skills: [
+            { label: "React / TypeScript", level: 94 },
+            { label: "Tailwind CSS", level: 92 },
+            { label: "Next.js", level: 82 },
+          ],
+        },
+        {
+          name: "Дизайн",
+          skills: [
+            { label: "UI/UX дизайн", level: 88 },
+            { label: "Figma", level: 85 },
+            { label: "Адаптивные layout-ы", level: 90 },
+          ],
+        },
+        {
+          name: "Backend и инструменты",
+          skills: [
+            { label: "Node.js / Express", level: 78 },
+            { label: "Firebase", level: 80 },
+            { label: "Git / GitHub", level: 90 },
+          ],
+        },
+      ],
+      stats: [
+        { value: 12, label: "Проекты", suffix: "+" },
+        { value: 3, label: "Лет опыта", suffix: "+" },
+        { value: 50, label: "UI компоненты", suffix: "+" },
+        { value: 24, label: "Достижения", suffix: "" },
+      ],
+      learningNote: "Постоянно учусь и создаю новые вещи с современными технологиями",
+      toolsLabel: "Инструменты и платформы",
+      toolsList: "VSCode · Git · Figma · Firebase · Chrome DevTools",
+      cta: {
+        titleStart: "Давайте создадим что-то",
+        titleAccent: "необыкновенное",
+        titleEnd: "вместе",
+        description:
+          "Сейчас углубляюсь в современные front-end паттерны, design systems и создание production-ready пользовательских интерфейсов.",
+        button: "Открыта к новым возможностям",
+      },
     },
 
     skillsCarousel: {
@@ -110,6 +157,12 @@ export const ru = {
         title: "Full-stack проекты с живыми данными",
         description: "Полноценные приложения с реальными базами данных, аутентификацией и серверной логикой.",
       },
+      panel: {
+        withLabel: "Backend проекты",
+        withoutLabel: "Frontend проекты",
+        withBadge: "Сначала новые",
+        withoutBadge: "Showcase",
+      },
       actions: {
         openPage: "Открыть страницу",
         sourceCode: "Исходный код",
@@ -138,6 +191,7 @@ export const ru = {
       emailNote: "Подходит для сотрудничества и проектов.",
       locationNote: "Нахожусь в Бухаре и открыта к удалённой работе.",
       builtWith: "Сделано с",
+      builtWithStack: "React / TypeScript / Tailwind CSS",
       quickLinks: "Ссылки",
       getInTouch: "Связаться",
       workTogether: "Давайте работать вместе",

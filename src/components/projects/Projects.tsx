@@ -150,7 +150,9 @@ function Projects() {
                 </span>
                 <div>
                   <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--text-muted)]">
-                    {activeTab === "with" ? "Backend Projects" : "Frontend Projects"}
+                    {activeTab === "with"
+                      ? t("projects.panel.withLabel")
+                      : t("projects.panel.withoutLabel")}
                   </p>
                   <h3 className="mt-1 text-lg font-bold tracking-[-0.02em] text-[var(--text-primary)] sm:text-xl">
                     {activeTab === "with"
@@ -166,7 +168,9 @@ function Projects() {
                     : "border-[var(--accent-primary)]/15 bg-[var(--accent-primary)]/6 text-[var(--accent-primary)]"
                 }`}
               >
-                {activeTab === "with" ? "Featured first" : "Showcase"}
+                {activeTab === "with"
+                  ? t("projects.panel.withBadge")
+                  : t("projects.panel.withoutBadge")}
               </span>
             </div>
 

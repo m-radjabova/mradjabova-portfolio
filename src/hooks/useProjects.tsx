@@ -3,9 +3,13 @@ import {
   collection,
   onSnapshot,
   query,
-  orderBy,
 } from "firebase/firestore";
 import { db } from "../firebase";
+
+type FirestoreTimestampLike = {
+  seconds: number;
+  nanoseconds: number;
+};
 
 export interface Project {
   id: string;
@@ -14,6 +18,12 @@ export interface Project {
   technologies: string[];
   demoLink: string;
   githubLink?: string;
+  createdAt?: FirestoreTimestampLike;
+}
+
+function getTimestampValue(timestamp?: FirestoreTimestampLike) {
+  if (!timestamp) return 0;
+  return timestamp.seconds * 1000 + Math.floor(timestamp.nanoseconds / 1_000_000);
 }
 
 function useProjects() {
@@ -23,14 +33,16 @@ function useProjects() {
 
   useEffect(() => {
     try {
-      const q = query(collection(db, "projects"), orderBy("title", "asc"));
+      const q = query(collection(db, "projects"));
       const unsubscribe = onSnapshot(
         q,
         (snapshot) => {
-          const projectList: Project[] = snapshot.docs.map((docSnap) => ({
-            id: docSnap.id,
-            ...docSnap.data(),
-          })) as Project[];
+          const projectList: Project[] = snapshot.docs
+            .map((docSnap) => ({
+              id: docSnap.id,
+              ...docSnap.data(),
+            }) as Project)
+            .sort((a, b) => getTimestampValue(b.createdAt) - getTimestampValue(a.createdAt));
           setProjects(projectList);
           setLoading(false);
         },

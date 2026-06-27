@@ -469,7 +469,7 @@ const Contact = () => {
                       </div>
                       <div>
                         <p className="text-sm font-semibold">{t("contact.builtWith")}</p>
-                        <p className="text-xs text-[var(--text-secondary)]">React / TypeScript / Tailwind CSS</p>
+                        <p className="text-xs text-[var(--text-secondary)]">{t("contact.builtWithStack")}</p>
                       </div>
                     </div>
                   </div>

@@ -12,6 +12,10 @@
         switchToDark: "Tungi rejimga o'tish",
         switchToLight: "Yorug' rejimga o'tish",
       },
+      actions: {
+        toggleMobileMenu: "Mobil menyuni ochish yoki yopish",
+        scrollToTop: "Yuqoriga qaytish",
+      },
     },
     nav: {
       home: "Bosh sahifa",
@@ -76,6 +80,49 @@
         description:
           "Dasturiy ta'minot ishlab chiqish, algoritmlar, tizimli fikrlash va amaliy muhandislik asoslariga yo'naltirilgan bakalavr ta'limi.",
       },
+      skillsCategories: [
+        {
+          name: "Frontend",
+          skills: [
+            { label: "React / TypeScript", level: 94 },
+            { label: "Tailwind CSS", level: 92 },
+            { label: "Next.js", level: 82 },
+          ],
+        },
+        {
+          name: "Dizayn",
+          skills: [
+            { label: "UI/UX Dizayn", level: 88 },
+            { label: "Figma", level: 85 },
+            { label: "Responsive Layoutlar", level: 90 },
+          ],
+        },
+        {
+          name: "Backend va vositalar",
+          skills: [
+            { label: "Node.js / Express", level: 78 },
+            { label: "Firebase", level: 80 },
+            { label: "Git / GitHub", level: 90 },
+          ],
+        },
+      ],
+      stats: [
+        { value: 12, label: "Loyihalar", suffix: "+" },
+        { value: 3, label: "Yillik tajriba", suffix: "+" },
+        { value: 50, label: "UI komponentlar", suffix: "+" },
+        { value: 24, label: "Yutuqlar", suffix: "" },
+      ],
+      learningNote: "Zamonaviy texnologiyalar bilan doimiy o'rganib, yangi narsalar qurib boryapman",
+      toolsLabel: "Vositalar va platformalar",
+      toolsList: "VSCode · Git · Figma · Firebase · Chrome DevTools",
+      cta: {
+        titleStart: "Keling, birga",
+        titleAccent: "ajoyib",
+        titleEnd: "narsa yarataylik",
+        description:
+          "Hozir zamonaviy front-end patternlar, design systemlar va production-ready foydalanuvchi interfeyslarini chuqur o'rganib, ishlab chiqyapman.",
+        button: "Yangi imkoniyatlarga ochiqman",
+      },
     },
     skillsCarousel: {
       eyebrow: "Asosiy Stack",
@@ -102,6 +149,12 @@
         badge: "Backend bilan",
         title: "Jonli ma'lumotlar bilan full-stack loyihalar",
         description: "Haqiqiy ma'lumotlar bazalari, autentifikatsiya va server logikasi bilan to'liq funksional ilovalar.",
+      },
+      panel: {
+        withLabel: "Backend loyihalar",
+        withoutLabel: "Frontend loyihalar",
+        withBadge: "Yangi qo'shilganlar tepada",
+        withoutBadge: "Showcase",
       },
       actions: {
         openPage: "Sahifani ochish",
@@ -193,6 +246,7 @@
       emailNote: "Loyiha, hamkorlik va to'g'ridan-to'g'ri yozishmalar uchun qulay.",
       locationNote: "Buxoroda joylashganman va remote ishlarga ochiqman.",
       builtWith: "Yaratilgan texnologiya",
+      builtWithStack: "React / TypeScript / Tailwind CSS",
       quickLinks: "Tezkor havolalar",
       getInTouch: "Bog'lanish",
       workTogether: "Keling, birga ishlaymiz",
