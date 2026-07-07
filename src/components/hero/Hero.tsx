@@ -1,5 +1,5 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import portrait from "../../assets/me/hero_portrait.png";
 
 type HeroProps = {
   onNavigate?: (sectionId: "projects" | "contact" | "resume") => void;
@@ -7,6 +7,7 @@ type HeroProps = {
 
 const Hero = ({ onNavigate }: HeroProps) => {
   const { t } = useTranslation();
+  const [isPortraitLoaded, setIsPortraitLoaded] = useState(false);
 
   return (
     <section
@@ -238,10 +239,24 @@ const Hero = ({ onNavigate }: HeroProps) => {
           >
             {/* Portrait without shadow so it sits flush with the hero */}
             <div className="relative">
+              <div
+                className={`pointer-events-none absolute inset-x-[12%] top-[8%] bottom-[6%] rounded-[2rem] bg-gradient-to-br from-white/65 via-[#f4e8ef]/55 to-[#e9d8e4]/70 blur-2xl transition-all duration-700 ${
+                  isPortraitLoaded ? "opacity-0 scale-95" : "opacity-100 scale-100"
+                }`}
+                aria-hidden="true"
+              />
               <img
-                src={portrait}
+                src="/hero_portrait.webp"
                 alt="Muslima Radjabova"
-                className="mx-auto block h-auto w-full max-w-[28rem] sm:max-w-[52rem] object-contain lg:max-w-[58rem]"
+                loading="lazy"
+                decoding="async"
+                fetchPriority="low"
+                onLoad={() => setIsPortraitLoaded(true)}
+                className={`mx-auto block h-auto w-full max-w-[28rem] object-contain transition-all duration-[1400ms] ease-out sm:max-w-[52rem] lg:max-w-[58rem] ${
+                  isPortraitLoaded
+                    ? "scale-100 opacity-100 blur-0"
+                    : "scale-[0.985] opacity-0 blur-xl"
+                }`}
               />
             </div>
           </div>
