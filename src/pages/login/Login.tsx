@@ -42,7 +42,7 @@ const LoginForm = () => {
         }
 
         localStorage.removeItem("role");
-        toast.error("This account does not have admin access.");
+        toast.error(t("auth.login.toasts.noAdminAccess"));
         return;
       }
 
@@ -96,12 +96,12 @@ const LoginForm = () => {
             <div className="relative z-10 flex h-full flex-col justify-between text-white">
               <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold backdrop-blur-xl">
                 <FaShieldAlt />
-                Admin Access Only
+                {t("auth.login.adminOnlyBadge")}
               </div>
 
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.28em] text-white/70">
-                  Portfolio control room
+                  {t("auth.login.controlRoom")}
                 </p>
               </div>
             </div>
@@ -136,7 +136,11 @@ const LoginForm = () => {
                 </div>
 
                 <div className="mt-6 rounded-[1.4rem] border border-[var(--border-soft)] bg-[var(--bg-soft)]/65 p-4 text-sm leading-7 text-[var(--text-secondary)] dark:bg-white/5">
-                  Only accounts with the <span className="font-semibold text-[var(--text-primary)]">ADMIN</span> role can enter this panel.
+                  {t("auth.login.adminRoleNote.prefix")}{" "}
+                  <span className="font-semibold text-[var(--text-primary)]">
+                    {t("auth.login.adminRoleNote.role")}
+                  </span>{" "}
+                  {t("auth.login.adminRoleNote.suffix")}
                 </div>
 
                 <form onSubmit={handleSubmit(Login)} className="mt-8 space-y-5">
@@ -171,7 +175,11 @@ const LoginForm = () => {
                         type="button"
                         className="text-[var(--accent-primary)] transition hover:text-[var(--accent-secondary)]"
                         onClick={() => setShowPassword(!showPassword)}
-                        aria-label={showPassword ? "Hide password" : "Show password"}
+                        aria-label={
+                          showPassword
+                            ? t("auth.login.hidePassword")
+                            : t("auth.login.showPassword")
+                        }
                       >
                         {showPassword ? <FaEyeSlash /> : <FaEye />}
                       </button>

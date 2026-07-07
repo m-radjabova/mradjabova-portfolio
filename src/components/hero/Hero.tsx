@@ -1,243 +1,260 @@
-import { useEffect, useState, useRef } from "react";
-import { FaGithub, FaPython } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
-import { SiMysql, SiReact, SiTailwindcss } from "react-icons/si";
-import { IoCodeSlash } from "react-icons/io5";
-import myPhoto from "../../assets/pixar_img.png";
-import TypewriterTitle from "./TypewriterTitle";
+import portrait from "../../assets/me/hero_portrait.png";
 
-interface CustomStyle extends React.CSSProperties {
-  "--mouse-x": string;
-  "--mouse-y": string;
-}
+type HeroProps = {
+  onNavigate?: (sectionId: "projects" | "contact" | "resume") => void;
+};
 
-const orbitIcons = [
-  {
-    label: "React",
-    className:
-      "left-0 top-8 h-24 w-24 rounded-[1.9rem] text-[var(--accent-primary)] animate-orbit-icon",
-    icon: <SiReact className="h-12 w-12" />,
-    delay: "0s",
-  },
-  {
-    label: "Tailwind",
-    className:
-      "right-0 top-8 h-24 w-24 rounded-full text-sky-400 animate-orbit-icon",
-    icon: <SiTailwindcss className="h-12 w-12" />,
-    delay: "0.8s",
-  },
-  {
-    label: "Github",
-    className:
-      "-left-10 top-1/2 h-22 w-22 -translate-y-1/2 rounded-[1.7rem] text-orange-500 animate-orbit-icon",
-    icon: <FaGithub className="h-10 w-10" />,
-    delay: "1.6s",
-  },
-  {
-    label: "Python",
-    className:
-      "-right-10 top-1/2 h-22 w-22 -translate-y-1/2 rounded-full text-yellow-500 animate-orbit-icon",
-    icon: <FaPython className="h-10 w-10" />,
-    delay: "2.4s",
-  },
-  {
-    label: "SQL",
-    className:
-      "bottom-0 left-1/2 h-22 w-22 -translate-x-1/2 rounded-[1.7rem] text-violet-500 animate-orbit-icon",
-    icon: <SiMysql className="h-10 w-10" />,
-    delay: "3.2s",
-  },
-];
-
-const Hero = () => {
+const Hero = ({ onNavigate }: HeroProps) => {
   const { t } = useTranslation();
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      setMousePosition({
-        x: (event.clientX / window.innerWidth) * 100,
-        y: (event.clientY / window.innerHeight) * 100,
-      });
-
-      // Parallax effect on image
-      if (imageRef.current) {
-        const rect = imageRef.current.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const deltaX = (event.clientX - centerX) / 40;
-        const deltaY = (event.clientY - centerY) / 40;
-        imageRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-      }
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
 
   return (
     <section
-      ref={sectionRef}
-      className="relative overflow-hidden px-4 pb-16 pt-24 sm:px-6 sm:pb-24 sm:pt-10"
       id="home"
+      className="relative min-h-screen overflow-hidden bg-[var(--hero-bg)] lg:h-screen lg:min-h-0"
     >
-      {/* Ambient background layers */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={
-          {
-            "--mouse-x": `${mousePosition.x}%`,
-            "--mouse-y": `${mousePosition.y}%`,
-          } as CustomStyle
-        }
-      >
-        {/* Soft gradient overlay */}
-        <div className="absolute inset-y-0 left-0 w-[58%] bg-[linear-gradient(90deg,rgba(255,255,255,0.28)_0%,rgba(255,255,255,0.12)_55%,rgba(255,255,255,0)_100%)] dark:bg-[linear-gradient(90deg,rgba(15,23,42,0.22)_0%,rgba(15,23,42,0.08)_55%,rgba(15,23,42,0)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="animate-hero-veil-flow absolute inset-y-0 left-1/2 hidden w-[28rem] -translate-x-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent blur-3xl lg:block"
+          aria-hidden="true"
+        />
 
-        {/* Mouse-following spotlight */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgba(255,95,147,0.08),transparent_16%)] dark:bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgba(255,115,164,0.1),transparent_16%)]" />
+        {/* Primary morphing blob - large */}
+        <div
+          className="absolute -left-[10%] -top-[10%] h-[40vh] w-[40vw] sm:h-[60vh] sm:w-[50vw] animate-morph-blob opacity-20"
+          style={{
+            background: "radial-gradient(circle at 30% 40%, #dba4af 0%, #c18fa0 40%, transparent 70%)",
+            filter: "blur(60px)",
+          }}
+        />
 
-        {/* Glowing orbs */}
-        <div className="absolute -left-24 top-16 h-72 w-72 rounded-full bg-[var(--accent-secondary)]/12 blur-3xl animate-[glow-drift_14s_ease-in-out_infinite]" />
-        <div className="absolute right-0 top-6 h-80 w-80 rounded-full bg-[var(--accent-primary)]/10 blur-3xl animate-[glow-drift_16s_ease-in-out_infinite]" />
-        <div className="absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-[var(--accent-tertiary)]/10 blur-3xl animate-[glow-drift_12s_ease-in-out_infinite]" />
+        {/* Secondary morphing blob */}
+        <div
+          className="absolute -bottom-[15%] -right-[5%] h-[35vh] w-[35vw] sm:h-[55vh] sm:w-[45vw] animate-morph-blob-delayed opacity-15"
+          style={{
+            background: "radial-gradient(circle at 70% 60%, #b3aad7 0%, #8c83aa 40%, transparent 70%)",
+            filter: "blur(60px)",
+          }}
+        />
 
-        {/* Floating particles (decorative dots) */}
-        <div className="absolute left-[15%] top-[20%] h-1.5 w-1.5 rounded-full bg-[var(--accent-primary)]/20 animate-twinkle-soft" />
-        <div className="absolute right-[25%] top-[30%] h-2 w-2 rounded-full bg-[var(--accent-secondary)]/15 animate-twinkle-soft" style={{ animationDelay: "1.5s" }} />
-        <div className="absolute left-[50%] bottom-[15%] h-1 w-1 rounded-full bg-[var(--accent-tertiary)]/20 animate-twinkle-soft" style={{ animationDelay: "3s" }} />
-        <div className="absolute left-[10%] bottom-[40%] h-1.5 w-1.5 rounded-full bg-[var(--accent-primary)]/15 animate-twinkle-soft" style={{ animationDelay: "2.2s" }} />
-        <div className="absolute right-[15%] bottom-[25%] h-2 w-2 rounded-full bg-[var(--accent-secondary)]/12 animate-twinkle-soft" style={{ animationDelay: "0.8s" }} />
-        <div className="absolute left-[65%] top-[12%] h-1 w-1 rounded-full bg-[var(--accent-tertiary)]/18 animate-twinkle-soft" style={{ animationDelay: "4s" }} />
+        {/* Third floating blob - hidden on mobile */}
+        <div
+          className="hidden sm:block absolute left-[40%] top-[30%] h-[35vh] w-[30vw] animate-float-gentle opacity-10"
+          style={{
+            background: "radial-gradient(circle at 50% 50%, #f0dacd 0%, #e8c8b8 40%, transparent 70%)",
+            filter: "blur(50px)",
+          }}
+        />
       </div>
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
-        {/* Left column: text content */}
+      {/* ====== AURA GLOW BEHIND PORTRAIT ====== */}
+      <div className="pointer-events-none absolute right-0 top-1/2 h-[50vh] w-[40vw] sm:h-[70vh] sm:w-[50vw] -translate-y-1/2">
         <div
-          className={`relative min-w-0 space-y-6 sm:space-y-8 sm:p-8 lg:p-10 transition-all duration-1000 ${
-            isVisible
-              ? "translate-y-0 opacity-100"
-              : "translate-y-8 opacity-0"
-          }`}
-        >
+          className="absolute left-1/2 top-1/2 h-[35vh] w-[35vh] sm:h-[50vh] sm:w-[50vh] -translate-x-1/2 -translate-y-1/2 animate-aura-pulse rounded-full"
+          style={{
+            background: "radial-gradient(circle, rgba(193,143,160,0.15) 0%, rgba(179,170,215,0.08) 40%, transparent 70%)",
+          }}
+        />
+      </div>
 
-          <TypewriterTitle />
+      {/* ====== FLOATING PARTICLES - fewer on mobile ====== */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="absolute left-[15%] top-[20%] h-2 w-2 animate-particle-rise rounded-full"
+          style={{
+            background: "radial-gradient(circle, #c18fa0 0%, transparent 70%)",
+            boxShadow: "0 0 8px rgba(193,143,160,0.4)",
+          }}
+        />
+        <div
+          className="absolute right-[25%] top-[30%] h-1.5 w-1.5 animate-particle-rise-delayed rounded-full"
+          style={{
+            background: "radial-gradient(circle, #b3aad7 0%, transparent 70%)",
+            boxShadow: "0 0 6px rgba(179,170,215,0.4)",
+          }}
+        />
+        <div
+          className="hidden sm:block absolute left-[60%] top-[15%] h-2.5 w-2.5 animate-particle-rise-slow rounded-full"
+          style={{
+            background: "radial-gradient(circle, #d996a4 0%, transparent 70%)",
+            boxShadow: "0 0 10px rgba(217,150,164,0.3)",
+          }}
+        />
+        <div
+          className="hidden sm:block absolute right-[10%] top-[60%] h-1.5 w-1.5 animate-particle-rise rounded-full"
+          style={{
+            background: "radial-gradient(circle, #8c83aa 0%, transparent 70%)",
+            boxShadow: "0 0 6px rgba(140,131,170,0.4)",
+          }}
+        />
+        <div
+          className="absolute left-[30%] top-[70%] h-2 w-2 animate-particle-rise-delayed rounded-full"
+          style={{
+            background: "radial-gradient(circle, #c18fa0 0%, transparent 70%)",
+            boxShadow: "0 0 8px rgba(193,143,160,0.3)",
+          }}
+        />
+      </div>
 
-          <p className="max-w-2xl text-base leading-7 text-[var(--text-dark)] sm:text-xl sm:leading-8">
-            {t("hero.intro")}
-          </p>
+      {/* ====== SPARKLE DECORATIONS - fewer on mobile ====== */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <span className="absolute left-[8%] top-[12%] animate-sparkle-pop text-[10px] sm:text-[14px] text-[#c18fa0]/40 select-none">✦</span>
+        <span className="absolute right-[18%] top-[18%] animate-sparkle-pop-delayed text-[8px] sm:text-[10px] text-[#b3aad7]/35 select-none">✦</span>
+        <span className="hidden sm:block absolute left-[50%] top-[8%] animate-sparkle-pop-slow text-[12px] text-[#d996a4]/30 select-none">✦</span>
+        <span className="hidden sm:block absolute right-[30%] bottom-[25%] animate-sparkle-pop text-[11px] text-[#c18fa0]/35 select-none">✦</span>
+        <span className="absolute left-[22%] bottom-[15%] animate-sparkle-pop-delayed text-[9px] text-[#8c83aa]/30 select-none">✦</span>
+        <span className="hidden sm:block absolute right-[8%] top-[40%] animate-sparkle-pop-slow text-[13px] text-[#b3aad7]/30 select-none">✦</span>
+      </div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-wrap gap-3 sm:gap-4">
-            <a
-              href="#projects"
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full px-6 py-3 font-bold text-white transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)]" />
-              <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent-secondary)] to-[var(--accent-primary)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <IoCodeSlash className="relative z-10 h-4 w-4" />
-              <span className="relative z-10">{t("hero.cta.explore") || "View Projects"}</span>
-            </a>
-            <a
-              href="#contact"
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full border border-[var(--border-soft)] px-6 py-3 font-semibold text-[var(--text-primary)] transition-all duration-300 hover:border-[var(--accent-primary)]/30 hover:shadow-[0_0_30px_color-mix(in_srgb,var(--accent-primary)_12%,transparent)] hover:scale-[1.03] active:scale-[0.97]"
-              style={{
-                background: "var(--card-bg)",
-                backdropFilter: "blur(12px)",
-              }}
-            >
-              <span className="relative z-10">{"Contact Me"}</span>
-            </a>
+      {/* ====== DECORATIVE RINGS - fewer on mobile ====== */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute left-[8%] top-[20%] h-12 w-12 sm:h-16 sm:w-16 animate-ring-expand rounded-full border border-[#c18fa0]/20" />
+        <div className="absolute left-[8%] top-[20%] h-12 w-12 sm:h-16 sm:w-16 animate-ring-expand-delayed rounded-full border border-[#c18fa0]/15" />
+        <div className="hidden sm:block absolute right-[15%] bottom-[30%] h-12 w-12 animate-ring-expand rounded-full border border-[#b3aad7]/20" style={{ animationDelay: "1s" }} />
+        <div className="hidden sm:block absolute right-[15%] bottom-[30%] h-12 w-12 animate-ring-expand-delayed rounded-full border border-[#b3aad7]/15" style={{ animationDelay: "1s" }} />
+
+        {/* Slow spinning rings - smaller on mobile */}
+        <div className="absolute -left-24 -top-24 h-48 w-48 sm:h-72 sm:w-72 animate-spin-slow rounded-full border border-[#c18fa0]/8" />
+        <div className="hidden sm:block absolute -right-36 -top-16 h-96 w-96 animate-spin-slow rounded-full border border-[#8c83aa]/6" style={{ animationDirection: "reverse" }} />
+        <div className="absolute -bottom-20 left-[30%] h-40 w-40 sm:h-56 sm:w-56 animate-spin-slow rounded-full border border-[#b3aad7]/8" style={{ animationDuration: "25s" }} />
+      </div>
+
+      {/* ====== MAIN GRID ====== */}
+      <div className="relative z-10 mx-auto grid min-h-screen max-w-[1500px] grid-cols-1 items-center gap-4 lg:h-full lg:min-h-0 lg:grid-cols-[1fr_1.2fr] lg:gap-6">
+        {/* ====== LEFT CONTENT ====== */}
+        <div className="relative px-4 pt-16 sm:px-6 sm:pt-20 lg:px-12 lg:pt-0">
+          {/* Elegant badge with shimmer */}
+          <div
+            className="animate-hero-content-reveal group inline-flex items-center gap-2 sm:gap-3 rounded-full border border-[#c18fa0]/20 bg-white/45 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.3em] text-[#7d719e] shadow-lg shadow-[#8c83aa]/6 backdrop-blur-md transition-all duration-500 hover:border-[#c18fa0]/35 hover:bg-white/55 hover:shadow-[#c18fa0]/10 sm:px-6 sm:py-2.5 sm:text-xs lg:text-sm"
+            style={{ animationDelay: "0.08s" }}
+          >
+            <span className="inline-flex h-1.5 w-1.5 rounded-full bg-[#c18fa0] animate-pulse" />
+            <span className="relative">
+              {t("hero.badge")}
+              <span className="absolute inset-0 animate-shimmer-text bg-gradient-to-r from-transparent via-white/30 to-transparent bg-[length:200%_100%]" />
+            </span>
+            <span className="inline-flex h-1.5 w-1.5 rounded-full bg-[#c18fa0] animate-pulse" />
           </div>
 
-          {/* Stats */}
-          <div className="flex gap-3 sm:gap-4 sm:grid-cols-3">
-            {[
-              ["20+", t("hero.stats.projects")],
-              ["2+", t("hero.stats.years")],
-            ].map(([value, label]) => (
-              <div
-                key={label}
-                className="group rounded-[1.4rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] p-4 shadow-[var(--shadow-soft)] backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-glow)] sm:rounded-[1.8rem] sm:p-5"
-              >
-                <p className="text-2xl font-black text-[var(--text-primary)] sm:text-3xl">
-                  {value}
-                </p>
-                <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-[var(--text-secondary)] sm:text-sm sm:tracking-[0.24em]">
-                  {label}
-                </p>
+          {/* Main title with gradient text */}
+          <h1
+            className="animate-hero-content-reveal mt-6 font-serif text-[clamp(3.5rem,12vw,11rem)] leading-[0.75] tracking-[-0.06em] select-none sm:mt-10"
+            style={{ animationDelay: "0.18s" }}
+          >
+            <span
+              className="bg-gradient-to-r from-[#716895] via-[#8c83aa] to-[#b3aad7] bg-clip-text text-transparent animate-shimmer-text"
+              style={{ backgroundSize: "200% 200%" }}
+            >
+              {t("hero.title")}
+            </span>
+          </h1>
+
+          {/* Name and role with decorative elements */}
+          <div
+            className="animate-hero-content-reveal mt-6 sm:mt-12"
+            style={{ animationDelay: "0.28s" }}
+          >
+            <h2
+              className="text-[clamp(2rem,5vw,5rem)] leading-none text-[#c18fa0] transition-all duration-700"
+              style={{ fontFamily: "var(--font-script)" }}
+            >
+              Muslima Radjabova
+            </h2>
+
+            <div className="mt-3 sm:mt-5 flex items-center gap-3 sm:gap-4">
+              <div className="h-px w-6 sm:w-10 bg-gradient-to-r from-[#c18fa0]/60 to-transparent" />
+              <p className="text-[10px] sm:text-sm font-semibold uppercase tracking-[0.3em] sm:tracking-[0.4em] text-[#716895]">
+                {t("hero.badge")}
+              </p>
+              <div className="h-px w-6 sm:w-10 bg-gradient-to-l from-[#c18fa0]/60 to-transparent" />
+            </div>
+          </div>
+
+          {/* Intro text with elegant styling */}
+          <div
+            className="animate-hero-content-reveal mt-6 flex max-w-[600px] items-start gap-3 sm:mt-10 sm:gap-5"
+            style={{ animationDelay: "0.38s" }}
+          >
+            <span className="mt-1 text-xl sm:text-2xl leading-none text-[#c18fa0] animate-float-gentle select-none">
+              ✦
+            </span>
+            <div>
+              <p className="text-sm sm:text-base font-medium leading-relaxed text-[#6f6b74] sm:text-lg sm:leading-[1.75]">
+                {t("hero.intro")}
+              </p>
+
+              {/* CTA Buttons */}
+              <div className="mt-4 sm:mt-6 flex flex-wrap gap-2 sm:gap-3">
+                <button
+                  type="button"
+                  onClick={() => onNavigate?.("contact")}
+                  className="cursor-pointer animate-hero-cta-breathe group relative overflow-hidden rounded-full bg-gradient-to-r from-[#716895] to-[#8c83aa] px-5 sm:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_32px_rgba(113,104,149,0.3)]"
+                >
+                  <span className="relative z-10">{t("hero.cta.hire")}</span>
+                  <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-[#8c83aa] via-[#b3aad7] to-[#c18fa0] transition-transform duration-500 group-hover:translate-x-0" />
+                  <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <span className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => onNavigate?.("projects")}
+                  className="cursor-pointer group relative overflow-hidden rounded-full border-2 border-[#716895] px-5 sm:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-[#716895] transition-all duration-300 hover:scale-105 hover:text-white hover:shadow-[0_8px_24px_rgba(113,104,149,0.2)]"
+                >
+                  <span className="relative z-10">{t("hero.cta.projects")}</span>
+                  <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-[#716895] to-[#8c83aa] transition-transform duration-500 group-hover:translate-x-0" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => onNavigate?.("resume")}
+                  className="cursor-pointer animate-hero-cta-breathe group relative overflow-hidden rounded-full border border-[#c18fa0]/30 bg-white/65 px-5 sm:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-[#c18fa0] transition-all duration-300 hover:scale-105 hover:border-[#c18fa0] hover:bg-white hover:shadow-[0_8px_24px_rgba(193,143,160,0.2)]"
+                  style={{ animationDelay: "1.2s" }}
+                >
+                  <span className="relative z-10">{t("hero.cta.resume")}</span>
+                  <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-[#c18fa0]/10 to-[#d996a4]/10 transition-transform duration-500 group-hover:translate-x-0" />
+                </button>
               </div>
-            ))}
+            </div>
           </div>
         </div>
 
-        {/* Right column: photo with orbital icons */}
-        <div
-          className={`relative mx-auto w-full max-w-xl transition-all duration-1000 delay-300 ${
-            isVisible
-              ? "translate-y-0 opacity-100"
-              : "translate-y-12 opacity-0"
-          }`}
-        >
-          {/* Glow behind photo */}
-          <div className="absolute -inset-4 rounded-[2.8rem] bg-gradient-to-br from-[var(--accent-primary)]/18 via-[var(--accent-secondary)]/10 to-[var(--accent-tertiary)]/16 blur-3xl sm:-inset-8" />
+        {/* ====== RIGHT - Portrait with Aesthetic Frame ====== */}
+        <div className="relative flex h-full w-full items-end justify-center self-end lg:-ml-16 lg:justify-start">
+          {/* Decorative morphing blob behind portrait - smaller on mobile */}
+          <div className="absolute -bottom-8 sm:-bottom-16 left-1/2 h-[20rem] w-[20rem] sm:h-[38rem] sm:w-[38rem] -translate-x-1/2 animate-breathe-glow rounded-full border border-[#c18fa0]/12 bg-gradient-to-br from-[#c18fa0]/6 via-[#b3aad7]/4 to-transparent blur-xl sm:blur-2xl lg:h-[45rem] lg:w-[45rem]" />
 
-          <div className="relative mx-auto flex min-h-[24rem] items-center justify-center sm:min-h-[32rem] lg:min-h-[44rem]">
-            {/* Radial overlay */}
-            <div className="absolute inset-0 rounded-[3rem] bg-[radial-gradient(circle,rgba(255,255,255,0.3),transparent_60%)] dark:bg-[radial-gradient(circle,rgba(255,255,255,0.08),transparent_60%)]" />
+          {/* Secondary decorative ring - hidden on mobile */}
+          <div className="hidden sm:block absolute -bottom-10 left-1/2 h-[30rem] w-[30rem] -translate-x-1/2 animate-float-gentle-delayed rounded-full border border-[#8c83aa]/6 bg-gradient-to-tr from-[#8c83aa]/3 via-transparent to-[#c18fa0]/3 blur-xl lg:h-[36rem] lg:w-[36rem]" />
 
-            {/* Orbital icons */}
-            <div className="absolute inset-0">
-              {orbitIcons.map((item) => (
-                <div
-                  key={item.label}
-                  className={`absolute ${item.className}`}
-                  style={{
-                    animationDelay: item.delay,
-                    animationDuration: `${8 + Math.random() * 4}s`,
-                  }}
-                >
-                  <div className="flex h-full w-full items-center justify-center drop-shadow-[0_10px_22px_rgba(255,107,154,0.18)] transition-all duration-500 hover:scale-110 dark:drop-shadow-[0_10px_22px_rgba(168,85,247,0.18)]">
-                    <div className="relative">
-                      {item.icon}
-                      {/* Glow ring behind icon */}
-                      <div className="absolute -inset-3 rounded-full bg-current opacity-10 blur-md" />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+          {/* Third decorative ring - smaller on mobile */}
+          <div className="absolute -bottom-12 sm:-bottom-24 left-1/2 h-[24rem] w-[24rem] sm:h-[44rem] sm:w-[44rem] -translate-x-1/2 animate-spin-slow rounded-full border border-dashed border-[#c18fa0]/8 lg:h-[52rem] lg:w-[52rem]" style={{ animationDuration: "30s" }} />
 
-            {/* Photo container */}
-            <div
-              ref={imageRef}
-              className="relative z-10 mx-auto aspect-square w-full max-w-[16rem] transition-transform duration-200 ease-out sm:max-w-[22rem] lg:max-w-[30rem]"
-            >
-              {/* Decorative ring */}
-              <div className="absolute -inset-4 rounded-full bg-gradient-to-br from-[var(--accent-primary)]/20 via-[var(--accent-secondary)]/10 to-[var(--accent-tertiary)]/20 p-[2px] animate-spin-slow">
-                <div className="h-full w-full rounded-full bg-[var(--bg-base)]" />
-              </div>
-
-              {/* Inner ring */}
-              <div className="absolute -inset-2 rounded-full border border-[var(--border-soft)]/30" />
-
-              {/* Photo */}
-              <div className="relative h-full w-full overflow-hidden rounded-full ring-2 ring-[var(--border-soft)]/50 ring-offset-2 ring-offset-[var(--bg-base)]">
-                <img
-                  src={myPhoto}
-                  alt="Muslima"
-                  className="h-full w-full rounded-full object-cover object-center transition-transform duration-700 hover:scale-105"
-                />
-              </div>
+          {/* Portrait container blended into hero background */}
+          <div
+            className="animate-hero-content-reveal relative z-10 w-full max-w-[28rem] sm:max-w-[48rem] lg:max-w-[62rem]"
+            style={{ animationDelay: "0.32s" }}
+          >
+            {/* Portrait without shadow so it sits flush with the hero */}
+            <div className="relative">
+              <img
+                src={portrait}
+                alt="Muslima Radjabova"
+                className="mx-auto block h-auto w-full max-w-[28rem] sm:max-w-[52rem] object-contain lg:max-w-[58rem]"
+              />
             </div>
           </div>
+
+          {/* Floating decorative elements - fewer on mobile */}
+          <div className="hidden sm:block absolute left-4 top-1/3 h-4 w-4 animate-float-gentle rounded-full bg-[#c18fa0]/20" />
+          <div className="hidden sm:block absolute right-[15%] top-[28%] h-6 w-6 animate-float-gentle-delayed rounded-full bg-[#8c83aa]/15" />
+          <div className="absolute bottom-[18%] left-[10%] h-2 w-2 sm:h-3 sm:w-3 animate-float rounded-full bg-[#716895]/20" />
+
+          {/* Sparkle effects - fewer on mobile */}
+          <div className="absolute left-[20%] top-[18%] animate-sparkle-pop text-[8px] sm:text-[10px] text-[#c18fa0]/30 select-none">✦</div>
+          <div className="hidden sm:block absolute right-[25%] bottom-[30%] animate-sparkle-pop-delayed text-[8px] text-[#b3aad7]/30 select-none">✦</div>
+          <div className="hidden sm:block absolute left-[5%] bottom-[40%] animate-sparkle-pop-slow text-[9px] text-[#d996a4]/25 select-none">✦</div>
         </div>
       </div>
     </section>

@@ -12,6 +12,7 @@ import NotFound from "./components/NotFound";
 import IsLoading from "./components/IsLoading";
 import useLoading from "./hooks/useLoading";
 import ProjectDetails from "./pages/projects/ProjectDetails";
+import ProjectsPage from "./pages/projects/ProjectsPage";
 import Resume from "./pages/resume/Resume";
 
 function App() {
@@ -22,17 +23,18 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-[#f7eef3] via-[#f5e8ef] to-[#f0e4eb] text-[var(--text-primary)] transition-colors duration-300">
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/projects/:slug" element={<ProjectDetails />} />
           <Route path="/resume" element={<Resume />} />
         </Route>
 
         <Route element={<AuthLayout />}>
           <Route path="/adm-login" element={<Login />} />
-          <Route path="/sign-up" element={<Navigate to="/login" replace />} />
+          <Route path="/sign-up" element={<Navigate to="/adm-login" replace />} />
         </Route>
 
         <Route

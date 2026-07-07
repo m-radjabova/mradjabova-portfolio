@@ -15,6 +15,7 @@
       actions: {
         toggleMobileMenu: "Mobil menyuni ochish yoki yopish",
         scrollToTop: "Yuqoriga qaytish",
+        switchLanguage: "{{language}} tiliga o'tish",
       },
     },
     nav: {
@@ -26,6 +27,8 @@
       contact: "Aloqa",
     },
     hero: {
+      badge: "Full Stack Dasturchi",
+      title: "Portfolio",
       greeting: "Salom, men",
       intro:
         "Men React, TypeScript va Tailwind CSS yordamida zamonaviy, moslashuvchan va vizual jihatdan puxta veb-ilovalar yarataman. Kuchli back-end yechimlari bilan birga g'oyalarni tez, kengaytiriladigan va foydalanuvchiga qulay raqamli mahsulotga aylantirishni maqsad qilaman.",
@@ -34,6 +37,8 @@
         years: "Yillik tajriba",
       },
       cta: {
+        hire: "Bog'lanish",
+        projects: "Loyihalar",
         explore: "Loyihalarni ko'rish",
         github: "GitHub",
         resume: "Resume",
@@ -52,6 +57,10 @@
       openSection: "Bo'limni ochish",
     },
     about: {
+      heading: "Men Haqimda",
+      scriptLine: "G'oyalarni raqamli tajribaga aylantiraman",
+      intro:
+        "Men chiroyli, funksional va foydalanuvchiga qulay veb-ilovalar yaratishni yaxshi ko'radigan Full Stack Developerman. Toza kod yozish va sezilarli ta'sir beradigan silliq tajribalar yaratishga e'tibor beraman.",
       title: {
         lead: "Toza front-end tizimlari bilan",
         accent: "silliq va puxta interfeyslar yarataman",
@@ -115,6 +124,47 @@
       learningNote: "Zamonaviy texnologiyalar bilan doimiy o'rganib, yangi narsalar qurib boryapman",
       toolsLabel: "Vositalar va platformalar",
       toolsList: "VSCode · Git · Figma · Firebase · Chrome DevTools",
+      cards: {
+        story: {
+          title: "Mening Hikoyam",
+          description:
+            "Veb dasturlashdagi yo'lim qiziqishdan boshlangan va vaqt o'tishi bilan chinakam ishtiyoqga aylangan. Murakkab muammolarni hal qilish va g'oyalarni nafis kod orqali hayotga olib chiqish menga yoqadi.",
+        },
+        whatIDo: {
+          title: "Nimalar Qilaman",
+          items: [
+            {
+              title: "Web Development",
+              description: "Zamonaviy front-end arxitektura bilan responsive va puxta web ilovalar yarataman.",
+            },
+            {
+              title: "UI/UX Implementation",
+              description: "Vizual g'oyalarni chiroyli, qulay va interaktiv raqamli tajribaga aylantiraman.",
+            },
+            {
+              title: "Backend Development",
+              description: "Haqiqiy mahsulotlar uchun kengayadigan API va amaliy server-side yechimlar yarataman.",
+            },
+          ],
+        },
+        values: {
+          title: "Mening Qadriyatlarim",
+          items: [
+            {
+              title: "Sifat Birinchi",
+              description: "Men mayda detallargacha e'tibor berib, toza, tushunarli va samarali kod yozaman.",
+            },
+            {
+              title: "Foydalanuvchi Markazida",
+              description: "Mahsulot tabiiy va qulay his qilinishi uchun uni empatiya va qulaylik bilan quraman.",
+            },
+            {
+              title: "Doimiy O'sish",
+              description: "Yangi texnologiyalar, yaxshiroq patternlar va o'zimni rivojlantirishga doim ochiqman.",
+            },
+          ],
+        },
+      },
       cta: {
         titleStart: "Keling, birga",
         titleAccent: "ajoyib",
@@ -128,10 +178,14 @@
       eyebrow: "Asosiy Stack",
       title: "Ish jarayonimni kuchaytiradigan ko'nikmalar",
       description:
-        "Amaliy loyihalarda eng ko'p ishlatadigan texnologiyalarim va vositalarimning harakatdagi ko'rinishi.",
+        "Amaliy loyihalarda eng ko'p ishlatadigan texnologiyalarim va vositalarimning premium, eniga scroll bo'ladigan ko'rinishi.",
       level: "Daraja",
       mastery: "Mahorat",
       readiness: "Loyihaga tayyorlik",
+      badge: "Ekspertiza",
+      scrollHint: "Yoniga scroll qiling",
+      quote: "Yaxshi dizayn imkon qadar kamroq dizayn bo'lishidir.",
+      author: "Dieter Rams",
     },
     projects: {
       title: {
@@ -140,6 +194,15 @@
       },
       subtitle:
         "Quyida frontend showcase loyihalar va dinamik ilovalar ajratib berilgan. Lokal showcase kartalari barcha skrinshotlari bilan alohida sahifada ochiladi.",
+      featured: {
+        eyebrow: "Tanlangan ishlar",
+        title: "Eng yangi backend loyihalar",
+        description:
+          "Bosh sahifada backendga ulangan oxirgi 3 ta loyiha chiqadi. To'liq projects sahifasida esa backendli va backendsiz ishlarni bir joyda ko'rish mumkin.",
+        cta: "Ko'proq loyihalarni ko'rish",
+        latestBadge_one: "Eng yangi 1",
+        latestBadge_other: "Eng yangi {{count}}",
+      },
       withoutBackend: {
         badge: "Backendsiz",
         title: "Statik va showcase loyihalar",
@@ -156,20 +219,37 @@
         withBadge: "Yangi qo'shilganlar tepada",
         withoutBadge: "Showcase",
       },
+      filters: {
+        all: "Barcha loyihalar",
+        web: "Web ilovalar",
+        ecommerce: "E-Commerce",
+        uiux: "UI/UX",
+        other: "Boshqa",
+      },
       actions: {
         openPage: "Sahifani ochish",
         sourceCode: "Manba kod",
         liveDemo: "Live demo",
         showDescription: "Batafsil ko'rish",
         hideDescription: "Yig'ish",
+        openProject: "Loyihani ochish",
       },
       states: {
         loading: "Loyihalar yuklanmoqda...",
         empty: "Hozircha backendli loyihalar topilmadi.",
+        emptyDescription: "Admin panel orqali bir nechta backend loyiha qo'shsangiz, ular shu yerda avtomatik chiqadi.",
         errors: {
           fetchFailed: "Loyihalarni yuklab bo'lmadi.",
           connectFailed: "Firestore bilan ulanib bo'lmadi.",
         },
+      },
+      page: {
+        eyebrow: "Loyihalar sahifasi",
+        title: "Barcha loyihalar bitta chiroyli sahifada",
+        description:
+          "Bu yerda ishlar ikki aniq bo'limga ajratilgan: backend logikasi bilan qurilgan loyihalar va frontend showcase loyihalar.",
+        backHome: "Bosh sahifaga qaytish",
+        splitLabel: "Backend bilan va backendsiz",
       },
       localItems: {
         "floral-elegance": {
@@ -230,6 +310,8 @@
       },
     },
     contact: {
+      heading: "Men Bilan Bog'laning",
+      imageAlt: "Email aloqa illustratsiyasi",
       title: "Keling, birga chiroyli va kuchli mahsulot yarataylik",
       role: "Frontend Developer",
       description:
@@ -252,9 +334,31 @@
       workTogether: "Keling, birga ishlaymiz",
       workTogetherText: "Loyiha g'oyangiz bormi? Keling, muhokama qilamiz.",
       email: "Email",
+      phone: "Telefon",
       location: "Manzil",
       locationValue: "Buxoro, O'zbekiston",
+      availability: "Mavjudlik",
+      availabilityValue: "Yangi loyihalar uchun ochiqman",
+      actions: {
+        openForm: "Xabar yuborish",
+        hideForm: "Formani yopish",
+      },
+      features: {
+        response: {
+          title: "Tezkor javob",
+          description: "Odatda 24 soat ichida javob beraman.",
+        },
+        communication: {
+          title: "Aniq muloqot",
+          description: "G'oyangizni tushunarli va qulay tarzda muhokama qilamiz.",
+        },
+        quality: {
+          title: "Sifatli ish",
+          description: "Toza, puxta va kengayadigan kod bilan topshiraman.",
+        },
+      },
       form: {
+        heading: "Keling, birga ishlaylik",
         title: "Email yuborish",
         description: "Formani to'ldiring, xabaringiz to'g'ridan-to'g'ri emailimga boradi.",
         fields: {
@@ -303,7 +407,7 @@
     },
     resume: {
       eyebrow: "Resume",
-      title: "Professional Resume",
+      title: "Professional profil, yuklab olishga tayyor.",
       description:
         "Kerakli tilni tanlang, sahifaning o'zida ko'ring va Word, PDF yoki rasm ko'rinishida yuklab oling.",
       previewLabel: "Ko'rish paneli",
@@ -334,6 +438,15 @@
       login: {
         title: "Qaytganingiz bilan",
         subtitle: "Portfolio dashboardni ochish uchun admin hisobingiz bilan kiring.",
+        adminOnlyBadge: "Faqat admin kirishi mumkin",
+        controlRoom: "Portfolio boshqaruv paneli",
+        hidePassword: "Parolni yashirish",
+        showPassword: "Parolni ko'rsatish",
+        adminRoleNote: {
+          prefix: "Faqat",
+          role: "ADMIN",
+          suffix: "roliga ega akkauntlar bu panelga kira oladi.",
+        },
         email: "Email manzil",
         password: "Parol",
         passwordPlaceholder: "Parol",
@@ -343,6 +456,7 @@
         noAccount: "Hisobingiz yo'qmi?",
         createOne: "Ro'yxatdan o'ting",
         toasts: {
+          noAdminAccess: "Bu akkauntda admin ruxsati yo'q.",
           roleNotFound: "Foydalanuvchi roli topilmadi.",
           userNotFound: "Hisob topilmadi. Avval ro'yxatdan o'ting.",
           wrongCredentials: "Email yoki parol noto'g'ri. Qayta urinib ko'ring.",
@@ -377,6 +491,120 @@
           weakPassword: "Parol kamida 6 ta belgidan iborat bo'lishi kerak.",
           failed: "Ro'yxatdan o'tishda xatolik yuz berdi. Qayta urinib ko'ring.",
           unknown: "Noma'lum xatolik yuz berdi. Qayta urinib ko'ring.",
+        },
+      },
+    },
+    admin: {
+      sidebar: {
+        overview: "Umumiy ko'rinish",
+        projects: "Loyihalar",
+        users: "Foydalanuvchilar",
+        panel: "Admin Panel",
+        toggle: "Sidebarni ochish yoki yopish",
+        signedInAs: "Tizimga kirgan foydalanuvchi",
+        adminFallback: "Admin",
+        viewSite: "Saytni ko'rish",
+        logout: "Chiqish",
+        openMenu: "Admin menyusini ochish",
+        closeMenu: "Admin menyusini yopish",
+        toasts: {
+          logoutSuccess: "Muvaffaqiyatli chiqildi.",
+          logoutError: "Chiqib bo'lmadi. Qayta urinib ko'ring.",
+        },
+      },
+      overview: {
+        badge: "Admin dashboard",
+        welcome: "Xush kelibsiz, {{name}}!",
+        homePage: "Bosh sahifa",
+        description: "Projects collection shu paneldan boshqariladi. Firebase ichiga alohida kirib o‘tmasdan turib loyiha qo‘shish, tahrirlash va o‘chirish mumkin.",
+        stats: {
+          projectsNote: "Firestore ichidagi live yozuvlar",
+          usersNote: "Users collection ichidagi accountlar",
+          admins: "Adminlar",
+          adminsNote: "ADMIN roliga ega foydalanuvchilar",
+        },
+        quickActions: {
+          title: "Tezkor amallar",
+          description: "Eng ko‘p ishlatiladigan admin amallarini bir klik bilan oching.",
+          manage: "Boshqarish",
+          review: "Ko‘rib chiqish",
+          projectsTitle: "Loyihalar CRUD",
+          projectsDescription: "Firestore ichidagi loyiha yozuvlarini qo‘shing, tahrirlang, yangilang va o‘chiring.",
+          usersTitle: "Foydalanuvchilar va rollar",
+          usersDescription: "Users collectionni ko‘rib chiqing va qaysi accountlarda ADMIN roli borligini tekshiring.",
+          openProjects: "Loyihalarni ochish",
+          openUsers: "Foydalanuvchilarni ochish",
+        },
+        projectList: {
+          title: "Loyihalar ro‘yxati",
+          description: "Firestore ichidagi mavjud loyihalar.",
+          viewAll: "Hammasini ko‘rish",
+          empty: "Hozircha projects collection bo‘sh.",
+        },
+      },
+      users: {
+        badge: "Users collection",
+        title: "Foydalanuvchilar va rollar",
+        description: "Bu sahifa users collectionni ko‘rsatadi. Hozircha read-only, lekin qaysi accountda ADMIN roli borligini va kim tizimga kirayotganini aniq ko‘rasiz.",
+        stats: {
+          total: "Jami foydalanuvchilar",
+          admins: "Adminlar",
+          members: "A'zolar",
+        },
+        you: "Siz",
+        noRoles: "Rol yo‘q",
+        joined: "Qo‘shilgan sana",
+        empty: "Hozircha users collection bo‘sh.",
+      },
+      projects: {
+        badge: "Loyihalar boshqaruvi",
+        title: "Loyihalarni qo‘shish, tahrirlash va o‘chirish",
+        description: "Bu sahifa Firestore’dagi projects collection bilan ulangan. Technologies maydonini vergul bilan yozsangiz, u avtomatik array bo‘lib saqlanadi.",
+        confirmDelete: "\"{{title}}\" loyihasini o‘chirasizmi?",
+        stats: {
+          totalLabel: "Jami",
+          total: "ta loyiha",
+          githubLinked: "GitHub ulangan",
+          techTags: "Tech taglar",
+        },
+        form: {
+          editTitle: "Loyihani tahrirlash",
+          createTitle: "Loyiha yaratish",
+          editingDescription: "Tanlangan loyiha formaga yuklandi.",
+          creatingDescription: "Formani to‘ldirib yangi loyiha yozuvini yarating.",
+          cancelEditing: "Tahrirni bekor qilish",
+          titleLabel: "Loyiha nomi",
+          descriptionLabel: "Tavsif",
+          technologiesLabel: "Texnologiyalar",
+          demoLinkLabel: "Demo havola",
+          githubLinkLabel: "Github havola",
+          saving: "Saqlanmoqda...",
+          update: "Loyihani yangilash",
+          create: "Loyiha yaratish",
+          clear: "Formani tozalash",
+          placeholders: {
+            title: "Portfolio Admin",
+            description: "Loyiha haqida qisqacha izoh...",
+            technologies: "React, TypeScript, Tailwind, Firebase",
+          },
+        },
+        listTitle: "Mavjud loyihalar",
+        listDescription: "Edit tugmasi loyihani formaga yuklaydi. Delete esa Firestore ichidan hujjatni darhol o‘chiradi.",
+        actions: {
+          edit: "Tahrirlash",
+          delete: "O‘chirish",
+        },
+        demo: "Demo",
+        github: "Github",
+        notAdded: "Qo‘shilmagan",
+        empty: "Hozircha projects collection bo‘sh. Chap tomondagi forma orqali birinchi loyihani qo‘shishingiz mumkin.",
+        toasts: {
+          required: "Title, description, demo link va technologies maydonlari to‘ldirilishi shart.",
+          updated: "Loyiha yangilandi.",
+          created: "Loyiha yaratildi.",
+          deleted: "Loyiha o‘chirildi.",
+          saveError: "Loyihani saqlab bo‘lmadi.",
+          deleteError: "Loyihani o‘chirib bo‘lmadi.",
         },
       },
     },

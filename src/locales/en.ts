@@ -15,6 +15,7 @@
       actions: {
         toggleMobileMenu: "Toggle mobile menu",
         scrollToTop: "Scroll to top",
+        switchLanguage: "Switch language to {{language}}",
       },
     },
     nav: {
@@ -26,6 +27,8 @@
       contact: "Contact",
     },
     hero: {
+      badge: "Full Stack Developer",
+      title: "Portfolio",
       greeting: "Hi, I'm",
       intro:
         "I build modern, responsive, and visually polished web applications using React, TypeScript, and Tailwind CSS, combined with powerful back-end solutions. My goal is to turn ideas into fast, scalable, and user-friendly digital products ready for real-world use.",
@@ -34,6 +37,8 @@
         years: "Years",
       },
       cta: {
+        hire: "Hire Me",
+        projects: "Projects",
         explore: "Explore Projects",
         github: "GitHub",
         resume: "Resume",
@@ -52,6 +57,10 @@
       openSection: "Open section",
     },
     about: {
+      heading: "About Me",
+      scriptLine: "Turning ideas into digital experiences",
+      intro:
+        "I'm a passionate Full Stack Developer who loves building beautiful, functional and user-friendly web applications. I focus on writing clean code and creating seamless experiences that make an impact.",
       title: {
         lead: "Building polished interfaces with",
         accent: "clean front-end systems",
@@ -115,6 +124,47 @@
       learningNote: "Continuously learning and building with modern technologies",
       toolsLabel: "Tools & Platforms",
       toolsList: "VSCode · Git · Figma · Firebase · Chrome DevTools",
+      cards: {
+        story: {
+          title: "My Story",
+          description:
+            "My journey in web development started with curiosity and has grown into a true passion. I enjoy solving complex problems and bringing ideas to life through elegant, thoughtful code.",
+        },
+        whatIDo: {
+          title: "What I Do",
+          items: [
+            {
+              title: "Web Development",
+              description: "Building responsive and polished web applications with modern front-end architecture.",
+            },
+            {
+              title: "UI/UX Implementation",
+              description: "Turning visual ideas into beautiful, intuitive and interactive digital experiences.",
+            },
+            {
+              title: "Backend Development",
+              description: "Creating scalable APIs and practical server-side solutions that support real products.",
+            },
+          ],
+        },
+        values: {
+          title: "My Values",
+          items: [
+            {
+              title: "Quality First",
+              description: "I write clean, maintainable and efficient code with attention to the little details.",
+            },
+            {
+              title: "User Focused",
+              description: "I build with empathy, clarity and usability in mind so the final product feels natural.",
+            },
+            {
+              title: "Continuous Learning",
+              description: "I stay open to new technologies, better patterns and constant improvement in my craft.",
+            },
+          ],
+        },
+      },
       cta: {
         titleStart: "Let's create something",
         titleAccent: "extraordinary",
@@ -128,11 +178,14 @@
       eyebrow: "Core Stack",
       title: "Skills that keep my workflow moving",
       description:
-        "A rotating snapshot of the tools and technologies I use most often in production work.",
+        "A premium scrollable wall of the tools and technologies I use most often in production work.",
       level: "Level",
       mastery: "Mastery",
       readiness: "Project readiness",
-      badge: "Expertise"
+      badge: "Expertise",
+      scrollHint: "Scroll sideways",
+      quote: "Good design is as little design as possible.",
+      author: "Dieter Rams",
     },
     projects: {
       title: {
@@ -141,6 +194,15 @@
       },
       subtitle:
         "Frontend showcase projects and dynamic app projects are grouped below. Local showcase cards open dedicated detail pages with all screenshots.",
+      featured: {
+        eyebrow: "Featured work",
+        title: "Latest backend projects",
+        description:
+          "The home page highlights the 3 newest projects connected to the backend. Open the full projects page to explore both full-stack and frontend showcase work together.",
+        cta: "See more projects",
+        latestBadge_one: "Latest 1",
+        latestBadge_other: "Latest {{count}}",
+      },
       withoutBackend: {
         badge: "Without backend",
         title: "Static and showcase projects",
@@ -157,20 +219,37 @@
         withBadge: "Featured first",
         withoutBadge: "Showcase",
       },
+      filters: {
+        all: "All Projects",
+        web: "Web Applications",
+        ecommerce: "E-Commerce",
+        uiux: "UI/UX",
+        other: "Other",
+      },
       actions: {
         openPage: "Open page",
         sourceCode: "Source Code",
         liveDemo: "Live Demo",
         showDescription: "View details",
         hideDescription: "Hide details",
+        openProject: "Open project",
       },
       states: {
         loading: "Loading projects...",
         empty: "No backend projects found yet.",
+        emptyDescription: "Add a few backend projects from the admin panel and they will appear here automatically.",
         errors: {
           fetchFailed: "Failed to fetch projects.",
           connectFailed: "Could not connect to Firestore.",
         },
+      },
+      page: {
+        eyebrow: "Project Library",
+        title: "All projects in one elegant space",
+        description:
+          "Here the work is split into two clear groups: projects built with backend logic and showcase projects focused on frontend presentation.",
+        backHome: "Back to home",
+        splitLabel: "With backend and without backend",
       },
       localItems: {
         "floral-elegance": {
@@ -231,6 +310,8 @@
       },
     },
     contact: {
+      heading: "Contact Me",
+      imageAlt: "Contact email illustration",
       title: "Let’s build something elegant together",
       role: "Frontend Developer",
       description:
@@ -253,9 +334,31 @@
       workTogether: "Let's Work Together",
       workTogetherText: "Have a project in mind? Let's discuss it.",
       email: "Email",
+      phone: "Phone",
       location: "Location",
       locationValue: "Bukhara, Uzbekistan",
+      availability: "Availability",
+      availabilityValue: "Open for new projects",
+      actions: {
+        openForm: "Send me a message",
+        hideForm: "Hide form",
+      },
+      features: {
+        response: {
+          title: "Fast Response",
+          description: "I usually reply within 24 hours.",
+        },
+        communication: {
+          title: "Clear Communication",
+          description: "Let's discuss your ideas clearly and comfortably.",
+        },
+        quality: {
+          title: "Quality Work",
+          description: "Delivering scalable, polished, and clean code.",
+        },
+      },
       form: {
+        heading: "Let's work together",
         title: "Send an email",
         description: "Fill out the form and your message will be delivered straight to my inbox.",
         fields: {
@@ -304,7 +407,7 @@
     },
     resume: {
       eyebrow: "Resume",
-      title: "Professional Resume",
+      title: "Professional Resume ready to download.",
       description:
         "Choose the version you need, preview it on the page, and download it in Word, PDF, or image format.",
       previewLabel: "Preview panel",
@@ -335,6 +438,15 @@
       login: {
         title: "Welcome back",
         subtitle: "Sign in with your admin account to open the portfolio dashboard.",
+        adminOnlyBadge: "Admin Access Only",
+        controlRoom: "Portfolio control room",
+        hidePassword: "Hide password",
+        showPassword: "Show password",
+        adminRoleNote: {
+          prefix: "Only accounts with the",
+          role: "ADMIN",
+          suffix: "role can enter this panel.",
+        },
         email: "Email Address",
         password: "Password",
         passwordPlaceholder: "Password",
@@ -344,6 +456,7 @@
         noAccount: "Don't have an account?",
         createOne: "Create one",
         toasts: {
+          noAdminAccess: "This account does not have admin access.",
           roleNotFound: "User role was not found.",
           userNotFound: "Account not found. Please sign up first.",
           wrongCredentials: "Incorrect email or password. Please try again.",
@@ -378,6 +491,120 @@
           weakPassword: "Password must be at least 6 characters.",
           failed: "Registration failed. Please try again.",
           unknown: "An unknown error occurred. Please try again.",
+        },
+      },
+    },
+    admin: {
+      sidebar: {
+        overview: "Overview",
+        projects: "Projects",
+        users: "Users",
+        panel: "Admin Panel",
+        toggle: "Toggle sidebar",
+        signedInAs: "Signed in as",
+        adminFallback: "Admin",
+        viewSite: "View site",
+        logout: "Logout",
+        openMenu: "Open admin menu",
+        closeMenu: "Close admin menu",
+        toasts: {
+          logoutSuccess: "Signed out successfully.",
+          logoutError: "Could not sign out. Try again.",
+        },
+      },
+      overview: {
+        badge: "Admin dashboard",
+        welcome: "Welcome, {{name}}!",
+        homePage: "Home Page",
+        description: "The projects collection is managed directly from this panel. You can add, edit and remove entries without opening Firebase manually.",
+        stats: {
+          projectsNote: "Live entries in Firestore",
+          usersNote: "Accounts in users collection",
+          admins: "Admins",
+          adminsNote: "Users with ADMIN role",
+        },
+        quickActions: {
+          title: "Quick actions",
+          description: "Open the most frequently used admin actions in one click.",
+          manage: "Manage",
+          review: "Review",
+          projectsTitle: "Projects CRUD",
+          projectsDescription: "Add, edit, update and delete project entries directly from Firestore.",
+          usersTitle: "Users & roles",
+          usersDescription: "Review the users collection and check which accounts have the ADMIN role.",
+          openProjects: "Open projects",
+          openUsers: "Open users",
+        },
+        projectList: {
+          title: "Project list",
+          description: "Current projects stored in Firestore.",
+          viewAll: "View all",
+          empty: "The projects collection is empty for now.",
+        },
+      },
+      users: {
+        badge: "Users collection",
+        title: "Users and roles",
+        description: "This page shows the users collection. It is currently read-only, but you can clearly see who has the ADMIN role and who is signing in.",
+        stats: {
+          total: "Total users",
+          admins: "Admins",
+          members: "Members",
+        },
+        you: "You",
+        noRoles: "No roles",
+        joined: "Joined",
+        empty: "The users collection is empty for now.",
+      },
+      projects: {
+        badge: "Projects manager",
+        title: "Add, edit and delete projects",
+        description: "This page is connected to the Firestore projects collection. Write the technologies field with commas and it will be saved as an array automatically.",
+        confirmDelete: "Delete \"{{title}}\"?",
+        stats: {
+          totalLabel: "Total",
+          total: "projects",
+          githubLinked: "Github linked",
+          techTags: "Tech tags",
+        },
+        form: {
+          editTitle: "Edit project",
+          createTitle: "Create project",
+          editingDescription: "The selected project is loaded into the form.",
+          creatingDescription: "Fill the form and create a new project entry.",
+          cancelEditing: "Cancel editing",
+          titleLabel: "Project title",
+          descriptionLabel: "Description",
+          technologiesLabel: "Technologies",
+          demoLinkLabel: "Demo link",
+          githubLinkLabel: "Github link",
+          saving: "Saving...",
+          update: "Update project",
+          create: "Create project",
+          clear: "Clear form",
+          placeholders: {
+            title: "Portfolio Admin",
+            description: "Short explanation about the project...",
+            technologies: "React, TypeScript, Tailwind, Firebase",
+          },
+        },
+        listTitle: "Existing projects",
+        listDescription: "Click edit to load a project into the form. Delete removes the document from Firestore immediately.",
+        actions: {
+          edit: "Edit",
+          delete: "Delete",
+        },
+        demo: "Demo",
+        github: "Github",
+        notAdded: "Not added",
+        empty: "The projects collection is empty for now. You can add the first project from the form on the left.",
+        toasts: {
+          required: "Title, description, demo link and technologies are required.",
+          updated: "Project updated.",
+          created: "Project created.",
+          deleted: "Project deleted.",
+          saveError: "Could not save project.",
+          deleteError: "Could not delete project.",
         },
       },
     },

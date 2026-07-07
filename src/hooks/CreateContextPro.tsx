@@ -72,7 +72,7 @@ function CreateContextPro({ children }: { children: ReactNode }) {
     if (state.user?.roles.includes("CHEF")) {
       navigate("/chef");
     }
-  }, [state.user?.email]);
+  }, [navigate, state.user?.roles]);
 
 
   const fetchUser = () => {

@@ -2,12 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { collection, onSnapshot } from "firebase/firestore";
 import { FaArrowRight, FaFolderOpen, FaHome, FaShieldAlt, FaUsers } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import useContextPro from "../../hooks/useContextPro";
 import { db } from "../../firebase";
 import type { User } from "../../types/types";
 import type { Project } from "../../hooks/useProjects";
 
 function HelloAdmin() {
+  const { t } = useTranslation();
   const {
     state: { user },
   } = useContextPro();
@@ -58,17 +60,17 @@ function HelloAdmin() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs uppercase tracking-[0.28em] text-[var(--accent-primary)] sm:text-sm">
-                Admin dashboard
+                {t("admin.overview.badge")}
               </p>
               <h1 className="mt-3 text-3xl font-black text-[var(--text-primary)] sm:text-4xl">
-                Welcome, {user?.name || "Admin"}!
+                {t("admin.overview.welcome", { name: user?.name || t("admin.sidebar.adminFallback") })}
               </h1>
             </div>
             <button
               className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border-soft)] bg-white/80 px-5 py-3 text-sm font-semibold text-[var(--text-primary)] shadow-[var(--shadow-soft)] transition hover:border-[var(--accent-primary)]/35 hover:text-[var(--accent-primary)] dark:bg-white/5"
               onClick={() => navigate("/")}
             >
-              <FaHome /> Home Page
+              <FaHome /> {t("admin.overview.homePage")}
             </button>
           </div>
 
@@ -81,28 +83,28 @@ function HelloAdmin() {
             )}
 
             <p className="max-w-2xl text-base leading-8 text-[var(--text-secondary)] sm:text-lg">
-              Projects collection endi shu paneldan boshqariladi. Yangi project qo‘shish, mavjudini tahrirlash yoki o‘chirish uchun Firebase ichiga kirib chiqish shart emas.
+              {t("admin.overview.description")}
             </p>
           </div>
 
           <div className="mt-10 grid gap-4 md:grid-cols-3">
             {[
               {
-                label: "Projects",
+                label: t("admin.sidebar.projects"),
                 value: projects.length,
-                note: "Live entries in Firestore",
+                note: t("admin.overview.stats.projectsNote"),
                 icon: <FaFolderOpen />,
               },
               {
-                label: "Users",
+                label: t("admin.sidebar.users"),
                 value: users.length,
-                note: "Accounts in users collection",
+                note: t("admin.overview.stats.usersNote"),
                 icon: <FaUsers />,
               },
               {
-                label: "Admins",
+                label: t("admin.overview.stats.admins"),
                 value: adminCount,
-                note: "Users with ADMIN role",
+                note: t("admin.overview.stats.adminsNote"),
                 icon: <FaShieldAlt />,
               },
             ].map((item) => (
@@ -131,10 +133,10 @@ function HelloAdmin() {
       <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
         <div className="rounded-[2rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] p-6 shadow-[var(--shadow-soft)] backdrop-blur-2xl">
           <h2 className="text-2xl font-black text-[var(--text-primary)]">
-            Quick actions
+            {t("admin.overview.quickActions.title")}
           </h2>
           <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-            Eng ko‘p ishlatiladigan admin amallari shu yerdan bir klikda ochiladi.
+            {t("admin.overview.quickActions.description")}
           </p>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -143,16 +145,16 @@ function HelloAdmin() {
               className="rounded-[1.5rem] border border-[var(--border-soft)] bg-white/76 p-5 transition hover:-translate-y-1 hover:border-[var(--accent-primary)]/35 dark:bg-white/5"
             >
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent-primary)]">
-                Manage
+                {t("admin.overview.quickActions.manage")}
               </p>
               <h3 className="mt-3 text-xl font-bold text-[var(--text-primary)]">
-                Projects CRUD
+                {t("admin.overview.quickActions.projectsTitle")}
               </h3>
               <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                Add, edit, update va delete project entries directly from Firestore.
+                {t("admin.overview.quickActions.projectsDescription")}
               </p>
               <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[var(--accent-primary)]">
-                Open projects <FaArrowRight />
+                {t("admin.overview.quickActions.openProjects")} <FaArrowRight />
               </span>
             </Link>
 
@@ -161,16 +163,16 @@ function HelloAdmin() {
               className="rounded-[1.5rem] border border-[var(--border-soft)] bg-white/76 p-5 transition hover:-translate-y-1 hover:border-[var(--accent-primary)]/35 dark:bg-white/5"
             >
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--accent-secondary)]">
-                Review
+                {t("admin.overview.quickActions.review")}
               </p>
               <h3 className="mt-3 text-xl font-bold text-[var(--text-primary)]">
-                Users & roles
+                {t("admin.overview.quickActions.usersTitle")}
               </h3>
               <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                Users collectionni ko‘rib chiqing va qaysi accountda ADMIN role borligini tekshiring.
+                {t("admin.overview.quickActions.usersDescription")}
               </p>
               <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[var(--accent-primary)]">
-                Open users <FaArrowRight />
+                {t("admin.overview.quickActions.openUsers")} <FaArrowRight />
               </span>
             </Link>
           </div>
@@ -180,17 +182,17 @@ function HelloAdmin() {
           <div className="flex items-center justify-between gap-3">
             <div>
               <h2 className="text-2xl font-black text-[var(--text-primary)]">
-                Project list
+                {t("admin.overview.projectList.title")}
               </h2>
               <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                Firestore’dagi mavjud projectlar.
+                {t("admin.overview.projectList.description")}
               </p>
             </div>
             <Link
               to="/admin/projects"
               className="text-sm font-semibold text-[var(--accent-primary)]"
             >
-              View all
+              {t("admin.overview.projectList.viewAll")}
             </Link>
           </div>
 
@@ -211,7 +213,7 @@ function HelloAdmin() {
               ))
             ) : (
               <div className="rounded-[1.4rem] border border-dashed border-[var(--border-soft)] px-4 py-5 text-sm text-[var(--text-secondary)]">
-                Projects collection hozircha bo‘sh.
+                {t("admin.overview.projectList.empty")}
               </div>
             )}
           </div>

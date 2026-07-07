@@ -44,21 +44,17 @@ function ProjectActionButton({ action }: { action: ProjectAction }) {
 
   const buttonContent = (
     <>
-      {/* Primary bg gradient */}
       {isPrimary && (
         <span className="absolute inset-0 rounded-[inherit] bg-gradient-to-br from-[var(--accent-primary)] via-[var(--accent-primary)] to-[var(--accent-secondary)]" />
       )}
-      {/* Hover glow overlay */}
       <span className={`absolute inset-0 rounded-[inherit] transition-all duration-400 ${
         isPrimary
           ? "bg-gradient-to-br from-white/0 via-white/0 to-white/[0.08] opacity-0 group-hover/action:opacity-100"
           : "bg-gradient-to-br from-white/[0.04] to-transparent opacity-0 group-hover/action:opacity-100"
       }`} />
-      {/* Shimmer sweep */}
       <span className={`absolute inset-0 -translate-x-full skew-x-[-15deg] bg-gradient-to-r from-transparent ${
         isPrimary ? "via-white/20" : "via-white/8"
       } to-transparent transition-transform duration-[800ms] group-hover/action:translate-x-full`} />
-      {/* Glow ring */}
       <span className={`absolute -inset-[1.5px] rounded-[inherit] blur-md transition-all duration-500 ${
         isPrimary
           ? "bg-gradient-to-r from-[var(--accent-primary)]/30 to-[var(--accent-secondary)]/30 opacity-0 group-hover/action:opacity-100"
@@ -183,14 +179,14 @@ function ProjectShowcaseCard({
       />
 
       {/* Badge */}
-      <div className="absolute left-3 top-3 z-20 flex max-w-[calc(100%-1.5rem)] items-center gap-2.5 rounded-xl border border-white/15 bg-black/25 px-3.5 py-2 text-[11px] font-semibold text-white/90 backdrop-blur-xl transition-all duration-300 hover:bg-black/35 hover:border-white/25 sm:left-4 sm:top-4">
+      <div className="absolute left-3 top-3 z-20 flex max-w-[calc(100%-1.5rem)] items-center gap-2.5 rounded-xl border border-white/55 bg-[rgba(255,251,252,0.62)] px-3.5 py-2 text-[11px] font-semibold text-[var(--text-primary)] backdrop-blur-xl transition-all duration-300 hover:bg-[rgba(255,255,255,0.8)] hover:border-white/70 sm:left-4 sm:top-4">
         <span
           className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-white/12 text-sm shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all duration-300"
           style={badgeAccent ? { color: badgeAccent } : undefined}
         >
           {badgeIcon}
         </span>
-        <span className="truncate uppercase tracking-[0.16em] text-white/75">{badge}</span>
+        <span className="truncate uppercase tracking-[0.16em] text-[var(--text-secondary)]">{badge}</span>
       </div>
 
       {/* Bottom tech tags + stats */}
@@ -199,7 +195,7 @@ function ProjectShowcaseCard({
           {technologies.slice(0, 3).map((tech) => (
             <span
               key={tech}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-white/12 bg-white/10 px-2.5 py-1 text-[10px] font-medium text-white/90 backdrop-blur-xl transition-all duration-200 hover:bg-white/18 hover:border-white/20"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/45 bg-[rgba(255,255,255,0.45)] px-2.5 py-1 text-[10px] font-medium text-[var(--text-primary)] backdrop-blur-xl transition-all duration-200 hover:bg-[rgba(255,255,255,0.72)] hover:border-white/70"
             >
               {techIcons[tech.toLowerCase()] || badgeIcon}
               <span>{tech}</span>
@@ -208,7 +204,7 @@ function ProjectShowcaseCard({
         </div>
 
         {stats && (
-          <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-black/20 px-2.5 py-1 text-[10px] font-medium tracking-[0.12em] text-white/80 backdrop-blur-xl">
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/40 bg-[rgba(255,248,250,0.55)] px-2.5 py-1 text-[10px] font-medium tracking-[0.12em] text-[var(--text-secondary)] backdrop-blur-xl">
             <FaStar className="text-[9px] text-yellow-300/80" />
             {stats}
           </span>
@@ -343,11 +339,11 @@ function ProjectShowcaseCard({
       {isDetailsOpen &&
         createPortal(
           <div
-            className="fixed inset-0 z-[120] flex items-end justify-center bg-slate-950/60 px-4 pb-4 pt-16 backdrop-blur-xl sm:items-center sm:p-6 animate-[fade-up_0.35s_ease-out_both]"
+            className="fixed inset-0 z-[120] flex items-end justify-center bg-[rgba(214,198,224,0.42)] px-4 pb-4 pt-16 backdrop-blur-xl sm:items-center sm:p-6 animate-[fade-up_0.35s_ease-out_both]"
             onClick={() => setIsDetailsOpen(false)}
           >
             <div
-              className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-white/10 bg-[var(--card-solid)] shadow-[0_40px_120px_rgba(5,10,24,0.5)] backdrop-blur-2xl"
+              className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-white/60 bg-[rgba(255,250,251,0.92)] shadow-[0_40px_120px_rgba(175,160,197,0.28)] backdrop-blur-2xl"
               onClick={(event) => event.stopPropagation()}
             >
               {/* Top gradient bar */}

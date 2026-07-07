@@ -1,481 +1,293 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  FaGraduationCap,
-  FaHeart,
+  FaAward,
+  FaBookOpen,
   FaCode,
-  FaRocket,
-  FaStar,
+  FaDatabase,
+  FaHeart,
   FaPalette,
-  FaBullseye,
-  FaArrowRight,
-  FaCrown,
+  FaUser,
+  FaQuoteLeft,
 } from "react-icons/fa";
-import { HiSparkles } from "react-icons/hi";
-import { FiExternalLink } from "react-icons/fi";
+import { FiArrowUpRight } from "react-icons/fi";
+import flowerImage from "../../assets/me/flower.png";
 
-interface DecorativeItem {
-  id: number;
-  size: number;
-  left: string;
-  top: string;
-  delay: string;
-  duration: string;
-  opacity: number;
-}
-
-type SkillCategory = {
-  name: string;
-  skills: Array<{
-    label: string;
-    level: number;
-  }>;
+type AboutCardItem = {
+  title: string;
+  description: string;
 };
 
-type AboutStat = {
-  value: number;
-  label: string;
-  suffix: string;
-};
-
-// ── Floating Orbs Generator ────────────────────────────────────
-const useOrbs = (count: number): DecorativeItem[] => {
-  const [orbs, setOrbs] = useState<DecorativeItem[]>([]);
-
-  useEffect(() => {
-    const items: DecorativeItem[] = Array.from({ length: count }, (_, i) => ({
-      id: i,
-      size: Math.floor(Math.random() * 140) + 60,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      delay: `${Math.random() * 6}s`,
-      duration: `${Math.random() * 8 + 10}s`,
-      opacity: Math.random() * 0.12 + 0.04,
-    }));
-    setOrbs(items);
-  }, [count]);
-
-  return orbs;
-};
-
-// ── Animated Counter ───────────────────────────────────────────
-const AnimatedCounter = ({ value, suffix = "" }: { value: number; suffix?: string }) => {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const hasStarted = useRef(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasStarted.current) {
-          hasStarted.current = true;
-          let start = 0;
-          const step = Math.ceil(value / 50);
-          const interval = setInterval(() => {
-            start += step;
-            if (start >= value) {
-              setCount(value);
-              clearInterval(interval);
-            } else {
-              setCount(start);
-            }
-          }, 28);
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [value]);
-
-  return (
-    <span ref={ref} className="tabular-nums">
-      {count}
-      {suffix}
-    </span>
-  );
-};
-
-// ── Skill Bar ──────────────────────────────────────────────────
-const SkillBar = ({ label, level }: { label: string; level: number }) => {
-  const [width, setWidth] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => setWidth(level), 200);
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [level]);
-
-  return (
-    <div ref={ref} className="space-y-1.5">
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-[var(--text-primary)]">{label}</span>
-        <span className="text-xs font-semibold text-[var(--accent-primary)]">{level}%</span>
-      </div>
-      <div className="relative h-2 overflow-hidden rounded-full bg-[var(--border-strong)]">
-        <div
-          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] transition-all duration-[1200ms] ease-out"
-          style={{ width: `${width}%` }}
-        >
-          <div className="absolute inset-0 animate-[shimmer_2.4s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// ── Petal Component ────────────────────────────────────────────
-const SakuraPetal = () => (
-  <div
-    className="absolute pointer-events-none"
-    style={{
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      width: `${Math.floor(Math.random() * 8) + 6}px`,
-      height: `${Math.floor(Math.random() * 8) + 6}px`,
-      opacity: Math.random() * 0.2 + 0.05,
-      animation: `float-petal ${Math.random() * 10 + 12}s ease-in-out ${Math.random() * 8}s infinite`,
-    }}
-  >
-    <svg viewBox="0 0 24 24" fill="currentColor" className="text-[var(--accent-primary)]">
-      <path d="M12 2C12 2 8 6 8 10C8 13.3 10.7 16 12 16C13.3 16 16 13.3 16 10C16 6 12 2 12 2Z" />
-    </svg>
-  </div>
-);
-
-// ── Main Component ─────────────────────────────────────────────
 const About = () => {
   const { t } = useTranslation();
-  const orbs = useOrbs(5);
-  const [activeTab, setActiveTab] = useState<"education" | "skills">("education");
+  const sectionRef = useRef<HTMLElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
 
-  const education = [
-    {
-      year: t("about.education.year"),
-      degree: t("about.education.degree"),
-      institution: t("about.education.institution"),
-      description: t("about.education.description"),
-      icon: <FaGraduationCap />,
-    },
-  ];
-
-  const skillCategories = t("about.skillsCategories", {
+  const whatIDo = t("about.cards.whatIDo.items", {
     returnObjects: true,
-  }) as SkillCategory[];
-
-  const stats = (t("about.stats", {
+  }) as AboutCardItem[];
+  const values = t("about.cards.values.items", {
     returnObjects: true,
-  }) as AboutStat[]).map((stat, index) => ({
-    ...stat,
-    icon: [<FaCode />, <FaStar />, <FaPalette />, <FaCrown />][index],
-  }));
+  }) as AboutCardItem[];
+
+  const whatIDoIcons = [<FaCode />, <FaPalette />, <FaDatabase />];
+  const valueIcons = [<FaAward />, <FaUser />, <FaBookOpen />];
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animate-fade-up");
+          }
+        });
+      },
+      { threshold: 0.08 },
+    );
+
+    const section = sectionRef.current;
+    if (section) {
+      const children = section.querySelectorAll(".stagger-item");
+      children.forEach((child, index) => {
+        (child as HTMLElement).style.animationDelay = `${index * 0.07}s`;
+        observer.observe(child);
+      });
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!glowRef.current) return;
+      const rect = glowRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      glowRef.current.style.setProperty("--mx", `${x}px`);
+      glowRef.current.style.setProperty("--my", `${y}px`);
+    };
+
+    const section = sectionRef.current;
+    if (section) {
+      section.addEventListener("mousemove", handleMouseMove);
+    }
+    return () => {
+      if (section) section.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
+  
 
   return (
     <section
       id="about"
-      className="relative overflow-hidden px-4 pb-20 pt-28 sm:px-6 sm:pb-28 sm:pt-32 lg:px-8"
+      ref={sectionRef}
+      className="relative overflow-hidden px-3 pb-10 pt-6 sm:px-4 sm:pb-12 sm:pt-8 lg:px-8 lg:pb-16 lg:pt-10"
     >
-      {/* ── Background Layers ── */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_15%_25%,rgba(255,107,154,0.08),transparent_45%),radial-gradient(ellipse_at_85%_35%,rgba(168,85,247,0.06),transparent_45%),radial-gradient(ellipse_at_50%_75%,rgba(74,168,255,0.05),transparent_40%)] dark:bg-[radial-gradient(ellipse_at_15%_25%,rgba(255,107,154,0.15),transparent_45%),radial-gradient(ellipse_at_85%_35%,rgba(168,85,247,0.12),transparent_45%),radial-gradient(ellipse_at_50%_75%,rgba(74,168,255,0.08),transparent_40%)]" />
+      {/* --- Ambient Glow (quiet, single source of atmosphere) --- */}
+      <div
+        ref={glowRef}
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        style={
+          {
+            "--mx": "50%",
+            "--my": "50%",
+          } as React.CSSProperties
+        }
+      >
+        <div
+          className="absolute h-[20rem] w-[20rem] sm:h-[30rem] sm:w-[30rem] rounded-full opacity-25 sm:opacity-35 blur-[90px] sm:blur-[130px] transition-all duration-700 ease-out"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(217,192,207,0.45), rgba(179,170,215,0.22) 50%, transparent 72%)",
+            left: "calc(var(--mx) - 10rem)",
+            top: "calc(var(--my) - 10rem)",
+          }}
+        />
 
-      {/* ── Floating Orbs ── */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {orbs.map((orb) => (
-          <div
-            key={orb.id}
-            className="absolute rounded-full blur-3xl animate-[glow-drift_variables]"
-            style={{
-              width: orb.size,
-              height: orb.size,
-              left: orb.left,
-              top: orb.top,
-              opacity: orb.opacity,
-              background: `radial-gradient(circle, ${
-                orb.id % 3 === 0
-                  ? "var(--accent-primary)"
-                  : orb.id % 3 === 1
-                  ? "var(--accent-secondary)"
-                  : "var(--accent-tertiary)"
-              }, transparent 70%)`,
-              animation: `glow-drift ${orb.duration} ${orb.delay} infinite`,
-            } as React.CSSProperties}
-          />
-        ))}
-        {Array.from({ length: 8 }).map((_, i) => (
-          <SakuraPetal key={`petal-${i}`} />
-        ))}
+        {/* One large soft ring — the only structural decoration left */}
+        <div className="absolute right-[6%] top-[10%] h-[16rem] w-[16rem] sm:h-[26rem] sm:w-[26rem] rounded-full border border-[#e7dbe9]/35 bg-[radial-gradient(circle,rgba(236,228,244,0.35),rgba(248,243,248,0.04)_66%,transparent_80%)] animate-glow-drift" />
+
+        {/* A small constellation, not a scatter — three points, deliberately placed */}
+        <div className="absolute left-[10%] top-[14%] text-[0.8rem] sm:text-[1rem] text-[#d8bfd1]/55 animate-twinkle-soft">✦</div>
+        <div className="hidden sm:block absolute left-[6%] bottom-[16%] text-[0.9rem] text-[#b3aad7]/40 animate-twinkle-soft" style={{ animationDelay: "0.8s" }}>✦</div>
+        <div className="absolute right-[16%] bottom-[10%] text-[0.7rem] sm:text-[0.85rem] text-[#cfbfd7]/40 animate-twinkle-soft" style={{ animationDelay: "1.4s" }}>✦</div>
       </div>
 
-      <div className="relative mx-auto max-w-7xl">
-        {/* ════ Section Header ════ */}
-        <div className="mx-auto max-w-3xl text-center animate-[fade-up_0.9s_ease-out_both]">
+      <div className="relative mx-auto max-w-[1500px]">
+        {/* --- Eyebrow --- */}
+        <div className="stagger-item mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3 opacity-0">
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#d9c0cf]/50 to-transparent" />
+          <span className="flex items-center gap-1.5 sm:gap-2 text-[0.65rem] sm:text-[0.8rem] tracking-[0.25em] sm:tracking-[0.3em] text-[#c4aec4]/70 uppercase">
+            <span className="inline-block h-1 w-1 sm:h-1.5 sm:w-1.5 rounded-full bg-[#d9c0cf]/60" />
+            <span>about</span>
+            <span className="inline-block h-1 w-1 sm:h-1.5 sm:w-1.5 rounded-full bg-[#d9c0cf]/60" />
+          </span>
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#d9c0cf]/50 to-transparent" />
+        </div>
 
-          <h2 className="mt-6 text-3xl font-black tracking-[-0.03em] text-[var(--text-primary)] sm:text-5xl lg:text-6xl">
-            {t("about.title.lead")}
-            <br />
-            <span className="bg-gradient-to-r from-[var(--accent-gradient-from)] via-[var(--accent-gradient-via)] to-[var(--accent-gradient-to)] bg-clip-text text-transparent bg-[length:200%_auto] animate-[shimmer-text_4s_ease_infinite]">
-              {t("about.title.accent")}
-            </span>
+        {/* --- Heading --- */}
+        <div className="stagger-item opacity-0">
+          <h2 className="section-title-display text-[clamp(2.75rem,9vw,7.5rem)] text-[#5f458f] leading-[0.82]">
+            {t("about.heading")}
+            <span className="ml-2 sm:ml-3 inline-block align-top text-[0.26em] text-[#9aa0d7] animate-orbit-icon">✦</span>
           </h2>
 
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-[var(--text-secondary)] sm:text-lg sm:leading-8">
-            {t("about.subtitle")}
+          <p
+            className="mt-2 sm:mt-3 text-[clamp(1.4rem,3.6vw,2.8rem)] text-[#d5a1b6]"
+            style={{ fontFamily: "var(--font-script)" }}
+          >
+            {t("about.scriptLine")}
           </p>
+
+          {/* Pull-quote intro — one large watermark glyph instead of a border + icon combo */}
+          <div className="relative mt-5 sm:mt-7 max-w-3xl">
+            <FaQuoteLeft className="absolute -left-1 -top-3 sm:-top-4 text-[2.2rem] sm:text-[2.8rem] text-[#e7d5e2]/70 -z-0" />
+            <p className="relative pl-7 sm:pl-9 text-[1rem] sm:text-[1.25rem] leading-[1.85rem] sm:leading-[2.35rem] text-[var(--text-secondary)] italic">
+              {t("about.intro")}
+            </p>
+          </div>
         </div>
 
-        {/* ════ Stats Row ════ */}
-        <div className="mt-16 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 lg:gap-5">
-          {stats.map((stat) => (
+        {/* --- Cards --- */}
+        <div className="relative mt-8 sm:mt-12">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {/* Card 1: Story / Bio */}
+          <article className="stagger-item group relative flex flex-col rounded-[1.6rem] sm:rounded-[2rem] border border-[rgba(239,230,239,0.9)] bg-[linear-gradient(160deg,rgba(255,252,252,0.85),rgba(249,242,247,0.72))] p-5 sm:p-7 shadow-[0_18px_48px_rgba(196,178,209,0.08)] backdrop-blur-xl opacity-0 transition-all duration-500 hover:shadow-[0_26px_64px_rgba(196,178,209,0.16)] hover:-translate-y-1 focus-within:-translate-y-1">
+            <img
+              src={flowerImage}
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none absolute right-4 top-0 hidden w-20 -translate-y-1/2 opacity-55 sm:block md:w-24"
+            />
             <div
-              key={stat.label}
-              className="group relative rounded-2xl border border-[var(--border-soft)] bg-white/60 px-4 py-5 text-center backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-glow)] dark:bg-white/[0.04] sm:rounded-[1.5rem] sm:px-5 sm:py-7"
-            >
-              <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--accent-primary)]/20 to-[var(--accent-secondary)]/20 text-sm text-[var(--accent-primary)] transition-transform duration-300 group-hover:scale-110 sm:h-12 sm:w-12 sm:rounded-2xl sm:text-base">
-                {stat.icon}
-              </div>
-              <div className="text-2xl font-extrabold text-[var(--text-primary)] sm:text-3xl">
-                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-              </div>
-              <div className="mt-0.5 text-xs font-medium text-[var(--text-muted)] sm:text-sm">
-                {stat.label}
-              </div>
+              className="pointer-events-none absolute inset-0 rounded-[1.6rem] sm:rounded-[2rem] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+              style={{ boxShadow: "inset 0 0 0 1.5px rgba(217,192,207,0.28)" }}
+            />
+
+            <h3 className="section-title-display text-[1.6rem] sm:text-[2.15rem] text-[#5f458f]">
+              {t("about.cards.story.title")}
+            </h3>
+
+            <p className="mt-4 sm:mt-5 flex-1 text-[0.95rem] sm:text-[1.02rem] leading-7 sm:leading-8 text-[var(--text-secondary)]">
+              {t("about.cards.story.description")}
+            </p>
+
+            <div className="mt-5 sm:mt-6 flex flex-wrap gap-2">
+              <span className="rounded-full bg-[rgba(217,192,207,0.14)] px-3 py-1.5 text-[0.72rem] sm:text-[0.8rem] font-medium text-[#8b7a9e]">
+                3+ years
+              </span>
+              <span className="rounded-full bg-[rgba(179,170,215,0.14)] px-3 py-1.5 text-[0.72rem] sm:text-[0.8rem] font-medium text-[#8b7a9e]">
+                Full-Stack
+              </span>
             </div>
-          ))}
-        </div>
 
-        {/* ════ Main Grid ════ */}
-        <div className="mt-14 grid gap-8 lg:mt-20 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 xl:gap-12">
-          {/* ──────── LEFT CARD - Profile ──────── */}
-          <div className="group relative animate-[fade-up_0.9s_ease-out_0.1s_both]">
-            {/* Glow border */}
-            <div className="absolute -inset-0.5 rounded-[2.25rem] bg-gradient-to-br from-[var(--accent-primary)]/30 via-[var(--accent-secondary)]/20 to-[var(--accent-tertiary)]/30 opacity-0 blur-sm transition-all duration-500 group-hover:opacity-100 sm:rounded-[2.75rem]" />
-
-            <div className="relative rounded-[2rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] p-6 shadow-[var(--shadow-soft)] backdrop-blur-2xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-glow)] sm:rounded-[2.5rem] sm:p-10">
-              {/* Avatar & Name */}
-              <div className="mb-8 flex flex-col items-center gap-5 sm:flex-row sm:items-start">
-                <div className="relative shrink-0">
-                  {/* Avatar ring glow */}
-                  <div className="absolute -inset-1.5 rounded-full bg-gradient-to-br from-[var(--accent-primary)] via-[var(--accent-secondary)] to-[var(--accent-tertiary)] opacity-30 blur-md animate-[ring-pulse_3s_ease-in-out_infinite]" />
-                  <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] text-4xl text-white shadow-[0_20px_40px_rgba(255,107,154,0.28)] sm:h-28 sm:w-28 sm:text-5xl">
-                    <FaHeart className="animate-[orbit-icon_4s_ease-in-out_infinite]" />
-                    {/* Small decorative dot */}
-                    <div className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full border-2 border-white bg-emerald-400 dark:border-[var(--bg-base)]" />
-                  </div>
-                </div>
-
-                <div className="text-center sm:text-left">
-                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--text-muted)]">
-                    {t("about.profileLabel")}
-                  </p>
-                  <h3 className="mt-1.5 text-2xl font-bold text-[var(--text-primary)] sm:text-3xl">
-                    Muslima Radjabova
-                  </h3>
-                  <p className="mt-1 text-sm font-medium text-[var(--accent-primary)]">
-                    {t("about.role")}
-                  </p>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="relative">
-                <div className="absolute -left-3 top-0 text-4xl text-[var(--accent-primary)]/15 select-none leading-none">
-                  "
-                </div>
-                <p className="relative z-[1] pl-4 text-base leading-8 text-[var(--text-secondary)] italic">
-                  {t("about.description")}
+            <div className="mt-6 flex items-end justify-between gap-4 border-t border-[rgba(217,192,207,0.22)] pt-4 sm:pt-5">
+              <div>
+                <p
+                  className="text-[1.4rem] sm:text-[1.9rem] leading-[1] text-[#d39db4]"
+                  style={{ fontFamily: "var(--font-script)" }}
+                >
+                  Muslima Radjabova
+                </p>
+                <p className="mt-1 text-[0.72rem] sm:text-[0.8rem] tracking-wide text-[#b3aad7]">
+                  Web Developer &amp; Designer
                 </p>
               </div>
-
-              {/* Highlights as chips */}
-              <div className="mt-7 grid grid-cols-2 gap-3">
-                {(t("about.highlights", { returnObjects: true }) as string[]).map((item, idx) => (
-                  <div
-                    key={item}
-                    className="group/chip relative overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-white/70 px-4 py-3.5 backdrop-blur-xl transition-all duration-300 hover:border-[var(--accent-primary)]/30 hover:shadow-md dark:bg-white/[0.04] sm:rounded-[1.35rem]"
-                    style={{
-                      animationDelay: `${idx * 0.12}s`,
-                    }}
-                  >
-                    {/* Shimmer on hover */}
-                    <div className="absolute inset-0 -translate-x-full group-hover/chip:translate-x-full transition-transform duration-[800ms] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-                    <div className="relative flex items-center gap-3">
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--accent-primary)]/15 to-[var(--accent-secondary)]/15 text-xs text-[var(--accent-primary)]">
-                        <FaBullseye />
-                      </div>
-                      <span className="text-sm leading-5 font-medium text-[var(--text-secondary)]">
-                        {item}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Availability badge */}
-              <div className="mt-7 inline-flex w-full items-center justify-center gap-3 rounded-full border border-emerald-400/20 bg-gradient-to-r from-emerald-400/10 to-emerald-400/5 px-5 py-3 text-sm font-semibold text-emerald-600 backdrop-blur-xl dark:text-emerald-300 sm:w-auto sm:justify-start">
-                <span className="relative flex h-3 w-3">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-                  <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-400" />
-                </span>
-                {t("about.availability")}
-              </div>
+              <span className="flex h-9 w-9 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,rgba(239,228,245,0.95),rgba(252,245,247,0.92))] text-[1.05rem] sm:text-[1.4rem] text-[#e2a9c0] shadow-[0_8px_20px_rgba(193,143,160,0.1)] transition-transform duration-300 group-hover:scale-110">
+                <FaHeart />
+              </span>
             </div>
-          </div>
+          </article>
 
-          {/* ──────── RIGHT CARD - Education / Skills ──────── */}
-          <div className="group relative animate-[fade-up_0.9s_ease-out_0.2s_both]">
-            <div className="absolute -inset-0.5 rounded-[2.25rem] bg-gradient-to-br from-[var(--accent-secondary)]/20 via-[var(--accent-tertiary)]/15 to-[var(--accent-primary)]/20 opacity-0 blur-sm transition-all duration-500 group-hover:opacity-100 sm:rounded-[2.75rem]" />
+          {/* Card 2: What I Do */}
+          <article className="stagger-item group relative rounded-[1.6rem] sm:rounded-[2rem] border border-[rgba(239,230,239,0.9)] bg-[linear-gradient(160deg,rgba(255,252,252,0.85),rgba(249,242,247,0.72))] p-5 sm:p-7 shadow-[0_18px_48px_rgba(196,178,209,0.08)] backdrop-blur-xl opacity-0 transition-all duration-500 hover:shadow-[0_26px_64px_rgba(196,178,209,0.16)] hover:-translate-y-1">
+            <img
+              src={flowerImage}
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none absolute right-4 top-0 hidden w-20 -translate-y-1/2 opacity-55 sm:block md:w-24"
+            />
+            <div
+              className="pointer-events-none absolute inset-0 rounded-[1.6rem] sm:rounded-[2rem] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+              style={{ boxShadow: "inset 0 0 0 1.5px rgba(217,192,207,0.28)" }}
+            />
 
-            <div className="relative rounded-[2rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] p-6 shadow-[var(--shadow-soft)] backdrop-blur-2xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-glow)] sm:rounded-[2.5rem] sm:p-8">
-              {/* Tab Switcher */}
-              <div className="mb-8 flex gap-2 rounded-2xl border border-[var(--border-soft)] bg-white/40 p-1.5 backdrop-blur-2xl dark:bg-white/[0.04]">
-                <button
-                  onClick={() => setActiveTab("education")}
-                  className={`relative flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-300 ${
-                    activeTab === "education"
-                      ? "bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] text-white shadow-lg shadow-[var(--accent-primary)]/20"
-                      : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-                  }`}
+            <h3 className="section-title-display text-[1.6rem] sm:text-[2.15rem] text-[#5f458f]">
+              {t("about.cards.whatIDo.title")}
+            </h3>
+
+            <div className="mt-5 sm:mt-6 space-y-1">
+              {whatIDo.map((item, index) => (
+                <div
+                  key={item.title}
+                  className="group/item flex items-start gap-3 sm:gap-4 rounded-2xl p-2.5 sm:p-3 transition-all duration-300 hover:bg-[rgba(217,192,207,0.07)]"
                 >
-                  <FaGraduationCap />
-                  {t("about.tabs.education")}
-                </button>
-                <button
-                  onClick={() => setActiveTab("skills")}
-                  className={`relative flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-300 ${
-                    activeTab === "skills"
-                      ? "bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] text-white shadow-lg shadow-[var(--accent-primary)]/20"
-                      : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-                  }`}
+                  <div className="flex h-11 w-11 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl bg-[linear-gradient(135deg,rgba(239,228,245,0.95),rgba(252,245,247,0.92))] text-[1rem] sm:text-[1.3rem] text-[#9a83b7] shadow-[0_10px_22px_rgba(193,143,160,0.06)] transition-all duration-300 group-hover/item:scale-105 group-hover/item:text-[#d39db4]">
+                    {whatIDoIcons[index]}
+                  </div>
+                  <div className="min-w-0 flex-1 pt-0.5">
+                    <p className="text-[1.02rem] sm:text-[1.3rem] font-semibold leading-6 sm:leading-7 text-[#5f458f]">
+                      {item.title}
+                    </p>
+                    <p className="mt-1 text-[0.85rem] sm:text-[0.95rem] leading-6 sm:leading-7 text-[var(--text-secondary)]">
+                      {item.description}
+                    </p>
+                  </div>
+                  <FiArrowUpRight className="mt-1 text-[0.85rem] sm:text-[1rem] text-[#d9c0cf]/0 transition-all duration-300 group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5 group-hover/item:text-[#d9c0cf]/70 shrink-0" />
+                </div>
+              ))}
+            </div>
+          </article>
+
+          {/* Card 3: Values */}
+          <article className="stagger-item group relative rounded-[1.6rem] sm:rounded-[2rem] border border-[rgba(239,230,239,0.9)] bg-[linear-gradient(160deg,rgba(255,252,252,0.85),rgba(249,242,247,0.72))] p-5 sm:p-7 shadow-[0_18px_48px_rgba(196,178,209,0.08)] backdrop-blur-xl opacity-0 transition-all duration-500 hover:shadow-[0_26px_64px_rgba(196,178,209,0.16)] hover:-translate-y-1 md:col-span-2 xl:col-span-1">
+            <img
+              src={flowerImage}
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none absolute right-4 top-0 hidden w-20 -translate-y-1/2 opacity-55 sm:block md:w-24"
+            />
+            <div
+              className="pointer-events-none absolute inset-0 rounded-[1.6rem] sm:rounded-[2rem] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+              style={{ boxShadow: "inset 0 0 0 1.5px rgba(217,192,207,0.28)" }}
+            />
+
+            <h3 className="section-title-display text-[1.6rem] sm:text-[2.15rem] text-[#5f458f]">
+              {t("about.cards.values.title")}
+            </h3>
+
+            <div className="mt-5 sm:mt-6 grid gap-1 sm:grid-cols-1">
+              {values.map((item, index) => (
+                <div
+                  key={item.title}
+                  className="group/item flex items-start gap-3 sm:gap-4 rounded-2xl p-2.5 sm:p-3 transition-all duration-300 hover:bg-[rgba(179,170,215,0.07)]"
                 >
-                  <FaCode />
-                  {t("about.tabs.skills")}
-                </button>
-              </div>
-
-              {/* ── Education Tab Content ── */}
-              {activeTab === "education" && (
-                <div className="space-y-4 animate-[fade-up_0.5s_ease-out]">
-                  {education.map((edu) => (
-                    <div
-                      key={edu.degree}
-                      className="group/card relative overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-white/60 p-6 shadow-[0_10px_24px_rgba(255,107,154,0.08)] backdrop-blur-xl transition-all duration-300 hover:border-[var(--accent-primary)]/25 hover:shadow-lg dark:bg-white/[0.04] sm:rounded-[1.8rem] sm:p-7"
-                    >
-                      {/* Accent bar */}
-                      <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-[var(--accent-primary)] to-[var(--accent-secondary)] rounded-r-full" />
-
-                      <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-                        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] text-2xl text-white shadow-[0_12px_28px_rgba(255,107,154,0.24)] transition-transform duration-300 group-hover/card:scale-110 group-hover/card:rotate-3 sm:h-18 sm:w-18 sm:rounded-2xl">
-                          {edu.icon}
-                        </div>
-                        <div className="flex-1">
-                          <span className="inline-block rounded-full border border-[var(--accent-primary)]/20 bg-[var(--accent-primary)]/10 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent-primary)]">
-                            {edu.year}
-                          </span>
-                          <h4 className="mt-3 text-xl font-bold text-[var(--text-primary)] sm:text-2xl">
-                            {edu.degree}
-                          </h4>
-                          <p className="mt-1 text-sm font-semibold text-[var(--accent-secondary)]">
-                            {edu.institution}
-                          </p>
-                          <p className="mt-3 leading-7 text-[var(--text-secondary)]">
-                            {edu.description}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-
-                  {/* Extra decoration for education tab */}
-                  <div className="flex items-center gap-3 rounded-2xl border border-dashed border-[var(--border-strong)] bg-white/30 px-5 py-4 backdrop-blur-sm dark:bg-white/[0.02]">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400/20 to-amber-500/10 text-amber-500">
-                      <FaRocket />
-                    </div>
-                    <p className="text-sm font-medium text-[var(--text-secondary)]">
-                      {t("about.learningNote")}
+                  <div className="flex h-11 w-11 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl bg-[linear-gradient(135deg,rgba(239,228,245,0.95),rgba(252,245,247,0.92))] text-[1rem] sm:text-[1.3rem] text-[#9a83b7] shadow-[0_10px_22px_rgba(193,143,160,0.06)] transition-all duration-300 group-hover/item:scale-105 group-hover/item:text-[#d39db4]">
+                    {valueIcons[index]}
+                  </div>
+                  <div className="min-w-0 flex-1 pt-0.5">
+                    <p className="text-[1.02rem] sm:text-[1.3rem] font-semibold leading-6 sm:leading-7 text-[#5f458f]">
+                      {item.title}
+                    </p>
+                    <p className="mt-1 text-[0.85rem] sm:text-[0.95rem] leading-6 sm:leading-7 text-[var(--text-secondary)]">
+                      {item.description}
                     </p>
                   </div>
                 </div>
-              )}
-
-              {/* ── Skills Tab Content ── */}
-              {activeTab === "skills" && (
-                <div className="space-y-6 animate-[fade-up_0.5s_ease-out]">
-                  {skillCategories.map((cat) => (
-                    <div key={cat.name}>
-                      <div className="mb-3 flex items-center gap-2">
-                        <div className="h-1.5 w-1.5 rounded-full bg-[var(--accent-primary)]" />
-                        <span className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--text-muted)]">
-                          {cat.name}
-                        </span>
-                      </div>
-                      <div className="space-y-3 pl-4 border-l-2 border-[var(--border-soft)]">
-                        {cat.skills.map((skill) => (
-                          <SkillBar key={skill.label} label={skill.label} level={skill.level} />
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-
-                  <div className="mt-4 flex items-center justify-between rounded-2xl bg-gradient-to-r from-[var(--accent-primary)]/5 to-[var(--accent-secondary)]/5 p-4">
-                    <span className="text-sm font-semibold text-[var(--text-primary)]">
-                      {t("about.toolsLabel")}
-                    </span>
-                    <div className="flex items-center gap-2 text-xs text-[var(--accent-primary)]">
-                      <span>{t("about.toolsList")}</span>
-                      <FiExternalLink className="opacity-60" />
-                    </div>
-                  </div>
-                </div>
-              )}
+              ))}
             </div>
+          </article>
           </div>
         </div>
 
-        {/* ════ Bottom CTA Banner ════ */}
-        <div className="group relative mt-14 animate-[fade-up_0.9s_ease-out_0.3s_both] lg:mt-20">
-          <div className="absolute -inset-1 rounded-[2.5rem] bg-gradient-to-r from-[var(--accent-primary)]/20 via-[var(--accent-secondary)]/20 to-[var(--accent-tertiary)]/20 opacity-0 blur-lg transition-all duration-500 group-hover:opacity-100" />
-          <div className="relative overflow-hidden rounded-[2rem] border border-[var(--border-soft)] bg-gradient-to-br from-white/60 to-white/30 px-6 py-8 text-center backdrop-blur-2xl transition-all duration-500 hover:shadow-[var(--shadow-glow)] dark:from-white/[0.06] dark:to-white/[0.02] sm:rounded-[2.5rem] sm:px-12 sm:py-12">
-            {/* Subtle pattern overlay */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,107,154,0.04),transparent_50%),radial-gradient(circle_at_70%_50%,rgba(168,85,247,0.04),transparent_50%)]" />
-
-            <div className="relative">
-              <p className="text-xs font-bold uppercase tracking-[0.3em] text-[var(--text-muted)]">
-                {t("about.profileLabel")}
-              </p>
-              <h3 className="mt-3 text-2xl font-extrabold text-[var(--text-primary)] sm:text-3xl">
-                {t("about.cta.titleStart")}{" "}
-                <span className="bg-gradient-to-r from-[var(--accent-gradient-from)] via-[var(--accent-gradient-via)] to-[var(--accent-gradient-to)] bg-clip-text text-transparent">
-                  {t("about.cta.titleAccent")}
-                </span>{" "}
-                {t("about.cta.titleEnd")}
-              </h3>
-              <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-[var(--text-secondary)]">
-                {t("about.cta.description")}
-              </p>
-              <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-[var(--accent-primary)]/20 transition-all duration-300 hover:shadow-xl hover:shadow-[var(--accent-primary)]/30 hover:scale-105">
-                <FaRocket />
-                {t("about.cta.button")}
-                <FaArrowRight className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
-              </div>
-            </div>
+        {/* --- Closing flourish --- */}
+        <div className="stagger-item mt-8 sm:mt-12 flex flex-col items-center gap-3 opacity-0">
+          <div className="flex items-center gap-2 sm:gap-3 text-[#d9c0cf]/50">
+            <span className="inline-block h-[1px] w-6 sm:w-8 bg-gradient-to-r from-transparent to-[#d9c0cf]/40" />
+            <span className="text-[1rem] sm:text-[1.15rem]">✦</span>
+            <span className="inline-block h-[1px] w-6 sm:w-8 bg-gradient-to-l from-transparent to-[#d9c0cf]/40" />
           </div>
-        </div>
-
-        {/* ════ Decorative divider ════ */}
-        <div className="mt-16 flex items-center justify-center gap-4 text-[var(--text-muted)]/30">
-          <div className="h-px w-16 bg-gradient-to-r from-transparent to-[var(--border-strong)]" />
-          <HiSparkles className="text-lg" />
-          <div className="h-px w-16 bg-gradient-to-l from-transparent to-[var(--border-strong)]" />
         </div>
       </div>
     </section>

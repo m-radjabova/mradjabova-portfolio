@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
 import {
+  FaCode,
   FaFigma,
   FaGitAlt,
   FaJs,
@@ -7,14 +8,18 @@ import {
   FaReact,
 } from "react-icons/fa";
 import {
-  SiCss3,
   SiFastapi,
   SiHtml5,
+  SiCss3,
+  SiFirebase,
+  SiNextdotjs,
+  SiNodedotjs,
   SiPostgresql,
   SiTailwindcss,
   SiTypescript,
   SiVite,
 } from "react-icons/si";
+import { VscVscode } from "react-icons/vsc";
 
 export type SkillItem = {
   name: string;
@@ -35,5 +40,17 @@ export const skills: SkillItem[] = [
   { name: "FastAPI", level: 82, icon: <SiFastapi />, tone: "from-emerald-400 to-teal-500" },
   { name: "PostgreSQL", level: 80, icon: <SiPostgresql />, tone: "from-blue-500 to-cyan-400" },
   { name: "UI/UX Design", level: 90, icon: <FaFigma />, tone: "from-pink-400 to-rose-500" },
-  { name: "Git", level: 85, icon: <FaGitAlt />, tone: "from-orange-500 to-rose-500" },
+  { name: "Next.js", level: 85, icon: <SiNextdotjs />, tone: "from-slate-700 to-black" },
+  { name: "Node.js", level: 80, icon: <SiNodedotjs />, tone: "from-lime-500 to-green-600" },
+] as const;
+
+export const otherSkills = [
+  { name: "Git & GitHub", icon: <FaGitAlt /> },
+  { name: "FastAPI", icon: <SiFastapi /> },
+  { name: "PostgreSQL", icon: <SiPostgresql /> },
+  { name: "Firebase", icon: <SiFirebase /> },
+  { name: "Figma", icon: <FaFigma /> },
+  { name: "VS Code", icon: <VscVscode /> },
+  { name: "CSS", icon: <SiCss3 /> },
+  { name: "HTML", icon: <FaCode /> },
 ] as const;

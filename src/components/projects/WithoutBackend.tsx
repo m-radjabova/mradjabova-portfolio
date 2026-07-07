@@ -47,7 +47,7 @@ function WithoutBackend({ showHeader = true }: WithoutBackendProps) {
                 <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--accent-primary)]" />
                 {t("projects.withoutBackend.badge")}
               </div>
-              <h3 className="mt-1.5 text-xl font-black tracking-[-0.02em] text-[var(--text-primary)] transition-all duration-300 sm:text-2xl">
+              <h3 className="section-title-display mt-2 text-[2rem] text-[var(--text-primary)] transition-all duration-300 sm:text-[2.35rem]">
                 {t("projects.withoutBackend.title")}
               </h3>
             </div>

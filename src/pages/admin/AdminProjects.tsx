@@ -9,6 +9,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { FaEdit, FaPlus, FaSave, FaTrash, FaTimes } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { db } from "../../firebase";
 import type { Project } from "../../hooks/useProjects";
@@ -30,6 +31,7 @@ const emptyForm: ProjectFormState = {
 };
 
 function AdminProjects() {
+  const { t } = useTranslation();
   const [projects, setProjects] = useState<Project[]>([]);
   const [form, setForm] = useState<ProjectFormState>(emptyForm);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
@@ -100,7 +102,7 @@ function AdminProjects() {
       .filter(Boolean);
 
     if (!title || !description || !demoLink || !technologies.length) {
-      toast.error("Title, description, demo link and technologies are required.");
+      toast.error(t("admin.projects.toasts.required"));
       return;
     }
 
@@ -118,39 +120,39 @@ function AdminProjects() {
 
       if (selectedProjectId) {
         await updateDoc(doc(db, "projects", selectedProjectId), payload);
-        toast.success("Project updated.");
+        toast.success(t("admin.projects.toasts.updated"));
       } else {
         await addDoc(collection(db, "projects"), {
           ...payload,
           createdAt: serverTimestamp(),
         });
-        toast.success("Project created.");
+        toast.success(t("admin.projects.toasts.created"));
       }
 
       resetForm();
     } catch (error) {
       console.error("Project save failed:", error);
-      toast.error("Could not save project.");
+      toast.error(t("admin.projects.toasts.saveError"));
     } finally {
       setIsSaving(false);
     }
   };
 
   const handleDelete = async (projectId: string, projectTitle: string) => {
-    if (!window.confirm(`Delete "${projectTitle}"?`)) {
+    if (!window.confirm(t("admin.projects.confirmDelete", { title: projectTitle }))) {
       return;
     }
 
     try {
       await deleteDoc(doc(db, "projects", projectId));
-      toast.success("Project deleted.");
+      toast.success(t("admin.projects.toasts.deleted"));
 
       if (selectedProjectId === projectId) {
         resetForm();
       }
     } catch (error) {
       console.error("Project delete failed:", error);
-      toast.error("Could not delete project.");
+      toast.error(t("admin.projects.toasts.deleteError"));
     }
   };
 
@@ -158,23 +160,22 @@ function AdminProjects() {
     <div className="space-y-6 pt-14 md:pt-0">
       <section className="rounded-[2rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] p-6 shadow-[var(--shadow-soft)] backdrop-blur-2xl sm:p-8">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--accent-primary)]">
-          Projects manager
+          {t("admin.projects.badge")}
         </p>
         <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h1 className="text-3xl font-black text-[var(--text-primary)] sm:text-4xl">
-              Add, edit and delete projects
+              {t("admin.projects.title")}
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
-              Firestore `projects` collection shu page bilan bog‘langan. `technologies`
-              maydonini vergul bilan yozing, qolgani avtomatik array bo‘lib saqlanadi.
+              {t("admin.projects.description")}
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div className="rounded-[1.3rem] border border-[var(--border-soft)] bg-white/72 px-4 py-3 dark:bg-white/5">
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--text-secondary)]">
-                Total
+                {t("admin.projects.stats.totalLabel")}
               </p>
               <p className="mt-2 text-2xl font-black text-[var(--text-primary)]">
                 {projectStats.total}
@@ -182,7 +183,7 @@ function AdminProjects() {
             </div>
             <div className="rounded-[1.3rem] border border-[var(--border-soft)] bg-white/72 px-4 py-3 dark:bg-white/5">
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--text-secondary)]">
-                Github linked
+                {t("admin.projects.stats.githubLinked")}
               </p>
               <p className="mt-2 text-2xl font-black text-[var(--text-primary)]">
                 {projectStats.withGithub}
@@ -190,7 +191,7 @@ function AdminProjects() {
             </div>
             <div className="rounded-[1.3rem] border border-[var(--border-soft)] bg-white/72 px-4 py-3 dark:bg-white/5">
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--text-secondary)]">
-                Tech tags
+                {t("admin.projects.stats.techTags")}
               </p>
               <p className="mt-2 text-2xl font-black text-[var(--text-primary)]">
                 {projectStats.totalTech}
@@ -205,12 +206,14 @@ function AdminProjects() {
           <div className="flex items-center justify-between gap-3">
             <div>
               <h2 className="text-2xl font-black text-[var(--text-primary)]">
-                {selectedProject ? "Edit project" : "Create project"}
+                {selectedProject
+                  ? t("admin.projects.form.editTitle")
+                  : t("admin.projects.form.createTitle")}
               </h2>
               <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
                 {selectedProject
-                  ? "Selected project is loaded into the form."
-                  : "Fill the form and create a new project entry."}
+                  ? t("admin.projects.form.editingDescription")
+                  : t("admin.projects.form.creatingDescription")}
               </p>
             </div>
             {selectedProject && (
@@ -218,7 +221,7 @@ function AdminProjects() {
                 type="button"
                 onClick={resetForm}
                 className="inline-flex h-11 w-11 items-center justify-center rounded-[1rem] border border-[var(--border-soft)] bg-white/72 text-[var(--text-primary)] transition hover:text-[var(--accent-primary)] dark:bg-white/5"
-                aria-label="Cancel editing"
+                aria-label={t("admin.projects.form.cancelEditing")}
               >
                 <FaTimes />
               </button>
@@ -228,20 +231,20 @@ function AdminProjects() {
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             <label className="block">
               <span className="mb-2 block text-sm font-semibold text-[var(--text-primary)]">
-                Project title
+                {t("admin.projects.form.titleLabel")}
               </span>
               <input
                 name="title"
                 value={form.title}
                 onChange={handleChange}
                 className="w-full rounded-[1rem] border border-[var(--border-soft)] bg-white/82 px-4 py-3 text-[var(--text-primary)] outline-none transition focus:border-[var(--accent-primary)] dark:bg-white/5"
-                placeholder="Portfolio Admin"
+                placeholder={t("admin.projects.form.placeholders.title")}
               />
             </label>
 
             <label className="block">
               <span className="mb-2 block text-sm font-semibold text-[var(--text-primary)]">
-                Description
+                {t("admin.projects.form.descriptionLabel")}
               </span>
               <textarea
                 name="description"
@@ -249,26 +252,26 @@ function AdminProjects() {
                 onChange={handleChange}
                 rows={5}
                 className="w-full rounded-[1rem] border border-[var(--border-soft)] bg-white/82 px-4 py-3 text-[var(--text-primary)] outline-none transition focus:border-[var(--accent-primary)] dark:bg-white/5"
-                placeholder="Short explanation about the project..."
+                placeholder={t("admin.projects.form.placeholders.description")}
               />
             </label>
 
             <label className="block">
               <span className="mb-2 block text-sm font-semibold text-[var(--text-primary)]">
-                Technologies
+                {t("admin.projects.form.technologiesLabel")}
               </span>
               <input
                 name="technologies"
                 value={form.technologies}
                 onChange={handleChange}
                 className="w-full rounded-[1rem] border border-[var(--border-soft)] bg-white/82 px-4 py-3 text-[var(--text-primary)] outline-none transition focus:border-[var(--accent-primary)] dark:bg-white/5"
-                placeholder="React, TypeScript, Tailwind, Firebase"
+                placeholder={t("admin.projects.form.placeholders.technologies")}
               />
             </label>
 
             <label className="block">
               <span className="mb-2 block text-sm font-semibold text-[var(--text-primary)]">
-                Demo link
+                {t("admin.projects.form.demoLinkLabel")}
               </span>
               <input
                 name="demoLink"
@@ -281,7 +284,7 @@ function AdminProjects() {
 
             <label className="block">
               <span className="mb-2 block text-sm font-semibold text-[var(--text-primary)]">
-                Github link
+                {t("admin.projects.form.githubLinkLabel")}
               </span>
               <input
                 name="githubLink"
@@ -300,10 +303,10 @@ function AdminProjects() {
               >
                 {selectedProject ? <FaSave /> : <FaPlus />}
                 {isSaving
-                  ? "Saving..."
+                  ? t("admin.projects.form.saving")
                   : selectedProject
-                    ? "Update project"
-                    : "Create project"}
+                    ? t("admin.projects.form.update")
+                    : t("admin.projects.form.create")}
               </button>
 
               <button
@@ -312,7 +315,7 @@ function AdminProjects() {
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border-soft)] bg-white/82 px-5 py-3 text-sm font-semibold text-[var(--text-primary)] shadow-[var(--shadow-soft)] transition hover:border-[var(--accent-primary)]/35 hover:text-[var(--accent-primary)] dark:bg-white/5"
               >
                 <FaTimes />
-                Clear form
+                {t("admin.projects.form.clear")}
               </button>
             </div>
           </form>
@@ -322,14 +325,14 @@ function AdminProjects() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-2xl font-black text-[var(--text-primary)]">
-                Existing projects
+                {t("admin.projects.listTitle")}
               </h2>
               <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                Click edit to load a project into the form. Delete immediately removes the doc from Firestore.
+                {t("admin.projects.listDescription")}
               </p>
             </div>
             <p className="text-sm font-semibold text-[var(--text-secondary)]">
-              {projects.length} item{projects.length === 1 ? "" : "s"}
+              {projects.length} {t("admin.projects.stats.total")}
             </p>
           </div>
 
@@ -371,7 +374,7 @@ function AdminProjects() {
                         className="inline-flex items-center gap-2 rounded-full border border-[var(--border-soft)] bg-white/82 px-4 py-2.5 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--accent-primary)]/35 hover:text-[var(--accent-primary)] dark:bg-white/5"
                       >
                         <FaEdit />
-                        Edit
+                        {t("admin.projects.actions.edit")}
                       </button>
                       <button
                         type="button"
@@ -379,7 +382,7 @@ function AdminProjects() {
                         className="inline-flex items-center gap-2 rounded-full border border-rose-400/20 bg-rose-500/10 px-4 py-2.5 text-sm font-semibold text-rose-500 transition hover:bg-rose-500/15 dark:text-rose-300"
                       >
                         <FaTrash />
-                        Delete
+                        {t("admin.projects.actions.delete")}
                       </button>
                     </div>
                   </div>
@@ -391,17 +394,17 @@ function AdminProjects() {
                       rel="noreferrer"
                       className="truncate rounded-[1rem] border border-[var(--border-soft)] bg-white/80 px-4 py-3 transition hover:text-[var(--accent-primary)] dark:bg-white/5"
                     >
-                      Demo: {project.demoLink}
+                      {t("admin.projects.demo")}: {project.demoLink}
                     </a>
                     <div className="truncate rounded-[1rem] border border-[var(--border-soft)] bg-white/80 px-4 py-3 dark:bg-white/5">
-                      Github: {project.githubLink?.trim() || "Not added"}
+                      {t("admin.projects.github")}: {project.githubLink?.trim() || t("admin.projects.notAdded")}
                     </div>
                   </div>
                 </article>
               ))
             ) : (
               <div className="rounded-[1.5rem] border border-dashed border-[var(--border-soft)] px-5 py-8 text-center text-sm leading-7 text-[var(--text-secondary)]">
-                Projects collection hozircha bo‘sh. Chap tomondagi form orqali birinchi projectni qo‘shishingiz mumkin.
+                {t("admin.projects.empty")}
               </div>
             )}
           </div>

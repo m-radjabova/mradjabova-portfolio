@@ -11,10 +11,12 @@ import {
 } from "react-icons/fa";
 import { signOut } from "firebase/auth";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 import useContextPro from "../../hooks/useContextPro";
 import { auth } from "../../firebase";
 
 function AdminSidebar() {
+  const { t } = useTranslation();
   const [isDesktopOpen, setIsDesktopOpen] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const navigate = useNavigate();
@@ -24,9 +26,9 @@ function AdminSidebar() {
   } = useContextPro();
 
   const menuItems = [
-    { name: "Overview", icon: <FaChartPie />, path: "/admin", role: "ADMIN" },
-    { name: "Projects", icon: <FaFolderOpen />, path: "/admin/projects", role: "ADMIN" },
-    { name: "Users", icon: <FaUsers />, path: "/admin/users", role: "ADMIN" },
+    { name: t("admin.sidebar.overview"), icon: <FaChartPie />, path: "/admin", role: "ADMIN" },
+    { name: t("admin.sidebar.projects"), icon: <FaFolderOpen />, path: "/admin/projects", role: "ADMIN" },
+    { name: t("admin.sidebar.users"), icon: <FaUsers />, path: "/admin/users", role: "ADMIN" },
   ];
 
   const canAccess = (itemRole: string) => {
@@ -44,11 +46,11 @@ function AdminSidebar() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      toast.success("Signed out successfully.");
-      navigate("/login", { replace: true });
+      toast.success(t("admin.sidebar.toasts.logoutSuccess"));
+      navigate("/adm-login", { replace: true });
     } catch (error) {
       console.error("Logout failed:", error);
-      toast.error("Could not sign out. Try again.");
+      toast.error(t("admin.sidebar.toasts.logoutError"));
     }
   };
 
@@ -58,17 +60,17 @@ function AdminSidebar() {
         {!collapsed && (
           <button onClick={() => navigate("/admin")} className="min-w-0 text-left">
             <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[var(--text-secondary)]">
-              Portfolio
+              {t("common.portfolio")}
             </p>
             <h4 className="mt-1 truncate text-lg font-black text-[var(--text-primary)]">
-              Admin Panel
+              {t("admin.sidebar.panel")}
             </h4>
           </button>
         )}
         <button
           className="hidden h-11 w-11 items-center justify-center rounded-[1.2rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] text-[var(--text-primary)] shadow-[var(--shadow-soft)] md:inline-flex"
           onClick={() => setIsDesktopOpen((current) => !current)}
-          aria-label="Toggle sidebar"
+          aria-label={t("admin.sidebar.toggle")}
         >
           <FaBars />
         </button>
@@ -76,10 +78,10 @@ function AdminSidebar() {
 
       <div className="mb-5 rounded-[1.5rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] p-4 shadow-[var(--shadow-soft)] backdrop-blur-2xl">
         <p className="text-xs uppercase tracking-[0.24em] text-[var(--accent-primary)]">
-          Signed in as
+          {t("admin.sidebar.signedInAs")}
         </p>
         <p className="mt-2 truncate text-base font-bold text-[var(--text-primary)]">
-          {user?.name || "Admin"}
+          {user?.name || t("admin.sidebar.adminFallback")}
         </p>
         <p className="mt-1 truncate text-sm text-[var(--text-secondary)]">
           {user?.email}
@@ -112,14 +114,14 @@ function AdminSidebar() {
           className="inline-flex w-full items-center justify-center gap-2 rounded-[1.25rem] border border-[var(--border-soft)] bg-white/72 px-4 py-3 text-sm font-semibold text-[var(--text-primary)] shadow-[var(--shadow-soft)] transition hover:border-[var(--accent-primary)]/35 hover:text-[var(--accent-primary)] dark:bg-white/5"
         >
           <FaHome />
-          {!collapsed && <span>View site</span>}
+          {!collapsed && <span>{t("admin.sidebar.viewSite")}</span>}
         </Link>
         <button
           onClick={handleLogout}
           className="inline-flex w-full items-center justify-center gap-2 rounded-[1.25rem] border border-rose-400/20 bg-rose-500/10 px-4 py-3 text-sm font-semibold text-rose-500 transition hover:bg-rose-500/15 dark:text-rose-300"
         >
           <FaSignOutAlt />
-          {!collapsed && <span>Logout</span>}
+          {!collapsed && <span>{t("admin.sidebar.logout")}</span>}
         </button>
       </div>
     </>
@@ -130,7 +132,7 @@ function AdminSidebar() {
       <button
         className="fixed left-4 top-4 z-50 inline-flex h-11 w-11 items-center justify-center rounded-[1.2rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] text-[var(--text-primary)] shadow-[var(--shadow-soft)] backdrop-blur-2xl md:hidden"
         onClick={() => setIsMobileOpen(true)}
-        aria-label="Open admin menu"
+        aria-label={t("admin.sidebar.openMenu")}
       >
         <FaBars />
       </button>
@@ -142,7 +144,7 @@ function AdminSidebar() {
               <button
                 className="inline-flex h-11 w-11 items-center justify-center rounded-[1.2rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] text-[var(--text-primary)] shadow-[var(--shadow-soft)]"
                 onClick={() => setIsMobileOpen(false)}
-                aria-label="Close admin menu"
+                aria-label={t("admin.sidebar.closeMenu")}
               >
                 <FaTimes />
               </button>

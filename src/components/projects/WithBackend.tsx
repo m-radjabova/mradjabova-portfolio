@@ -151,7 +151,7 @@ function WithBackend({ showHeader = true }: WithBackendProps) {
                 </span>
                 {t("projects.withBackend.badge")}
               </div>
-              <h3 className="mt-1.5 text-xl font-black tracking-[-0.02em] text-[var(--text-primary)] transition-all duration-300 sm:text-2xl">
+              <h3 className="section-title-display mt-2 text-[2rem] text-[var(--text-primary)] transition-all duration-300 sm:text-[2.35rem]">
                 {t("projects.withBackend.title")}
               </h3>
             </div>

@@ -1,24 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { FaEnvelope, FaShieldAlt, FaUser } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import { db } from "../../firebase";
 import type { User } from "../../types/types";
 import useContextPro from "../../hooks/useContextPro";
 
-function formatCreatedAt(value: unknown) {
+function formatCreatedAt(value: unknown, locale: string) {
   if (
     value &&
     typeof value === "object" &&
     "seconds" in value &&
     typeof (value as { seconds?: unknown }).seconds === "number"
   ) {
-    return new Date((value as { seconds: number }).seconds * 1000).toLocaleDateString();
+    return new Date((value as { seconds: number }).seconds * 1000).toLocaleDateString(locale);
   }
 
-  return "Unknown";
+  return "";
 }
 
 function AdminUsers() {
+  const { t, i18n } = useTranslation();
   const {
     state: { user: currentUser },
   } = useContextPro();
@@ -51,23 +53,22 @@ function AdminUsers() {
     <div className="space-y-6 pt-14 md:pt-0">
       <section className="rounded-[2rem] border border-[var(--border-soft)] bg-[color:var(--card-bg)] p-6 shadow-[var(--shadow-soft)] backdrop-blur-2xl sm:p-8">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--accent-secondary)]">
-          Users collection
+          {t("admin.users.badge")}
         </p>
         <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h1 className="text-3xl font-black text-[var(--text-primary)] sm:text-4xl">
-              Users and roles
+              {t("admin.users.title")}
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
-              Bu page `users` collectionni ko‘rsatadi. Hozircha read-only, lekin qaysi accountda `ADMIN`
-              borligini va kim tizimga kirayotganini aniq ko‘rasiz.
+              {t("admin.users.description")}
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div className="rounded-[1.3rem] border border-[var(--border-soft)] bg-white/72 px-4 py-3 dark:bg-white/5">
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--text-secondary)]">
-                Total users
+                {t("admin.users.stats.total")}
               </p>
               <p className="mt-2 text-2xl font-black text-[var(--text-primary)]">
                 {stats.total}
@@ -75,7 +76,7 @@ function AdminUsers() {
             </div>
             <div className="rounded-[1.3rem] border border-[var(--border-soft)] bg-white/72 px-4 py-3 dark:bg-white/5">
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--text-secondary)]">
-                Admins
+                {t("admin.users.stats.admins")}
               </p>
               <p className="mt-2 text-2xl font-black text-[var(--text-primary)]">
                 {stats.admins}
@@ -83,7 +84,7 @@ function AdminUsers() {
             </div>
             <div className="rounded-[1.3rem] border border-[var(--border-soft)] bg-white/72 px-4 py-3 dark:bg-white/5">
               <p className="text-xs uppercase tracking-[0.2em] text-[var(--text-secondary)]">
-                Members
+                {t("admin.users.stats.members")}
               </p>
               <p className="mt-2 text-2xl font-black text-[var(--text-primary)]">
                 {stats.members}
@@ -113,7 +114,7 @@ function AdminUsers() {
                   </div>
                   {isCurrentUser && (
                     <span className="rounded-full bg-[var(--accent-primary)]/12 px-3 py-1 text-xs font-semibold text-[var(--accent-primary)]">
-                      You
+                      {t("admin.users.you")}
                     </span>
                   )}
                 </div>
@@ -139,13 +140,13 @@ function AdminUsers() {
                     ))
                   ) : (
                     <span className="rounded-full border border-[var(--border-soft)] px-3 py-1 text-xs text-[var(--text-secondary)]">
-                      No roles
+                      {t("admin.users.noRoles")}
                     </span>
                   )}
                 </div>
 
                 <div className="mt-5 rounded-[1rem] border border-[var(--border-soft)] bg-white/76 px-4 py-3 text-sm text-[var(--text-secondary)] dark:bg-white/5">
-                  Joined: {formatCreatedAt(item.createdAt)}
+                  {t("admin.users.joined")}: {formatCreatedAt(item.createdAt, i18n.language)}
                 </div>
               </article>
             );
@@ -154,7 +155,7 @@ function AdminUsers() {
 
         {!users.length && (
           <div className="rounded-[1.5rem] border border-dashed border-[var(--border-soft)] px-5 py-8 text-center text-sm leading-7 text-[var(--text-secondary)]">
-            Users collection hozircha bo‘sh.
+            {t("admin.users.empty")}
           </div>
         )}
       </section>
