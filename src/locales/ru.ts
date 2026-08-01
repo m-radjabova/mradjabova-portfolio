@@ -152,7 +152,7 @@ export const ru = {
           ],
         },
         values: {
-          title: "Мои Ценности",
+          title: "Мои Принципы Работы",
           items: [
             {
               title: "Качество Прежде Всего",

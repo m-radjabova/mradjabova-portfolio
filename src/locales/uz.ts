@@ -148,7 +148,7 @@
           ],
         },
         values: {
-          title: "Mening Qadriyatlarim",
+          title: "Ishdagi Prinsiplarim",
           items: [
             {
               title: "Sifat Birinchi",
