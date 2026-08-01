@@ -11,7 +11,6 @@ import {
 } from "react-icons/fa";
 import useProjects, { type Project } from "../../hooks/useProjects";
 import { localProjects, type LocalProject } from "../../data/projects";
-import projectFlowerImage from "../../assets/me/flower_for_project.png";
 
 type DisplayProject = {
   id: string;
@@ -343,12 +342,7 @@ function Projects() {
                     transition: `all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) ${index * 0.08}s`,
                   }}
                 >
-                  <img
-                    src={projectFlowerImage}
-                    alt=""
-                    aria-hidden="true"
-                    className="pointer-events-none absolute -bottom-2 right-4 z-20 hidden w-24 translate-y-[32%] opacity-55 sm:block lg:w-28 xl:w-32"
-                  />
+
 
                   {/* Top gradient border */}
                   <div className="absolute inset-x-0 top-0 z-10 h-[3px] bg-gradient-to-r from-[#d996a4] via-[#b3aad7] to-[#d397af] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
