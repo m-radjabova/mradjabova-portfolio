@@ -58,9 +58,13 @@
     },
     about: {
       heading: "Men Haqimda",
+      eyebrow: "Men haqimda",
+      yearsExp: "3+ yil",
+      fullStack: "Full-Stack",
+      webRole: "Veb ishlab chiqaruvchi va dizayner",
       scriptLine: "G'oyalarni raqamli tajribaga aylantiraman",
       intro:
-        "Men chiroyli, funksional va foydalanuvchiga qulay veb-ilovalar yaratishni yaxshi ko'radigan Full Stack Developerman. Toza kod yozish va sezilarli ta'sir beradigan silliq tajribalar yaratishga e'tibor beraman.",
+        "Men chiroyli, qulay va foydali veb-saytlar yaratishni yaxshi ko‘radigan Full Stack Developerman. Kodim tartibli va tushunarli bo‘lishiga, yaratgan saytlarim esa foydalanuvchilar uchun qulay va oson ishlatilishiga e’tibor beraman.",
       title: {
         lead: "Toza front-end tizimlari bilan",
         accent: "silliq va puxta interfeyslar yarataman",
@@ -77,7 +81,7 @@
         "Dizaynni kodga sifatli o'tkazish",
         "Kuchli vizual ierarxiya",
       ],
-      availability: "Yangi loyihalar uchun ochiqman",
+      availability: "Yangi loyihalar uchun doim tayyorman",
       tabs: {
         skills: "Ko'nikmalar",
         education: "Ta'lim",
@@ -176,6 +180,9 @@
     },
     skillsCarousel: {
       eyebrow: "Asosiy Stack",
+      mySkills: "Mening ko'nikmalarim",
+      technicalSkills: "Texnik ko'nikmalar",
+      otherSkills: "Boshqa ko'nikmalar",
       title: "Ish jarayonimni kuchaytiradigan ko'nikmalar",
       description:
         "Amaliy loyihalarda eng ko'p ishlatadigan texnologiyalarim va vositalarimning premium, eniga scroll bo'ladigan ko'rinishi.",
@@ -338,7 +345,7 @@
       location: "Manzil",
       locationValue: "Buxoro, O'zbekiston",
       availability: "Mavjudlik",
-      availabilityValue: "Yangi loyihalar uchun ochiqman",
+      availabilityValue: "Yangi loyihalar uchun doim tayyorman",
       actions: {
         openForm: "Xabar yuborish",
         hideForm: "Formani yopish",

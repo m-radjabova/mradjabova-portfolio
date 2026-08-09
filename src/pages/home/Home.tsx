@@ -114,23 +114,7 @@ function Home() {
             Muslima
           </span>
           <div className="flex items-center gap-2">
-            {/* Mobile language switcher */}
-            <div className="flex gap-1 rounded-full border border-white/30 bg-white/60 p-1">
-              {languageOptions.map((language) => (
-                <button
-                  key={language.code}
-                  type="button"
-                  onClick={() => handleLanguageChange(language.code)}
-                  className={`px-2 py-1 text-[10px] font-semibold tracking-wider rounded-full transition-all duration-300 ${
-                    currentLanguage === language.code
-                      ? "bg-gradient-to-r from-[#dba4af] to-[#b9b2de] text-white shadow-sm"
-                      : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-                  }`}
-                >
-                  {language.label}
-                </button>
-              ))}
-            </div>
+
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -280,7 +264,6 @@ function Home() {
                     type="button"
                     onClick={() => handleSectionChange(item.id)}
                     aria-label={item.label}
-                    title={item.label}
                     className={`
                       group relative cursor-pointer flex h-[2.8rem] w-[2.8rem] md:h-[3.55rem] md:w-[3.55rem] min-w-[2.8rem] md:min-w-[3.55rem] items-center justify-center
                       rounded-[1.2rem] md:rounded-[1.55rem] transition-all duration-300
@@ -308,27 +291,6 @@ function Home() {
                       {item.icon}
                     </span>
 
-                    {/* Tooltip - only on lg+ */}
-                    <span
-                      className="
-                        absolute -left-1 top-1/2 -translate-x-full -translate-y-1/2
-                        px-3 py-1.5 rounded-xl text-xs font-semibold
-                        whitespace-nowrap
-                        bg-[rgba(247,238,243,0.96)]
-                        border border-[rgba(255,255,255,0.55)]
-                        text-[var(--text-primary)]
-                        shadow-[0_8px_24px_rgba(170,155,194,0.12)]
-                        backdrop-blur-xl
-                        opacity-0 -translate-x-8
-                        transition-all duration-300
-                        group-hover:opacity-100 group-hover:-translate-x-[calc(100%+12px)]
-                        pointer-events-none
-                        hidden lg:block
-                      "
-                    >
-                      {item.label}
-                    </span>
-
                     {/* Active indicator */}
                     {isActive && (
                       <span className="absolute -bottom-1 left-1/2 h-1.5 w-1.5 md:h-2 md:w-2 -translate-x-1/2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.65)]" />
@@ -350,7 +312,6 @@ function Home() {
                     href={item.href}
                     target="_blank"
                     rel="noreferrer"
-                    title={item.label}
                     aria-label={item.label}
                     className={`
                       flex h-7 w-7 md:h-9 md:w-9 items-center justify-center

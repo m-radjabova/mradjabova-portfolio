@@ -32,35 +32,24 @@ type ProjectShowcaseCardProps = {
 function ProjectActionButton({ action }: { action: ProjectAction }) {
   const isPrimary = action.variant === "primary";
 
-  const baseClasses = `group/action relative inline-flex min-h-[3.2rem] flex-1 items-center justify-center gap-2.5 overflow-hidden rounded-[0.85rem] px-5 text-sm font-bold tracking-[-0.01em] transition-all duration-400 ease-out lg:flex-none lg:px-6 ${
+  const baseClasses = `group/action relative inline-flex min-h-[2.9rem] flex-1 items-center justify-center gap-2 overflow-hidden rounded-xl px-5 text-sm font-semibold tracking-[-0.01em] transition-all duration-300 ease-out lg:flex-none lg:px-6 ${
     isPrimary
-      ? "text-white"
-      : "text-[var(--text-primary)]/90 border border-[var(--border-soft)]/40 bg-white/5 backdrop-blur-sm"
+      ? "text-white shadow-[0_8px_24px_-8px_var(--accent-primary)]"
+      : "border border-[var(--border-soft)]/50 bg-white/[0.03] text-[var(--text-primary)]/85"
   }`;
 
   const hoverClasses = isPrimary
-    ? "hover:scale-[1.03] hover:shadow-2xl hover:shadow-[var(--accent-primary)]/30 active:scale-[0.97]"
-    : "hover:scale-[1.03] hover:border-[var(--accent-primary)]/25 hover:bg-white/10 hover:text-[var(--accent-primary)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] active:scale-[0.97]";
+    ? "hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-8px_var(--accent-primary)] active:translate-y-0"
+    : "hover:-translate-y-0.5 hover:border-[var(--accent-primary)]/30 hover:bg-white/[0.06] hover:text-[var(--accent-primary)] active:translate-y-0";
 
   const buttonContent = (
     <>
       {isPrimary && (
-        <span className="absolute inset-0 rounded-[inherit] bg-gradient-to-br from-[var(--accent-primary)] via-[var(--accent-primary)] to-[var(--accent-secondary)]" />
+        <span className="absolute inset-0 rounded-[inherit] bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)]" />
       )}
-      <span className={`absolute inset-0 rounded-[inherit] transition-all duration-400 ${
-        isPrimary
-          ? "bg-gradient-to-br from-white/0 via-white/0 to-white/[0.08] opacity-0 group-hover/action:opacity-100"
-          : "bg-gradient-to-br from-white/[0.04] to-transparent opacity-0 group-hover/action:opacity-100"
-      }`} />
-      <span className={`absolute inset-0 -translate-x-full skew-x-[-15deg] bg-gradient-to-r from-transparent ${
-        isPrimary ? "via-white/20" : "via-white/8"
-      } to-transparent transition-transform duration-[800ms] group-hover/action:translate-x-full`} />
-      <span className={`absolute -inset-[1.5px] rounded-[inherit] blur-md transition-all duration-500 ${
-        isPrimary
-          ? "bg-gradient-to-r from-[var(--accent-primary)]/30 to-[var(--accent-secondary)]/30 opacity-0 group-hover/action:opacity-100"
-          : "bg-gradient-to-r from-[var(--accent-primary)]/10 to-[var(--accent-secondary)]/10 opacity-0 group-hover/action:opacity-80"
-      }`} aria-hidden="true" />
-      <span className="relative z-10 transition-all duration-300 group-hover/action:translate-x-0.5 group-hover/action:scale-110">{action.icon}</span>
+      <span className="relative z-10 text-[0.85em] transition-transform duration-300 group-hover/action:translate-x-0.5">
+        {action.icon}
+      </span>
       <span className="relative z-10">{action.label}</span>
     </>
   );
@@ -100,53 +89,48 @@ function ProjectShowcaseCard({
 }: ProjectShowcaseCardProps) {
   const { t } = useTranslation();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const cardRef = useRef<HTMLElement>(null);
+  const closeTimerRef = useRef<number | null>(null);
 
-  /* ── Lock scroll & close on Escape ── */
+  const openDetails = () => {
+    setIsClosing(false);
+    setIsDetailsOpen(true);
+  };
+
+  const closeDetails = () => {
+    if (!isDetailsOpen || isClosing) return;
+    setIsClosing(true);
+    closeTimerRef.current = window.setTimeout(() => {
+      setIsDetailsOpen(false);
+      setIsClosing(false);
+    }, 220);
+  };
+
   useEffect(() => {
     if (!isDetailsOpen) return undefined;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsDetailsOpen(false);
+      if (event.key === "Escape") closeDetails();
     };
     window.addEventListener("keydown", handleEscape);
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleEscape);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDetailsOpen]);
 
-  /* ── 3D Parallax tilt on hover ── */
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = cardRef.current;
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width;
-    const y = (e.clientY - rect.top) / rect.height;
-    card.style.setProperty("--mx", `${(x - 0.5) * 4}deg`);
-    card.style.setProperty("--my", `${(y - 0.5) * -3}deg`);
-  };
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    const card = cardRef.current;
-    if (card) {
-      card.style.setProperty("--mx", "0deg");
-      card.style.setProperty("--my", "0deg");
-    }
-    setIsHovered(false);
-  };
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current !== null) window.clearTimeout(closeTimerRef.current);
+    };
+  }, []);
 
   /* ── Image area ── */
   const imageContent = (
     <div className="relative h-full w-full overflow-hidden rounded-xl">
-      {/* Skeleton shimmer */}
       {!imageLoaded && (
         <div className="absolute inset-0 z-10 animate-pulse bg-gradient-to-br from-white/[0.08] via-white/[0.02] to-white/[0.08]" />
       )}
@@ -156,56 +140,35 @@ function ProjectShowcaseCard({
         alt={imageAlt}
         loading="lazy"
         onLoad={() => setImageLoaded(true)}
-        className={`h-56 w-full object-cover object-top transition-all duration-700 sm:h-64 lg:h-full lg:min-h-[22rem] ${
+        className={`h-56 w-full object-cover object-top transition-[opacity,transform] duration-700 sm:h-64 lg:h-full lg:min-h-[22rem] ${
           imageLoaded ? "opacity-100" : "opacity-0"
-        } ${isHovered ? "scale-105" : "scale-100"}`}
+        } group-hover:scale-[1.04]`}
       />
 
-      {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[rgba(5,10,24,0.88)] via-[rgba(5,10,24,0.15)] to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[rgba(5,10,24,0.3)] to-transparent opacity-30" />
-
-      {/* Top edge light */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-
-      {/* Hover glow */}
-      <div
-        className={`absolute inset-0 rounded-xl transition-opacity duration-500 ${
-          isHovered ? "opacity-100" : "opacity-0"
-        }`}
-        style={{
-          boxShadow: "inset 0 0 50px rgba(168,85,247,0.08), inset 0 0 100px rgba(255,107,154,0.04)",
-        }}
-      />
+      <div className="absolute inset-0 bg-gradient-to-t from-[rgba(5,10,24,0.85)] via-[rgba(5,10,24,0.1)] to-transparent" />
 
       {/* Badge */}
-      <div className="absolute left-3 top-3 z-20 flex max-w-[calc(100%-1.5rem)] items-center gap-2.5 rounded-xl border border-white/55 bg-[rgba(255,251,252,0.62)] px-3.5 py-2 text-[11px] font-semibold text-[var(--text-primary)] backdrop-blur-xl transition-all duration-300 hover:bg-[rgba(255,255,255,0.8)] hover:border-white/70 sm:left-4 sm:top-4">
-        <span
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-white/12 text-sm shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all duration-300"
-          style={badgeAccent ? { color: badgeAccent } : undefined}
-        >
+      <div className="absolute left-3 top-3 z-20 inline-flex max-w-[calc(100%-1.5rem)] items-center gap-2 rounded-lg border border-white/15 bg-black/35 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur-md sm:left-4 sm:top-4">
+        <span className="text-[0.9em]" style={badgeAccent ? { color: badgeAccent } : undefined}>
           {badgeIcon}
         </span>
-        <span className="truncate uppercase tracking-[0.16em] text-[var(--text-secondary)]">{badge}</span>
+        <span className="truncate">{badge}</span>
       </div>
 
-      {/* Bottom tech tags + stats */}
-      <div className="absolute bottom-3 left-3 right-3 z-20 flex flex-col items-start gap-2 sm:bottom-4 sm:left-4 sm:right-4">
-        <div className="flex max-w-full flex-wrap gap-1.5">
-          {technologies.slice(0, 3).map((tech) => (
-            <span
-              key={tech}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-white/45 bg-[rgba(255,255,255,0.45)] px-2.5 py-1 text-[10px] font-medium text-[var(--text-primary)] backdrop-blur-xl transition-all duration-200 hover:bg-[rgba(255,255,255,0.72)] hover:border-white/70"
-            >
-              {techIcons[tech.toLowerCase()] || badgeIcon}
-              <span>{tech}</span>
-            </span>
-          ))}
-        </div>
-
+      {/* Bottom tech tags */}
+      <div className="absolute bottom-3 left-3 right-3 z-20 flex flex-wrap gap-1.5 sm:bottom-4 sm:left-4 sm:right-4">
+        {technologies.slice(0, 3).map((tech) => (
+          <span
+            key={tech}
+            className="inline-flex items-center gap-1.5 rounded-md border border-white/15 bg-black/35 px-2.5 py-1 text-[10px] font-medium text-white backdrop-blur-md"
+          >
+            {techIcons[tech.toLowerCase()] || badgeIcon}
+            <span>{tech}</span>
+          </span>
+        ))}
         {stats && (
-          <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/40 bg-[rgba(255,248,250,0.55)] px-2.5 py-1 text-[10px] font-medium tracking-[0.12em] text-[var(--text-secondary)] backdrop-blur-xl">
-            <FaStar className="text-[9px] text-yellow-300/80" />
+          <span className="ml-auto inline-flex items-center gap-1.5 rounded-md border border-white/15 bg-black/35 px-2.5 py-1 text-[10px] font-medium text-white backdrop-blur-md">
+            <FaStar className="text-[9px] text-amber-300" />
             {stats}
           </span>
         )}
@@ -214,29 +177,14 @@ function ProjectShowcaseCard({
   );
 
   return (
-    <article
-      ref={cardRef}
-      className="project-card group"
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      style={
-        {
-          "--mx": "0deg",
-          "--my": "0deg",
-          perspective: "1100px",
-          transform: "rotateY(var(--mx)) rotateX(var(--my))",
-          transformStyle: "preserve-3d",
-        } as React.CSSProperties
-      }
-    >
+    <article className="project-card group">
       <div className="project-card-glow" aria-hidden="true" />
       <div className="project-card-shine" aria-hidden="true" />
 
       <div className="flex flex-col lg:flex-row lg:items-stretch">
         {/* ── Image Column ── */}
         <div className="relative lg:w-[40%] lg:min-w-[18rem] xl:w-[38%]">
-          <div className="p-3 pb-0 lg:p-3 lg:pb-0 lg:h-full">
+          <div className="p-3 pb-0 lg:h-full lg:p-3 lg:pb-0">
             {previewHref ? (
               <a href={previewHref} target="_blank" rel="noopener noreferrer" className="block h-full">
                 {imageContent}
@@ -249,37 +197,21 @@ function ProjectShowcaseCard({
 
         {/* ── Content Column ── */}
         <div className="flex flex-1 flex-col gap-4 px-5 pb-5 pt-4 sm:px-6 sm:pb-6 lg:px-6 lg:py-5">
-          <div className="flex flex-1 flex-col gap-4">
-            {/* Badge + Stats row */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/8 bg-white/[0.03] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-secondary)]/80">
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--accent-primary)]/60" />
-                {badge}
-              </span>
-              {stats && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--accent-secondary)]/12 bg-[var(--accent-secondary)]/6 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--accent-secondary)]">
-                  <FaStar className="text-[9px]" />
-                  {stats}
-                </span>
-              )}
-            </div>
-
+          <div className="flex flex-1 flex-col gap-3.5">
             {/* Title */}
-            <h4 className="max-w-[20ch] text-[1.6rem] font-extrabold leading-[1.05] tracking-[-0.03em] text-[var(--text-primary)] transition-all duration-300 group-hover:text-[var(--accent-primary)] sm:text-[1.9rem]">
+            <h4 className="max-w-[22ch] text-[1.5rem] font-extrabold leading-[1.08] tracking-[-0.02em] text-[var(--text-primary)] transition-colors duration-300 group-hover:text-[var(--accent-primary)] sm:text-[1.8rem]">
               {title}
             </h4>
 
             {/* Short description */}
-            <p className="max-w-2xl text-sm leading-7 text-[var(--text-secondary)]/80 sm:text-[14px]">
-              {shortDescription}
-            </p>
+            <p className="max-w-2xl text-sm leading-7 text-[var(--text-secondary)]/80">{shortDescription}</p>
 
             {/* Tech pills */}
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {technologies.slice(0, 5).map((tech) => (
                 <span
                   key={tech}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/8 bg-white/[0.04] px-3 py-1.5 text-[11px] font-semibold text-[var(--text-primary)]/90 backdrop-blur-lg transition-all duration-200 hover:border-[var(--accent-primary)]/20 hover:bg-white/[0.07]"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/8 bg-white/[0.03] px-2.5 py-1.5 text-[11px] font-semibold text-[var(--text-primary)]/85"
                 >
                   {techIcons[tech.toLowerCase()] || badgeIcon}
                   <span>{tech}</span>
@@ -287,29 +219,15 @@ function ProjectShowcaseCard({
               ))}
             </div>
 
-            {/* Details expander */}
-            <div className="group/expand relative overflow-hidden rounded-[1.1rem] border border-white/6 bg-gradient-to-br from-white/[0.02] to-white/[0.01] p-4 backdrop-blur-lg transition-all duration-300 hover:border-[var(--accent-primary)]/12 hover:bg-white/[0.04] hover:shadow-[0_4px_20px_rgba(0,0,0,0.04)] sm:p-4">
-              {/* Gradient accent line */}
-              <div className="absolute top-0 left-3 right-3 h-px bg-gradient-to-r from-transparent via-[var(--accent-primary)]/20 to-transparent opacity-0 transition-opacity duration-300 group-hover/expand:opacity-100" />
-              
-              <button
-                type="button"
-                onClick={() => setIsDetailsOpen(true)}
-                className="group/btn inline-flex cursor-pointer items-center gap-2.5 text-sm font-semibold transition-all duration-300"
-              >
-                <span className="relative inline-flex items-center gap-2 text-[var(--accent-secondary)] group-hover/btn:text-[var(--accent-primary)] transition-colors duration-300">
-                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-[var(--accent-secondary)]/12 bg-[var(--accent-secondary)]/6 text-[10px] transition-all duration-300 group-hover/btn:bg-[var(--accent-primary)]/6 group-hover/btn:border-[var(--accent-primary)]/12">
-                    <FaChevronDown className="text-[9px] transition-all duration-300 group-hover/btn:translate-y-0.5" />
-                  </span>
-                  <span>{t("projects.actions.showDescription")}</span>
-                </span>
-                {/* Animated underline */}
-                <span className="h-px flex-1 max-w-[40px] bg-gradient-to-r from-[var(--accent-secondary)]/30 to-transparent transition-all duration-300 group-hover/btn:max-w-[60px] group-hover/btn:from-[var(--accent-primary)]/40" />
-              </button>
-              <p className="mt-2.5 text-sm leading-7 text-[var(--text-secondary)]/70 line-clamp-2 pl-[2.25rem]">
-                {description}
-              </p>
-            </div>
+            {/* Details toggle — quiet, single-purpose control */}
+            <button
+              type="button"
+              onClick={openDetails}
+              className="group/btn inline-flex w-fit items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--accent-secondary)] transition-colors duration-200 hover:text-[var(--accent-primary)]"
+            >
+              {t("projects.actions.showDescription")}
+              <FaChevronDown className="text-[9px] transition-transform duration-300 group-hover/btn:translate-y-0.5" />
+            </button>
           </div>
 
           {/* ── Actions Footer ── */}
@@ -320,15 +238,14 @@ function ProjectShowcaseCard({
               ))}
             </div>
 
-            {/* Bottom bar */}
-            <div className="flex items-center justify-between border-t border-white/6 pt-3 text-[10px] uppercase tracking-[0.16em] text-[var(--text-secondary)]/60">
+            <div className="flex items-center justify-between border-t border-white/6 pt-3 text-[10px] uppercase tracking-[0.14em] text-[var(--text-secondary)]/55">
               <span className="flex items-center gap-1.5">
                 <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--accent-primary)]/50" />
                 {badge}
               </span>
               <span className="inline-flex items-center gap-1.5 text-[var(--accent-tertiary)] transition-all duration-200 group-hover:gap-2.5">
                 {t("projects.actions.openPage")}
-                <FaArrowRight className="text-[10px] transition-all duration-200 group-hover:translate-x-1" />
+                <FaArrowRight className="text-[10px] transition-transform duration-200 group-hover:translate-x-1" />
               </span>
             </div>
           </div>
@@ -339,40 +256,39 @@ function ProjectShowcaseCard({
       {isDetailsOpen &&
         createPortal(
           <div
-            className="fixed inset-0 z-[120] flex items-end justify-center bg-[rgba(214,198,224,0.42)] px-4 pb-4 pt-16 backdrop-blur-xl sm:items-center sm:p-6 animate-[fade-up_0.35s_ease-out_both]"
-            onClick={() => setIsDetailsOpen(false)}
+            className={`fixed inset-0 z-[120] flex items-end justify-center bg-[rgba(20,14,26,0.55)] px-4 pb-4 pt-16 backdrop-blur-sm sm:items-center sm:p-6 ${
+              isClosing ? "project-overlay-out" : "project-overlay-in"
+            }`}
+            onClick={closeDetails}
           >
             <div
-              className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-white/60 bg-[rgba(255,250,251,0.92)] shadow-[0_40px_120px_rgba(175,160,197,0.28)] backdrop-blur-2xl"
+              className={`relative max-h-[92vh] w-full max-w-2xl overflow-hidden overflow-y-auto rounded-2xl border border-white/10 bg-[#0d0a16] shadow-[0_40px_120px_-20px_rgba(0,0,0,0.6)] ${
+                isClosing ? "project-modal-out" : "project-modal-in"
+              }`}
               onClick={(event) => event.stopPropagation()}
             >
               {/* Top gradient bar */}
-              <div className="relative h-1 w-full overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-[var(--accent-primary)] via-[var(--accent-secondary)] to-[var(--accent-tertiary)]" />
-                <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-              </div>
+              <div className="h-1 w-full bg-gradient-to-r from-[var(--accent-primary)] via-[var(--accent-secondary)] to-[var(--accent-tertiary)]" />
 
               {/* Header */}
               <div className="flex items-start justify-between gap-4 border-b border-white/8 px-5 pb-4 pt-4 sm:px-7">
-                <div className="space-y-2.5">
-                  <div className="inline-flex items-center gap-2.5 rounded-xl border border-white/8 bg-white/6 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-secondary)]">
-                    <span
-                      className="inline-flex h-6 w-6 items-center justify-center rounded-lg border border-white/8 bg-white/8 text-xs"
-                      style={badgeAccent ? { color: badgeAccent } : undefined}
-                    >
+                <div className="space-y-2">
+                  <div className="inline-flex items-center gap-2 rounded-lg border border-white/8 bg-white/[0.04] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--text-secondary)]">
+                    <span className="text-[0.9em]" style={badgeAccent ? { color: badgeAccent } : undefined}>
                       {badgeIcon}
                     </span>
                     <span>{badge}</span>
                   </div>
-                  <h5 className="text-xl font-extrabold tracking-[-0.03em] text-[var(--text-primary)] sm:text-2xl">
+                  <h5 className="text-xl font-extrabold tracking-[-0.02em] text-[var(--text-primary)] sm:text-2xl">
                     {title}
                   </h5>
                 </div>
 
                 <button
                   type="button"
-                  onClick={() => setIsDetailsOpen(false)}
-                  className="inline-flex cursor-pointer h-10 min-w-10 items-center justify-center rounded-xl border border-white/8 bg-white/6 px-3 text-sm font-semibold text-[var(--text-primary)] transition-all duration-200 hover:border-[var(--accent-primary)]/25 hover:bg-white/10 hover:text-[var(--accent-primary)] hover:rotate-90"
+                  onClick={closeDetails}
+                  aria-label="Close"
+                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/8 bg-white/[0.04] text-sm text-[var(--text-primary)] transition-all duration-200 hover:border-[var(--accent-primary)]/25 hover:bg-white/[0.08] hover:text-[var(--accent-primary)]"
                 >
                   <FaTimes className="text-sm" />
                 </button>
@@ -380,29 +296,21 @@ function ProjectShowcaseCard({
 
               {/* Body */}
               <div className="space-y-5 px-5 py-4 sm:px-7 sm:py-5">
-                {/* Image preview */}
-                <div className="overflow-hidden rounded-xl border border-white/6 shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
-                  <img
-                    src={image}
-                    alt={imageAlt}
-                    className="w-full object-cover object-top max-h-48 transition-transform duration-500 hover:scale-[1.03]"
-                  />
+                <div className="overflow-hidden rounded-xl border border-white/8">
+                  <img src={image} alt={imageAlt} className="max-h-48 w-full object-cover object-top" />
                 </div>
 
-                <p className="text-sm leading-7 text-[var(--text-secondary)]/85 sm:text-[15px]">
-                  {description}
-                </p>
+                <p className="text-sm leading-7 text-[var(--text-secondary)]/85 sm:text-[15px]">{description}</p>
 
-                {/* Tech pills */}
                 <div>
-                  <p className="mb-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
+                  <p className="mb-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">
                     Technologies
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-white/8 bg-white/5 px-3 py-1.5 text-[11px] font-semibold text-[var(--text-primary)] transition-all duration-200 hover:bg-white/10 hover:border-white/14"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-white/8 bg-white/[0.03] px-3 py-1.5 text-[11px] font-semibold text-[var(--text-primary)]"
                       >
                         {techIcons[tech.toLowerCase()] || badgeIcon}
                         <span>{tech}</span>
@@ -411,8 +319,7 @@ function ProjectShowcaseCard({
                   </div>
                 </div>
 
-                {/* Actions */}
-                <div className="flex flex-col gap-2.5 border-t border-white/6 pt-4 sm:flex-row">
+                <div className="flex flex-col gap-2.5 border-t border-white/8 pt-4 sm:flex-row">
                   {actions.map((action) => (
                     <ProjectActionButton key={`modal-${action.label}`} action={action} />
                   ))}
@@ -420,7 +327,7 @@ function ProjectShowcaseCard({
               </div>
             </div>
           </div>,
-          document.body
+          document.body,
         )}
     </article>
   );
