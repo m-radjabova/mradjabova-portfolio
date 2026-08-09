@@ -58,6 +58,10 @@
     },
     about: {
       heading: "About Me",
+      eyebrow: "About",
+      yearsExp: "3+ years",
+      fullStack: "Full-Stack",
+      webRole: "Web Developer & Designer",
       scriptLine: "Turning ideas into digital experiences",
       intro:
         "I'm a passionate Full Stack Developer who loves building beautiful, functional and user-friendly web applications. I focus on writing clean code and creating seamless experiences that make an impact.",
@@ -176,6 +180,9 @@
     },
     skillsCarousel: {
       eyebrow: "Core Stack",
+      mySkills: "My Skills",
+      technicalSkills: "Technical Skills",
+      otherSkills: "Other Skills",
       title: "Skills that keep my workflow moving",
       description:
         "A premium scrollable wall of the tools and technologies I use most often in production work.",

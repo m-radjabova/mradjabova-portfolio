@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaDownload, FaEye, FaFilePdf, FaFileWord, FaQuoteRight } from "react-icons/fa";
 import { SiGoogledocs } from "react-icons/si";
@@ -9,11 +9,50 @@ type ResumeSectionProps = {
   standalone?: boolean;
 };
 
+/* ---------- Kursorni kuzatuvchi yumshoq "spotlight" (faqat transform/opacity) ---------- */
+function useSpotlight<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+  const onMouseMove = useCallback((e: React.MouseEvent<T>) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+    el.style.setProperty("--my", `${e.clientY - rect.top}px`);
+  }, []);
+  return { ref, onMouseMove };
+}
+
+/* ---------- Preview panelga yengil 3D-tilt (faqat transform, GPU-safe) ---------- */
+function useTilt<T extends HTMLElement>(maxDeg = 4) {
+  const ref = useRef<T>(null);
+  const onMouseMove = useCallback(
+    (e: React.MouseEvent<T>) => {
+      const el = ref.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      el.style.transform = `perspective(1200px) rotateX(${-py * maxDeg}deg) rotateY(${px * maxDeg}deg)`;
+    },
+    [maxDeg],
+  );
+  const onMouseLeave = useCallback(() => {
+    const el = ref.current;
+    if (el) el.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg)";
+  }, []);
+  return { ref, onMouseMove, onMouseLeave };
+}
+
 function ResumeSection({ standalone = false }: ResumeSectionProps) {
   const { t, i18n } = useTranslation();
   const [downloading, setDownloading] = useState<"pdf" | "word" | null>(null);
   const [hoveredPreview, setHoveredPreview] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+
+  const cardSpotlight = useSpotlight<HTMLDivElement>();
+  const previewTilt = useTilt<HTMLDivElement>(3);
+  const pdfBtn = useSpotlight<HTMLButtonElement>();
+  const wordBtn = useSpotlight<HTMLButtonElement>();
 
   const selectedLanguage = (i18n.language.slice(0, 2) in resumeAssets
     ? i18n.language.slice(0, 2)
@@ -74,9 +113,8 @@ function ResumeSection({ standalone = false }: ResumeSectionProps) {
         standalone ? "pb-8 pt-16 sm:pt-20" : "pb-8 pt-6 sm:pb-10 sm:pt-8"
       } lg:px-8`}
     >
-      {/* ===== Decorative background elements ===== */}
+      {/* ===== Fon dekoratsiyalari ===== */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        {/* Floating orbs - fewer on mobile */}
         <div className="absolute left-[6%] top-[12%] h-3 w-3 sm:h-4 sm:w-4 rounded-full bg-[#c18fa0]/20 animate-float" />
         <div className="hidden sm:block absolute right-[10%] top-[25%] h-3 w-3 rounded-full bg-[#b3aad7]/25 animate-float-delayed" />
         <div className="absolute left-[18%] bottom-[20%] h-3 w-3 sm:h-5 sm:w-5 rounded-full bg-[#c18fa0]/15 animate-float" style={{ animationDelay: "0.8s" }} />
@@ -84,12 +122,10 @@ function ResumeSection({ standalone = false }: ResumeSectionProps) {
         <div className="absolute left-[55%] top-[8%] h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-[#d996a4]/25 animate-float" style={{ animationDelay: "1.5s" }} />
         <div className="hidden sm:block absolute right-[35%] top-[45%] h-3.5 w-3.5 rounded-full bg-[#b3aad7]/15 animate-float" style={{ animationDelay: "2s" }} />
 
-        {/* Elegant ring decorations - smaller on mobile */}
         <div className="absolute -left-16 -top-16 h-40 w-40 sm:h-60 sm:w-60 rounded-full border border-[#c18fa0]/8 animate-spin-slow" />
         <div className="hidden sm:block absolute -right-24 -bottom-24 h-72 w-72 rounded-full border border-[#b3aad7]/6 animate-spin-slow" style={{ animationDirection: "reverse" }} />
         <div className="absolute left-[35%] -top-28 h-48 w-48 sm:h-80 sm:w-80 rounded-full border border-[#c18fa0]/5 animate-spin-slow" style={{ animationDuration: "25s" }} />
 
-        {/* Sparkle effects - fewer on mobile */}
         <div className="absolute left-[15%] top-[35%] text-[10px] sm:text-xs text-[#c18fa0]/25 animate-twinkle-soft select-none">✦</div>
         <div className="hidden sm:block absolute right-[18%] top-[50%] text-sm text-[#b3aad7]/20 animate-twinkle-soft select-none" style={{ animationDelay: "1s" }}>✦</div>
         <div className="absolute left-[65%] bottom-[40%] text-[8px] sm:text-[10px] text-[#d996a4]/25 animate-twinkle-soft select-none" style={{ animationDelay: "0.5s" }}>✦</div>
@@ -97,7 +133,7 @@ function ResumeSection({ standalone = false }: ResumeSectionProps) {
       </div>
 
       <div className="mx-auto max-w-7xl">
-        {/* ===== Section header ===== */}
+        {/* ===== Sarlavha ===== */}
         <div className="mb-6 sm:mb-8 text-center stagger-item opacity-0">
           <div className="inline-flex items-center gap-2 sm:gap-3 rounded-full border border-[#c18fa0]/20 bg-white/40 px-4 sm:px-5 py-1.5 sm:py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.3em] sm:tracking-[0.35em] text-[#7d719e] shadow-lg shadow-[#8c83aa]/6 backdrop-blur-md">
             <span className="inline-flex h-1 w-1 sm:h-1.5 sm:w-1.5 rounded-full bg-[#c18fa0] animate-pulse" />
@@ -112,24 +148,31 @@ function ResumeSection({ standalone = false }: ResumeSectionProps) {
           </div>
         </div>
 
-        {/* ===== Main card ===== */}
-        <div className="relative overflow-hidden rounded-[1.8rem] sm:rounded-[2.75rem] border border-white/70 bg-[rgba(255,251,249,0.75)] shadow-[0_30px_80px_rgba(189,173,209,0.12)] backdrop-blur-2xl transition-all duration-500 hover:shadow-[0_40px_100px_rgba(189,173,209,0.18)]">
-          {/* Subtle gradient overlay */}
-          <div className="pointer-events-none absolute inset-0 rounded-[1.8rem] sm:rounded-[2.75rem] bg-gradient-to-br from-[#c18fa0]/3 via-transparent to-[#b3aad7]/5" />
-
-          {/* Animated gradient border line at top */}
+        {/* ===== Asosiy karta ===== */}
+        <div
+          ref={cardSpotlight.ref}
+          onMouseMove={cardSpotlight.onMouseMove}
+          className="group relative overflow-hidden rounded-[1.8rem] sm:rounded-[2.75rem] border border-white/70 bg-[rgba(255,251,249,0.75)] shadow-[0_30px_80px_rgba(189,173,209,0.12)] backdrop-blur-2xl transition-all duration-500 hover:shadow-[0_40px_100px_rgba(189,173,209,0.18)]"
+        >
+          {/* Kursorga ergashuvchi ambient yorug'lik */}
           <div
-            className="h-[2px] w-full bg-gradient-to-r from-transparent via-[#c18fa0]/40 to-transparent"
+            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
             style={{
-              backgroundSize: "200% 100%",
-              animation: "shimmer-text 3s ease-in-out infinite",
+              background:
+                "radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(193,143,160,0.06), transparent 70%)",
             }}
           />
 
+          <div className="pointer-events-none absolute inset-0 rounded-[1.8rem] sm:rounded-[2.75rem] bg-gradient-to-br from-[#c18fa0]/3 via-transparent to-[#b3aad7]/5" />
+
+          <div
+            className="h-[2px] w-full bg-gradient-to-r from-transparent via-[#c18fa0]/40 to-transparent"
+            style={{ backgroundSize: "200% 100%", animation: "shimmer-text 3s ease-in-out infinite" }}
+          />
+
           <div className="relative grid gap-0 lg:grid-cols-[0.82fr_1.18fr]">
-            {/* ===== LEFT PANEL – Download options ===== */}
+            {/* ===== CHAP PANEL — Yuklab olish ===== */}
             <div className="relative border-b border-[rgba(190,181,212,0.15)] px-4 sm:px-5 py-5 sm:py-6 lg:border-b-0 lg:border-r">
-              {/* Decorative quote icon */}
               <div className="absolute -top-2 -left-2 text-3xl sm:text-5xl text-[#c18fa0]/8 select-none leading-none">
                 <FaQuoteRight className="rotate-180" />
               </div>
@@ -145,7 +188,6 @@ function ResumeSection({ standalone = false }: ResumeSectionProps) {
                   {t("resume.description")}
                 </p>
 
-                {/* Decorative divider */}
                 <div className="my-5 sm:my-7 flex items-center gap-3 sm:gap-4 stagger-item opacity-0">
                   <div className="h-px flex-1 bg-gradient-to-r from-[#c18fa0]/20 to-transparent" />
                   <div className="flex gap-1.5 sm:gap-2">
@@ -156,46 +198,66 @@ function ResumeSection({ standalone = false }: ResumeSectionProps) {
                   <div className="h-px flex-1 bg-gradient-to-l from-[#b3aad7]/20 to-transparent" />
                 </div>
 
-                {/* Download buttons */}
+                {/* Yuklab olish tugmalari — spotlight bilan */}
                 <div className="grid gap-2 sm:gap-3 sm:grid-cols-2 stagger-item opacity-0">
                   <button
+                    ref={pdfBtn.ref}
+                    onMouseMove={pdfBtn.onMouseMove}
                     type="button"
                     onClick={handlePdfDownload}
                     disabled={downloading !== null}
-                    className="group relative inline-flex min-h-10 sm:min-h-12 items-center justify-center gap-2 sm:gap-3 overflow-hidden rounded-full bg-gradient-to-r from-[#c18fa0] to-[#b3aad7] px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white shadow-[0_12px_28px_rgba(193,143,160,0.28)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(193,143,160,0.4)] disabled:opacity-70"
+                    className="group/btn relative inline-flex min-h-10 sm:min-h-12 items-center justify-center gap-2 sm:gap-3 overflow-hidden rounded-full bg-gradient-to-r from-[#c18fa0] to-[#b3aad7] px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white shadow-[0_12px_28px_rgba(193,143,160,0.28)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(193,143,160,0.4)] disabled:opacity-70"
                   >
-                    <span className="absolute inset-0 translate-x-[-100%] skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-[100%]" />
-                    <FaFilePdf className="relative" />
+                    <span className="absolute inset-0 translate-x-[-100%] skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover/btn:translate-x-[100%]" />
+                    <span
+                      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover/btn:opacity-100"
+                      style={{ background: "radial-gradient(100px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.3), transparent 70%)" }}
+                    />
+                    {downloading === "pdf" ? (
+                      <span className="relative h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                    ) : (
+                      <FaFilePdf className="relative" />
+                    )}
                     <span className="relative">
                       {downloading === "pdf" ? t("resume.downloadPreparing") : t("resume.downloadPdf")}
                     </span>
                   </button>
                   <button
+                    ref={wordBtn.ref}
+                    onMouseMove={wordBtn.onMouseMove}
                     type="button"
                     onClick={handleWordDownload}
                     disabled={downloading !== null}
-                    className="group relative inline-flex min-h-10 sm:min-h-12 items-center justify-center gap-2 sm:gap-3 overflow-hidden rounded-full border border-white/35 bg-white/60 px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-[var(--lavender-strong)] shadow-[0_8px_24px_rgba(193,143,160,0.12)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#c18fa0]/35 hover:shadow-[0_12px_32px_rgba(193,143,160,0.2)] disabled:opacity-70"
+                    className="group/btn relative inline-flex min-h-10 sm:min-h-12 items-center justify-center gap-2 sm:gap-3 overflow-hidden rounded-full border border-white/35 bg-white/60 px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-[var(--lavender-strong)] shadow-[0_8px_24px_rgba(193,143,160,0.12)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#c18fa0]/35 hover:shadow-[0_12px_32px_rgba(193,143,160,0.2)] disabled:opacity-70"
                   >
-                    <span className="absolute inset-0 translate-x-[-100%] skew-x-[-20deg] bg-gradient-to-r from-transparent via-[#c18fa0]/10 to-transparent transition-transform duration-500 group-hover:translate-x-[100%]" />
-                    <FaFileWord className="relative" />
+                    <span className="absolute inset-0 translate-x-[-100%] skew-x-[-20deg] bg-gradient-to-r from-transparent via-[#c18fa0]/10 to-transparent transition-transform duration-500 group-hover/btn:translate-x-[100%]" />
+                    <span
+                      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover/btn:opacity-100"
+                      style={{ background: "radial-gradient(100px circle at var(--mx,50%) var(--my,50%), rgba(193,143,160,0.16), transparent 70%)" }}
+                    />
+                    {downloading === "word" ? (
+                      <span className="relative h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#c18fa0]/30 border-t-[#c18fa0]" />
+                    ) : (
+                      <FaFileWord className="relative" />
+                    )}
                     <span className="relative">
                       {downloading === "word" ? t("resume.downloadPreparing") : t("resume.downloadWord")}
                     </span>
                   </button>
                 </div>
 
-                {/* Download image link */}
-                <a
+                
+                  <a
                   href={resume.image}
                   download={`${resume.fileBaseName}.png`}
-                  className="group mt-2 sm:mt-3 inline-flex w-full items-center justify-center gap-2 sm:gap-3 rounded-full border border-[rgba(190,181,212,0.2)] bg-white/40 px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-[var(--text-secondary)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#b3aad7]/30 hover:text-[var(--lavender-strong)] hover:shadow-[0_8px_24px_rgba(179,170,215,0.15)] stagger-item opacity-0"
+                  className="group/link mt-2 sm:mt-3 inline-flex w-full items-center justify-center gap-2 sm:gap-3 rounded-full border border-[rgba(190,181,212,0.2)] bg-white/40 px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-[var(--text-secondary)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#b3aad7]/30 hover:text-[var(--lavender-strong)] hover:shadow-[0_8px_24px_rgba(179,170,215,0.15)] stagger-item opacity-0"
                 >
-                  <FaDownload className="transition-transform duration-300 group-hover:translate-y-0.5" />
+                  <FaDownload className="transition-transform duration-300 group-hover/link:translate-y-0.5" />
                   {t("resume.downloadImage")}
                 </a>
 
-                {/* Language badge */}
-                <div className="mt-4 sm:mt-5 flex items-center gap-1.5 sm:gap-2 stagger-item opacity-0">
+                {/* Til belgisi — endi nozik "muhr" uslubida */}
+                <div className="mt-4 sm:mt-5 inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-[#c18fa0]/15 bg-white/30 px-3 py-1.5 stagger-item opacity-0">
                   <SiGoogledocs className="text-[var(--text-muted)]" />
                   <span className="text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.18em] sm:tracking-[0.2em] text-[var(--text-muted)]">
                     {selectedLanguage.toUpperCase()} version
@@ -204,18 +266,21 @@ function ResumeSection({ standalone = false }: ResumeSectionProps) {
               </div>
             </div>
 
-            {/* ===== RIGHT PANEL – Resume preview ===== */}
+            {/* ===== O'NG PANEL — Preview (tilt effekti bilan) ===== */}
             <div
               className="relative bg-[linear-gradient(135deg,rgba(255,250,251,0.9),rgba(248,242,250,0.95))] p-3 sm:p-4 md:p-6"
               onMouseEnter={() => setHoveredPreview(true)}
               onMouseLeave={() => setHoveredPreview(false)}
             >
               <div
-                className={`overflow-hidden rounded-[1.4rem] sm:rounded-[1.8rem] border border-white/70 bg-white/72 shadow-[0_20px_46px_rgba(177,162,201,0.12)] transition-all duration-500 ${
+                ref={previewTilt.ref}
+                onMouseMove={previewTilt.onMouseMove}
+                onMouseLeave={previewTilt.onMouseLeave}
+                className={`overflow-hidden rounded-[1.4rem] sm:rounded-[1.8rem] border border-white/70 bg-white/72 shadow-[0_20px_46px_rgba(177,162,201,0.12)] transition-shadow duration-500 will-change-transform ${
                   hoveredPreview ? "shadow-[0_28px_60px_rgba(177,162,201,0.22)]" : ""
                 }`}
+                style={{ transformStyle: "preserve-3d", transition: "transform 0.35s ease-out, box-shadow 0.5s" }}
               >
-                {/* MacOS-style window header */}
                 <div className="flex items-center justify-between border-b border-[rgba(185,177,212,0.22)] px-3 sm:px-4 py-2 sm:py-3">
                   <div className="flex items-center gap-1 sm:gap-1.5">
                     <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-rose-300 transition-all duration-300 hover:scale-125" />
@@ -231,7 +296,6 @@ function ResumeSection({ standalone = false }: ResumeSectionProps) {
                   </div>
                 </div>
 
-                {/* Preview content */}
                 <div className="p-3 sm:p-4">
                   <div className="relative overflow-hidden rounded-[1rem] sm:rounded-[1.2rem]">
                     <img
@@ -241,7 +305,6 @@ function ResumeSection({ standalone = false }: ResumeSectionProps) {
                         hoveredPreview ? "scale-[1.02]" : "scale-100"
                       }`}
                     />
-                    {/* Gradient fade at bottom */}
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 sm:h-20 bg-[linear-gradient(180deg,rgba(255,255,255,0),rgba(255,250,251,0.92))]" />
                   </div>
                   <div className="mt-3 sm:mt-4 inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/75 bg-white/75 px-3 sm:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.22em] text-[var(--lavender-strong)]">
@@ -251,7 +314,6 @@ function ResumeSection({ standalone = false }: ResumeSectionProps) {
                 </div>
               </div>
 
-              {/* Decorative subtle text at the bottom */}
               <p
                 className="mt-2 sm:mt-3 text-right text-base sm:text-lg text-[#c18fa0]/40 select-none"
                 style={{ fontFamily: "var(--font-script)" }}

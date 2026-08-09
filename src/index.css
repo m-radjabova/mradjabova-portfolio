@@ -55,6 +55,7 @@ a {
 
 button {
   font: inherit;
+  cursor: pointer;
 }
 
 * {
@@ -497,24 +498,30 @@ body::-webkit-scrollbar {
   animation: shimmer 3s ease-in-out infinite;
 }
 
-/* ── Project Showcase Card Styles ── */
+/* ── Project Showcase Card Styles ──
+   Kept deliberately quiet: one lift on hover, one soft cursor-follow glow.
+   The shine sweep is toned down so it reads as a subtle accent rather than
+   a moving highlight competing with the content. */
 .project-card {
   position: relative;
   overflow: hidden;
   border-radius: 1.6rem;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.35);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 8px 40px rgba(170, 155, 194, 0.08);
-  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 34px rgba(170, 155, 194, 0.1);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
 }
 
 .project-card:hover {
-  border-color: rgba(255, 255, 255, 0.5);
-  background: rgba(255, 255, 255, 0.55);
-  box-shadow: 0 20px 60px rgba(170, 155, 194, 0.15), 0 0 0 1px rgba(217, 150, 164, 0.1);
-  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 24px 60px -12px rgba(170, 155, 194, 0.28);
+  transform: translateY(-4px);
 }
 
 .project-card-glow {
@@ -523,8 +530,8 @@ body::-webkit-scrollbar {
   pointer-events: none;
   opacity: 0;
   background: radial-gradient(
-    600px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(217, 150, 164, 0.06) 0%,
+    560px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(217, 150, 164, 0.07) 0%,
     transparent 60%
   );
   transition: opacity 0.5s ease;
@@ -542,19 +549,78 @@ body::-webkit-scrollbar {
   opacity: 0;
   background: linear-gradient(
     105deg,
-    transparent 35%,
-    rgba(255, 255, 255, 0.15) 45%,
-    rgba(255, 255, 255, 0.04) 50%,
+    transparent 40%,
+    rgba(255, 255, 255, 0.12) 48%,
+    rgba(255, 255, 255, 0.03) 52%,
     transparent 60%
   );
-  transition: opacity 0.6s ease, transform 0.6s ease;
-  transform: translateX(-30%);
+  transition: opacity 0.6s ease, transform 0.7s ease;
+  transform: translateX(-25%);
   z-index: 2;
 }
 
 .project-card:hover .project-card-shine {
   opacity: 1;
-  transform: translateX(30%);
+  transform: translateX(25%);
+}
+
+/* ── Project Detail Modal — open/close transitions ──
+   Short and directional: overlay fades, panel rises slightly and settles.
+   Kept under 300ms so it reads as responsive rather than decorative. */
+@keyframes project-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes project-overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes project-modal-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes project-modal-out {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0) scale(0.97);
+  }
+}
+
+.project-overlay-in {
+  animation: project-overlay-in 0.22s ease-out forwards;
+}
+
+.project-overlay-out {
+  animation: project-overlay-out 0.2s ease-in forwards;
+}
+
+.project-modal-in {
+  animation: project-modal-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.project-modal-out {
+  animation: project-modal-out 0.2s ease-in forwards;
 }
 
 /* ── Hero Section Aesthetic Animations ── */
@@ -973,5 +1039,12 @@ body::-webkit-scrollbar {
 
   .project-card:hover {
     transform: none;
+  }
+
+  .project-overlay-in,
+  .project-overlay-out,
+  .project-modal-in,
+  .project-modal-out {
+    animation: none;
   }
 }
