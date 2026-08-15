@@ -632,8 +632,8 @@ const Contact = () => {
                     style={{ background: "linear-gradient(135deg,#8f87bf,#7d76a3)" }}
                   >
                     <span
-                      className="contact-shimmer pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-white/25"
-                      style={{ animation: "contact-shimmer 2.8s ease-in-out infinite" }}
+                      className=" pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-white/25"
+                     
                     />
                     {isSending ? (
                       <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
