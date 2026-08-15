@@ -103,8 +103,8 @@ function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--hero-bg)]">
-      <div className="relative h-screen overflow-hidden bg-[var(--hero-bg)]">
+    <div className="min-h-[100dvh] bg-[var(--hero-bg)]">
+      <div className="relative h-[100dvh] overflow-hidden bg-[var(--hero-bg)]">
         {/* ====== MOBILE HEADER BAR ====== */}
         <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 bg-[rgba(247,238,243,0.92)] backdrop-blur-xl border-b border-white/30 md:hidden">
           <span
@@ -114,7 +114,6 @@ function Home() {
             Muslima
           </span>
           <div className="flex items-center gap-2">
-
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -134,7 +133,7 @@ function Home() {
               : "opacity-0 pointer-events-none"
           }`}
         >
-          <div className="flex flex-col items-center justify-center h-full gap-6 px-6">
+          <div className="flex h-full flex-col items-center justify-center gap-5 overflow-y-auto px-6 py-20">
             {/* Language switcher in overlay */}
             <div className="flex gap-2 rounded-2xl border border-white/40 bg-white/60 p-2 shadow-lg">
               {languageOptions.map((language) => (
@@ -154,7 +153,7 @@ function Home() {
             </div>
 
             {/* Navigation items */}
-            <nav className="flex flex-col items-center gap-3 w-full max-w-xs">
+            <nav className="flex w-full max-w-xs flex-col items-center gap-2.5">
               {navItems.map((item) => {
                 const isActive = activeSection === item.id;
                 return (
@@ -162,14 +161,14 @@ function Home() {
                     key={item.id}
                     type="button"
                     onClick={() => handleSectionChange(item.id)}
-                    className={`w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl text-base font-semibold transition-all duration-300 ${
+                    className={`flex w-full items-center gap-3 rounded-2xl border px-6 py-3.5 text-base font-semibold transition-all duration-300 ${
                       isActive
-                        ? "bg-gradient-to-r from-[#dba4af]/20 to-[#b9b2de]/20 text-[var(--lavender-strong)] border border-white/60 shadow-md"
-                        : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-white/50 border border-transparent"
+                        ? "bg-gradient-to-r from-[#dba4af]/20 to-[#b9b2de]/20 text-[var(--lavender-strong)] border-white/60 shadow-md"
+                        : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-white/50 border-transparent"
                     }`}
                   >
                     <span className="text-lg">{item.icon}</span>
-                   
+                    <span>{item.label}</span>
                   </button>
                 );
               })}
@@ -192,27 +191,31 @@ function Home() {
           </div>
         </div>
 
-        {/* ====== DESKTOP SIDEBAR (lg+) ====== */}
+        {/* ====== DESKTOP / TABLET SIDEBAR (md+) ====== */}
+        {/* Vertical dock from md upward: consistent orientation on tablet and desktop,
+            only spacing/size grows at lg — avoids the row-inside-a-tall-thin-bar
+            mismatch that broke the tablet layout before. */}
         <aside
           className="
             hidden md:flex
-            absolute left-2 top-2 bottom-2 z-30
+            absolute left-2 top-1/2 -translate-y-1/2 z-30
             flex-col
             transition-all duration-500
-            lg:left-4 lg:top-1/2 lg:-translate-y-1/2 lg:bottom-auto
-            md:w-auto md:h-auto
+            md:left-3 lg:left-4
+            w-auto h-auto
             rounded-2xl md:rounded-3xl
             border border-white/35
             bg-[linear-gradient(180deg,rgba(247,238,243,0.88),rgba(245,232,239,0.80),rgba(240,228,235,0.72))]
             shadow-[0_18px_40px_rgba(179,170,215,0.10)]
             backdrop-blur-xl
+            max-h-[calc(100dvh-1rem)]
           "
         >
-          <div className="relative z-10 flex h-full flex-col items-center gap-2 p-2 md:gap-3 md:p-3 lg:gap-4 lg:p-5">
+          <div className="relative z-10 flex h-full flex-col items-center gap-2 overflow-y-auto p-2 md:gap-3 md:p-3 lg:gap-4 lg:p-5">
             {/* ====== LANGUAGE SWITCHER ====== */}
-            <div className="relative flex gap-1 rounded-[1.5rem] md:rounded-[2rem] border border-white/30 bg-[linear-gradient(135deg,rgba(248,239,244,0.88),rgba(238,230,244,0.72))] p-1 md:p-1.5 shadow-[0_16px_36px_rgba(180,165,200,0.05),inset_0_1px_0_rgba(255,255,255,0.75)] backdrop-blur-xl lg:flex-col lg:gap-1.5">
+            <div className="relative flex flex-col gap-1 rounded-[1.5rem] md:rounded-[2rem] border border-white/30 bg-[linear-gradient(135deg,rgba(248,239,244,0.88),rgba(238,230,244,0.72))] p-1 md:gap-1.5 md:p-1.5 shadow-[0_16px_36px_rgba(180,165,200,0.05),inset_0_1px_0_rgba(255,255,255,0.75)] backdrop-blur-xl">
               <div className="absolute -inset-2 rounded-[2.5rem] bg-gradient-to-br from-pink-200/15 via-purple-200/10 to-transparent blur-xl opacity-60 pointer-events-none" />
-              
+
               {languageOptions.map((language, index) => (
                 <button
                   key={language.code}
@@ -238,15 +241,15 @@ function Home() {
                       <span className="absolute -inset-[2px] rounded-[1.3rem] md:rounded-[1.6rem] bg-[linear-gradient(135deg,transparent_30%,rgba(255,255,255,0.25)_50%,transparent_70%)] animate-shimmer" />
                     </>
                   )}
-                  
+
                   {currentLanguage !== language.code && (
                     <span className="absolute inset-0 rounded-[1.2rem] md:rounded-[1.5rem] bg-white/0 group-hover:bg-white/40 transition-all duration-400" />
                   )}
-                  
+
                   <span className="relative z-10 text-[0.65rem] md:text-[0.78rem] font-medium tracking-[0.08em] transition-all duration-300 group-hover:scale-[1.04]">
                     {language.label}
                   </span>
-                  
+
                   {currentLanguage === language.code && (
                     <span className="absolute -bottom-[2px] left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white/70 shadow-[0_0_6px_rgba(255,255,255,0.5)]" />
                   )}
@@ -255,7 +258,7 @@ function Home() {
             </div>
 
             {/* ====== NAVIGATION ====== */}
-            <nav className="flex gap-1.5 md:gap-2 overflow-x-auto pb-1 lg:flex-col lg:gap-2 lg:overflow-visible lg:w-full">
+            <nav className="flex flex-col gap-1.5 md:gap-2 w-full">
               {navItems.map((item, index) => {
                 const isActive = activeSection === item.id;
                 return (
@@ -300,12 +303,12 @@ function Home() {
               })}
             </nav>
 
-            {/* Decorative divider - hidden on md, visible on lg */}
-            <div className="hidden lg:block w-8 h-px bg-gradient-to-r from-transparent via-[rgba(179,170,215,0.2)] to-transparent lg:w-full" />
+            {/* Decorative divider */}
+            <div className="block w-8 h-px bg-gradient-to-r from-transparent via-[rgba(179,170,215,0.2)] to-transparent md:w-full" />
 
             {/* ====== SOCIAL LINKS ====== */}
-            <div className="flex flex-col items-center gap-2 md:gap-3 lg:w-full">
-              <div className="flex gap-1.5 md:gap-2 lg:flex-col">
+            <div className="flex flex-col items-center gap-2 md:gap-3 w-full">
+              <div className="flex flex-col gap-1.5 md:gap-2">
                 {socialItems.map((item) => (
                   <a
                     key={item.label}
@@ -336,9 +339,9 @@ function Home() {
         {/* ====== MAIN CONTENT ====== */}
         <section
           ref={contentRef}
-          className={`h-full overflow-y-auto pt-14 md:pt-0 ${
-            activeSection === "home" ? "" : "md:pl-20 lg:pl-28"
-          }`}
+          className={`h-full overflow-y-auto pt-16 md:pt-0 ${
+  activeSection === "home" ? "" : "md:pl-24 lg:pl-28"
+}`}
         >
           <div
             key={activeSection}

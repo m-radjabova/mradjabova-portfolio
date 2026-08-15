@@ -29,9 +29,9 @@ const Hero = ({ onNavigate }: HeroProps) => {
 
   return (
     <section
-      id="home"
-      className="relative min-h-screen overflow-hidden bg-[var(--hero-bg)] lg:h-screen lg:min-h-0"
-    >
+  id="home"
+  className="relative min-h-screen overflow-hidden px-10 pt-2 sm:px-4 sm:pt-4 lg:px-25 lg:pt-8"
+>
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
           className="animate-hero-veil-flow absolute inset-y-0 left-1/2 hidden w-[28rem] -translate-x-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent blur-3xl lg:block"

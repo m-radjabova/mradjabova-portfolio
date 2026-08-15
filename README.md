@@ -6,8 +6,6 @@
 
 A **modern, responsive, and visually polished** portfolio built with React 19, TypeScript, Tailwind CSS 4 & Vite — featuring a trilingual experience, a dreamy pastel interface, project showcases, and a fully functional admin panel powered by Firebase.
 
-<img src="https://mradjabova-portfolio.vercel.app/website.png" alt="Muslima Radjabova Portfolio preview" width="820" />
-
 [![Live Demo](https://img.shields.io/badge/LIVE%20DEMO-mradjabova--portfolio.vercel.app-FF8FAB?style=for-the-badge&logo=vercel&logoColor=white)](https://mradjabova-portfolio.vercel.app/)
 [![GitHub](https://img.shields.io/badge/GitHub-m--radjabova-1A2036?style=for-the-badge&logo=github&logoColor=white)](https://github.com/m-radjabova)
 
